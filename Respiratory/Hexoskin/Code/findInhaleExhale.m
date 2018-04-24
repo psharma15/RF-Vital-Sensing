@@ -24,8 +24,8 @@ freqRange = [4, 60]./60; % In Hz
 % peak detection function gives indices corresponding to inhalation and
 % exhalation. These indices correspond to location in data, thereby,
 % retaining the time information for each inhalation and exhalation.
-[locInhaleAmp,locExhaleAmp] = peakDet(data(:,1),freqRange,fs);
-[locInhalePh, locExhalePh]  = peakDet(data(:,2),freqRange,fs);
+[locInhaleAmp,locExhaleAmp] = peakDetAMPD(data(:,1),freqRange,fs);
+[locInhalePh, locExhalePh]  = peakDetAMPD(data(:,2),freqRange,fs);
 
 % Somehow repeated inhale exhale points - most likely due to uncorrected
 % overlap segments. Can be corrected if nearby. But some issue if exact

@@ -7,11 +7,15 @@ function [data, dataSampRate, dateVector] = readHxData(dataPath,dataNum)
 % IMP: Remember issue with the way Hx data is saved. It saves previous data
 % records in the same file as new data. 
 % Input:
-%   dataPath = ['D:\Research\SummerFall17Spring18\CnC\NCS\Respiratory\',...
-%     'Hexoskin\Data\2\user_13412'];
-%   dataNum = 1; 
-% dataNum is number of data which is arranged in 'folderName'.
-
+%   dataPath: Path to data.
+%   dataNum: number of data which is arranged in 'folderName'.
+% Output:
+%   data: data as requested.
+%   dataSampRate: Sample rate of the data. It is 0 if data is uneven
+%   sampled.
+%   dateVector: Absolute time corresponding to each sample in data,
+%   arranged in columns representing [yyyy mm dd HH MM SS.FFFF] hours, mins
+%   and seconds are in 24 hours time format.
 
 %%
 addpath(dataPath);

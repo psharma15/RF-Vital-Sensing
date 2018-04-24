@@ -2,10 +2,10 @@
 % April 12, 2018
 % Pragya Sharma, ps847@cornell.edu
 
-function [tvCoeffAmpPhSum,tvCoeffAmp,tvCoeffPh,ncsTV,tTV] = ...
-    ncsEstTV(ncsRespDS,inExAmp,inExPh,hxTV,ncsDownSampRate,hxSampRateTV,calibTime)
+function [tvCoeffAmpPhSum,tvCoeffAmp,tvCoeffPh,ncsTV] = ...
+    ncsEstTV(ncsResp,inExAmp,inExPh,hxTV,ncsSampRate,hxSampRateTV,tOffsetTV,calibTime)
 %% Input and Output:
-% ncsRespDS: [ncs amp, ncs ph]
+% ncsResp: [ncs amp, ncs ph]
 % hxTv: Hexoskin Tidal volume estimation
 % ncsDownSampRate: sample frequency of input amp and ph data
 % hxSampRateTV: Tidal volume sample frequency for input hxTv 
@@ -20,7 +20,7 @@ function [tvCoeffAmpPhSum,tvCoeffAmp,tvCoeffPh,ncsTV,tTV] = ...
 
 %% ------------------------------------------------------------------------
 % Checking correct NCS data input format
-[dataRow, dataCol] = size(ncsRespDS);
+[dataRow, dataCol] = size(ncsResp);
 if (dataRow < 1) || (dataCol ~=2)
     fprintf('In ncsEstTV(), input data is expected in [amp,ph] format.');
     return;
@@ -28,8 +28,8 @@ end
 
 %% ------------------------------------------------------------------------
 % Should ensure that there is an exhalation for every inhalation.
-tData = (0:(1/ncsDownSampRate):((length(ncsRespDS(:,1))-1)/ncsDownSampRate))';
-tTV = (0:(1/hxSampRateTV):((length(hxTV)-1)/hxSampRateTV))';
+tData = (0:(1/ncsSampRate):((length(ncsResp(:,1))-1)/ncsSampRate))';
+tTV = (0:(1/hxSampRateTV):((length(hxTV)-1)/hxSampRateTV))'+tOffsetTV;
 
 if inExAmp(1,2) == inExAmp(end,2)
     % If data starts and stops with the same event, truncating it such that
@@ -65,11 +65,11 @@ end
 tInhalePh = tData(phInhaleIdx);
 tExhalePh = tData(phExhaleIdx);
 
-ampTV = ncsRespDS(ampInhaleIdx,1)-ncsRespDS(ampExhaleIdx,1); %#ok<*FNDSB>
+ampTV = ncsResp(ampInhaleIdx,1)-ncsResp(ampExhaleIdx,1); %#ok<*FNDSB>
 % tAmp = (tInhaleAmp + tExhaleAmp)./2;
 tAmp = tInhaleAmp;
 
-phTV = ncsRespDS(phInhaleIdx,2)-ncsRespDS(phExhaleIdx,2);
+phTV = ncsResp(phInhaleIdx,2)-ncsResp(phExhaleIdx,2);
 % tPh = (tInhalePh + tExhalePh)./2;
 tPh = tInhalePh;
 
@@ -145,16 +145,14 @@ tvCoeffAmpPhSum = coeffvalues(modelCalibrationAmpPhSum);
 
 % Fitting Amp
 fitAmp = @(A,x) A.*x;
-startPt = 0.5e5;
 modelCalibrationAmp = fit(ampTVcalibTrunc(:),hxTVcalibTrunc(:),fitAmp,...
-                          'StartPoint',startPt);
+                          'StartPoint',startPt(1));
 tvCoeffAmp = coeffvalues(modelCalibrationAmp);
 
 % Fitting Phase
 fitPh = @(B,x) B.*x;
-startPt = 10;
 modelCalibrationPh = fit(phTVcalibTrunc(:),hxTVcalibTrunc(:),fitPh,...
-                         'StartPoint',startPt);
+                         'StartPoint',startPt(2));
 tvCoeffPh = coeffvalues(modelCalibrationPh);
 
 end

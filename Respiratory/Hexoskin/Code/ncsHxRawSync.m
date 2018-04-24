@@ -3,7 +3,7 @@
 % April 05, 2018
 % Pragya Sharma, ps847@cornell.edu
 
-function [ncsDataTrunc,ncsTimeTrunc,ncsSampRate,hxDataTrunc,hxTimeTrunc,hxSampRate] = ...
+function [ncsDataTrunc,ncsTimeTrunc,ncsSampRate,hxDataTrunc,hxAbsTimeTrunc,hxSampRate] = ...
     ncsHxRawSync(dataPath,hxFolder,hxDataNum,ncsDataNum,...
     manualTimeOffset,dataDuration,ncsTstart)
     
@@ -91,8 +91,16 @@ ncsDataTrunc = ncsData(ncsStartIdx:ncsEndIdx,:);
 hxStartIdx = uint64((hxOffsetSeconds + ncsTstart)*hxSampRate)+1;
 hxEndIdx = uint64((hxOffsetSeconds + ncsTstart + dataDuration)*hxSampRate)+1;
 
+if (hxEndIdx > length(hxData))
+    fprintf('Hexoskin data ended befor NCS, try with less data duration.\n');
+    return
+end
+
 hxTimeTrunc = hxTime(hxStartIdx:hxEndIdx) - hxTime(hxStartIdx); % Updating for the short duration
 hxDataTrunc = hxData(hxStartIdx:hxEndIdx);
+
+% This is the absolute time in date-time vector format, not starting from 0.
+hxAbsTimeTrunc = hxDateTime(hxStartIdx:hxEndIdx,:);
 
 figure
 nFig = 2;

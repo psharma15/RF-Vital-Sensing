@@ -3,9 +3,9 @@
 % Pragya Sharma, ps847@cornell.edu
 
 function [ncsBR,tBR] = ...
-    ncsEstBR(ncsRespDS,inExAmp,inExPh,hxBR,ncsDownSampRate,hxSampRateBR)
+    ncsEstBR(ncsResp,inExAmp,inExPh,ncsSampRate,tBR)
 %% Input and Output:
-% ncsRespDS: [ncs amp, ncs ph]
+% ncsResp: [ncs amp, ncs ph]
 % hxBR: Hexoskin Breath Rate estimation
 % ncsDownSampRate: sample frequency of input amp and ph data
 % hxSampRateBR: BR sample frequency for input Hx data
@@ -14,7 +14,7 @@ function [ncsBR,tBR] = ...
 
 %% ------------------------------------------------------------------------
 % Checking correct NCS data input format
-[dataRow, dataCol] = size(ncsRespDS);
+[dataRow, dataCol] = size(ncsResp);
 if (dataRow < 1) || (dataCol ~=2)
     fprintf('In ncsEstBR(), input data is expected in [amp,ph] format.');
     return;
@@ -22,8 +22,7 @@ end
 
 %% ------------------------------------------------------------------------
 % Should ensure that there is an exhalation for every inhalation.
-tData = (0:(1/ncsDownSampRate):((length(ncsRespDS(:,1))-1)/ncsDownSampRate))';
-tBR = (0:(1/hxSampRateBR):((length(hxBR)-1)/hxSampRateBR))';
+tData = (0:(1/ncsSampRate):((length(ncsResp(:,1))-1)/ncsSampRate))';
 
 if inExAmp(1,2) == inExAmp(end,2)
     % If data starts and stops with the same event, truncating it such that

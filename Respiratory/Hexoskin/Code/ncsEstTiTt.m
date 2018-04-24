@@ -3,10 +3,10 @@
 % Inhalation: Defined as end of inhalation
 % Exhalation: Defined as end of exhalation
 
-function [ampTiTt,phTiTt] = ncsEstTiTt(ncsRespDS,inExAmp,inExPh,ncsDownSampRate)
+function [ampTiTt,phTiTt] = ncsEstTiTt(ncsResp,inExAmp,inExPh,ncsSampRate)
 % Input:
-%     ncsRespDS: Downsampled NCS respiratory waveform, arranged as
-%                [amp(:), ph(:)]. 
+%     ncsResp: Downsampled NCS respiratory waveform, arranged as
+%              [amp(:), ph(:)]. 
 %     inExAmp: Amplitude inhalation and exhalation indices in first column,
 %              corresponding indicator in second column.
 %     inExPh: Phase inhalation and exhalation indices in first column,
@@ -25,7 +25,7 @@ function [ampTiTt,phTiTt] = ncsEstTiTt(ncsRespDS,inExAmp,inExPh,ncsDownSampRate)
 % finding inhalation point requires that information
 
 % Defining tData as a column vector
-tData = (0:(1/ncsDownSampRate):((length(ncsRespDS(:,1))-1)/ncsDownSampRate))';
+tData = (0:(1/ncsSampRate):((length(ncsResp(:,1))-1)/ncsSampRate))';
 
 if inExAmp(1,2) == 1
     % If data starts with inhalation (exhalation beginning), remove that 
