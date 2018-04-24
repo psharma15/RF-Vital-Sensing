@@ -1,6 +1,9 @@
-% This program compares processed NCS and 
+% This program compares respiratory vital sign and its characteristics as
+% obtained from Near-Field Coherent Sensing, against Hexoskin smart garment
+% data. 
+% April 24, 2018
+% Pragya Sharma, ps847@cornell.edu
 
-% function ncsHxCompare()
 %% ------------------------------------------------------------------------
 % Provide input to function.
 dataPath = ['D:\Research\SummerFall17Spring18\CnC\NCS\Respiratory\',...
@@ -20,8 +23,8 @@ ncsTstart = 0; % Time is relative to NCS in seconds, keep 140 for stable
 dataDuration = 0; % Leave last 30 sec abd data: 10*60-32-ncsTstart
 
 %% ------------------------------------------------------------------------
-% Synchronization
-% First synchronize Hx and NCS raw data: just for observation.
+% Reading NCS-synchronized Hx waveforms
+% Reading thoracic and abdomen respiratory waveform
 [ncsSync,~,ncsHighSampRate,hxRespTh,tAbsHxResp,hxRespSampRate] = ...
     ncsHxRawSync(dataPath,hxFolder,hxDataNumRespTh,ncsDataNum,...
     manualTimeOffset,dataDuration,ncsTstart);

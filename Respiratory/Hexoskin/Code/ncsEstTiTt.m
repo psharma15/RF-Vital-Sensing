@@ -2,6 +2,8 @@
 % inspiratory to total breath time). 
 % Inhalation: Defined as end of inhalation
 % Exhalation: Defined as end of exhalation
+% April 24, 2018
+% Pragya Sharma, ps847@cornell.edu
 
 function [ampTiTt,phTiTt] = ncsEstTiTt(ncsResp,inExAmp,inExPh,ncsSampRate)
 % Input:
@@ -70,11 +72,11 @@ tExhalePh = tData(phExhaleIdx);
 %% ------------------------------------------------------------------------
 % Finding inspiration time (Ti) and total time (Tt) for each breath and
 % Ti/Tt for both amplitude and phase.
-ampTi = tInhaleAmp - tExhaleAmp; 
+ampTi = tInhaleAmp - tExhaleAmp(1:end-1); 
 ampTt = diff(tExhaleAmp);
 ampTiTt = [tInhaleAmp, ampTi./ampTt];
 
-phTi = tInhalePh - tExhalePh;
+phTi = tInhalePh - tExhalePh(1:end-1);
 phTt = diff(tExhalePh);
 phTiTt = [tInhalePh, phTi./phTt];
 
