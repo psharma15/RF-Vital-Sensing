@@ -1,5 +1,5 @@
 % This function estimates fractional inspiratory time (Ti/Tt, ratio of
-% inspiratory to total breath time). 
+% inspiratory to total breath time) using NCS amplitude and phase data.
 % Inhalation: Defined as end of inhalation
 % Exhalation: Defined as end of exhalation
 % April 24, 2018

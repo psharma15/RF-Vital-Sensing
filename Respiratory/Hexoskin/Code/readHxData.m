@@ -51,13 +51,13 @@ convertedTime = datetime(posixTime,'ConvertFrom','epochtime',...
 % Storing the starting and end time of the data
 dateVector = datevec(convertedTime);
 
-if dataSampRate ~= 0
-    t = 0:1/dataSampRate:((length(data(:,1))/dataSampRate)-(1/dataSampRate));
-    figure
-    plot(t,data(:,2))
-    title(dataName, 'Interpreter', 'none')
-    xlabel('Time (sec)')    
-end
+% if dataSampRate ~= 0
+%     t = 0:1/dataSampRate:((length(data(:,1))/dataSampRate)-(1/dataSampRate));
+%     figure
+%     plot(t,data(:,2))
+%     title(dataName, 'Interpreter', 'none')
+%     xlabel('Time (sec)')    
+% end
 
 % % Flip inhalation and exhalation
 % data = abs(-data);

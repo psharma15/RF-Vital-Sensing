@@ -26,14 +26,14 @@ formatNcsTime = 'dd-mm-yyyy HH:MM:SS.FFF';
 dateVector = datevec(dateTime, formatNcsTime);
 
 t = 0:1/dataSampRate:((length(data(:,1))/dataSampRate)-(1/dataSampRate));
-figure
-title(['Data collection (started at: ',num2str(dateVector(4)),':',...
-    num2str(dateVector(5)),':',num2str(uint32(dateVector(6)))]);
-ax(1) = subplot(2,1,1);
-plot(t,data(:,1)); ylabel('NCS Amp')
-ax(2) = subplot(2,1,2);
-plot(t,data(:,2)); ylabel('NCS Ph')
-linkaxes(ax,'x')
+% figure
+% title(['Data collection (started at: ',num2str(dateVector(4)),':',...
+%     num2str(dateVector(5)),':',num2str(uint32(dateVector(6)))]);
+% ax(1) = subplot(2,1,1);
+% plot(t,data(:,1)); ylabel('NCS Amp')
+% ax(2) = subplot(2,1,2);
+% plot(t,data(:,2)); ylabel('NCS Ph')
+% linkaxes(ax,'x')
 
 %% 
 rmpath(dataPath);

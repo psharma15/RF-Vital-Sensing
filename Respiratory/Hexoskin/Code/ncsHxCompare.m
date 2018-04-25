@@ -1,6 +1,13 @@
 % This program compares respiratory vital sign and its characteristics as
 % obtained from Near-Field Coherent Sensing, against Hexoskin smart garment
 % data. 
+% Terminology used:
+% Inspiration: Peak at end of inspiration.
+% Expiration: Minima at end of expiration.
+% Tidal Volume (TV): Inspiration and expiration amplitude difference for
+%                    the last breath.
+% Breath Rate (BR): Breath per minute calculated using last 7 breaths.
+% TiTt: Fractional 
 % April 24, 2018
 % Pragya Sharma, ps847@cornell.edu
 
@@ -15,12 +22,13 @@ hxDataNumRespAbd = 1; % Reading abdomen respiration
 hxDataNumRespTh = 2; % Reading thorax respiration
 hxDataNumTV = 4; % Tidal Volume (TV)
 hxDataNumBR = 6; % Breath Rate (BR)
+hxDataNumInspExp = [9, 10]; % [Beginning of insp, beginning of exp]
 ncsDataNum = 11; % data at different time instants
 % Manual time offset is by observation. 
 % 20.5 for '2', -1 for '3a: 1-13', 6 for '3b: 14:20'
 manualTimeOffset = -1; % sec: This is by observation 
-ncsTstart = 0; % Time is relative to NCS in seconds, keep 140 for stable
-dataDuration = 0; % Leave last 30 sec abd data: 10*60-32-ncsTstart
+ncsTstart = 140; % Time is relative to NCS in seconds, keep 140 for stable
+dataDuration = 10*60-32-ncsTstart; % Leave last 30 sec abd data: 10*60-32-ncsTstart
 
 %% ------------------------------------------------------------------------
 % Reading NCS-synchronized Hx waveforms
@@ -32,15 +40,20 @@ dataDuration = 0; % Leave last 30 sec abd data: 10*60-32-ncsTstart
     ncsHxRawSync(dataPath,hxFolder,hxDataNumRespAbd,ncsDataNum,...
     manualTimeOffset,dataDuration,ncsTstart);
 
-% Synchronize NCS and Hx tidal volume (TV) estimation data. 
+% Reading Hx tidal volume (TV) and breath rate (BR) 
 [~,~,~,hxTV,tAbsHxTV,hxSampRateTV] = ...
     ncsHxRawSync(dataPath,hxFolder,hxDataNumTV,ncsDataNum,...
     manualTimeOffset,dataDuration,ncsTstart);
-
-% Synchronizing NCS and Hx breathing rate (BR) estimation data.
-% Expecting ncsSync to remain the same
 [~,~,~,hxBR,tAbsHxBR,hxSampRateBR] = ...
     ncsHxRawSync(dataPath,hxFolder,hxDataNumBR,ncsDataNum,...
+    manualTimeOffset,dataDuration,ncsTstart);
+
+% Reading Hx Inspiration and Expiration events. 
+[~,~,~,hxExp,tAbsHxExp,~] = ...
+    ncsHxRawSync(dataPath,hxFolder,hxDataNumInspExp(2),ncsDataNum,...
+    manualTimeOffset,dataDuration,ncsTstart);
+[~,~,~,hxInsp,tAbsHxInsp,~] = ...
+    ncsHxRawSync(dataPath,hxFolder,hxDataNumInspExp(1),ncsDataNum,...
     manualTimeOffset,dataDuration,ncsTstart);
 
 % Synchronizing timing of Hx data at different time stamps, taking start
@@ -50,7 +63,9 @@ tResp = etime(tAbsHxResp,tRef); % Time starts from 0
 tTV = etime(tAbsHxTV,tRef); % Time starts relative to tHxResp
 tOffsetTV = tTV(1);
 tBR = etime(tAbsHxBR,tRef); % Time starts relative to tHxResp
-tOffsetBR = tBR(1);
+tOffsetBR = tBR(1); 
+tHxInsp = etime(tAbsHxInsp,tRef); % Time starts relative to tHxResp
+tHxExp = etime(tAbsHxExp,tRef); % Time starts relative to tHxResp
 
 %% ------------------------------------------------------------------------
 % Process the NCS data to get respiration waveform - both amplitude 
@@ -59,8 +74,8 @@ tOffsetBR = tBR(1);
 % Specify correct amplitude and phase sign, see if you can implement algo
 % to detect this as well. 
 % *********************************************************************** %
-fprintf('Change amplitude and phase sign if needed ...\n');
-ncsFlipData = [1,1]; % -1 to flip
+fprintf('Change amplitude and phase sign if needed...\n');
+ncsFlipData = [-1,1]; % -1 to flip
 [ncsRespFiltered,~,~,~] = postProcess(0,1,1.4,ncsSync,ncsHighSampRate,ncsFlipData);
 
 %% ------------------------------------------------------------------------
@@ -183,10 +198,9 @@ linkaxes(ax3,'x')
 
 [ncsBR,tNcsBR] = ncsEstBR(ncsResp,inExAmp,inExPh,ncsSampRate,tBR);
 
-figure('Units', 'pixels', ...
-    'Position', [100 100 900 500]);
+figure('Units', 'pixels', 'Position', [100 100 900 500]);
 ax4 = gca;
-plot(tBR,hxBR,'LineWidth',2,'color',[0.5,0.2,0.7],'LineWIdth',2,'LineStyle',':');
+plot(tBR,hxBR,'LineWidth',2,'color',[0.5,0.2,0.7],'LineStyle',':');
 hold on
 plot(tNcsBR,ncsBR(:,1),'color',[0 0.9 0],'LineWidth',2);
 plot(tNcsBR,ncsBR(:,2),'--','color',[0.9 0.5 0.2],'LineWidth',2);
@@ -202,9 +216,26 @@ axis(ax4,'tight')
 
 %% ------------------------------------------------------------------------
 % Calculating fractional inspiratory time (Ti/Tt)
-% Resutls using amplitude and phase waveform for NCS
-[ampTiTt,phTiTt] = ncsEstTiTt(ncsResp,inExAmp,inExPh,ncsSampRate);
+% Results using amplitude and phase waveform for NCS
+[ncsAmpTiTt,ncsPhTiTt] = ncsEstTiTt(ncsResp,inExAmp,inExPh,ncsSampRate);
+hxTiTt = hxEstTiTt(tHxInsp,tHxExp,hxInsp,hxExp);
+
+figure('Units', 'pixels', 'Position', [100 100 900 500]);
+ax5 = gca; 
+plot(hxTiTt(:,1),hxTiTt(:,2),'LineWidth',2,'color',[0.5,0.2,0.7],'LineStyle',':');
+hold on
+plot(ncsAmpTiTt(:,1),ncsAmpTiTt(:,2),'color',[0 0.9 0],'LineWidth',2);
+plot(ncsPhTiTt(:,1),ncsPhTiTt(:,2),'--','color',[0.9 0.5 0.2],'LineWidth',2);
+hold off
+grid on
+
+xLabel = 'Time (sec)';
+yLabel = 'Ti/Tt';
+plotTitle = 'Fractional Inspiratory Time (Ti/Tt) from Hexoskin and NCS';
+plotLegend = {'Hx','NCS Amp','NCS Ph'};
+plotCute1(xLabel,yLabel,ax5,plotTitle,plotLegend,1);
+axis(ax5,'tight')
 
 %% ------------------------------------------------------------------------
 % Results to report: 
-% RMSE (Root mean squared Error):
+
