@@ -23,17 +23,28 @@ hxDataNumRespTh = 2; % Reading thorax respiration
 hxDataNumTV = 4; % Tidal Volume (TV)
 hxDataNumBR = 6; % Breath Rate (BR)
 hxDataNumInspExp = [9, 10]; % [Beginning of insp, beginning of exp]
-ncsDataNum = 11; % data at different time instants
+hxDataNumEcg = 3; % ECG_I data
+hxDataNumHR = 11; % Heart rate
+hxDataNumRR = 12; % RR interval 
+
+ncsDataNum = 8; % data at different time instants
+ncsFlipData = [-1,1]; % -1 to flip
+
 % Manual time offset is by observation. 
 % 20.5 for '2', -1 for '3a: 1-13', 6 for '3b: 14:20'
 manualTimeOffset = -1; % sec: This is by observation 
-ncsTstart = 140; % Time is relative to NCS in seconds, keep 140 for stable
-dataDuration = 10*60-32-ncsTstart; % Leave last 30 sec abd data: 10*60-32-ncsTstart
+ncsTstart = 150; % Time is relative to NCS in seconds, keep 150 for stable
+dataDuration = 10*60-30-ncsTstart; % Leave last 30 sec abd data: 10*60-30-ncsTstart
 
 %% ------------------------------------------------------------------------
 % Reading NCS-synchronized Hx waveforms
+% Reading ECG
+[ncsSync,~,ncsHighSampRate,hxEcg,tAbsHxEcg,hxEcgSampRate] = ...
+    ncsHxRawSync(dataPath,hxFolder,hxDataNumEcg,ncsDataNum,...
+    manualTimeOffset,dataDuration,ncsTstart);
+
 % Reading thoracic and abdomen respiratory waveform
-[ncsSync,~,ncsHighSampRate,hxRespTh,tAbsHxResp,hxRespSampRate] = ...
+[~,~,~,hxRespTh,tAbsHxResp,hxRespSampRate] = ...
     ncsHxRawSync(dataPath,hxFolder,hxDataNumRespTh,ncsDataNum,...
     manualTimeOffset,dataDuration,ncsTstart);
 [~,~,~,hxRespAbd,~,~] = ...
@@ -48,7 +59,7 @@ dataDuration = 10*60-32-ncsTstart; % Leave last 30 sec abd data: 10*60-32-ncsTst
     ncsHxRawSync(dataPath,hxFolder,hxDataNumBR,ncsDataNum,...
     manualTimeOffset,dataDuration,ncsTstart);
 
-% Reading Hx Inspiration and Expiration events. 
+% Reading Hx Inspiration and Expiration events
 [~,~,~,hxExp,tAbsHxExp,~] = ...
     ncsHxRawSync(dataPath,hxFolder,hxDataNumInspExp(2),ncsDataNum,...
     manualTimeOffset,dataDuration,ncsTstart);
@@ -56,32 +67,49 @@ dataDuration = 10*60-32-ncsTstart; % Leave last 30 sec abd data: 10*60-32-ncsTst
     ncsHxRawSync(dataPath,hxFolder,hxDataNumInspExp(1),ncsDataNum,...
     manualTimeOffset,dataDuration,ncsTstart);
 
+% Reading Hx Heart Rate
+[~,~,~,hxHR,tAbsHxHR,hxSampRateHR] = ...
+    ncsHxRawSync(dataPath,hxFolder,hxDataNumHR,ncsDataNum,...
+    manualTimeOffset,dataDuration,ncsTstart);
+
+% Reading RR interval
+[~,~,~,hxRR,tAbsHxRR,~] = ncsHxRawSync(dataPath,hxFolder,hxDataNumRR,...
+    ncsDataNum, manualTimeOffset,dataDuration,ncsTstart);
+
 % Synchronizing timing of Hx data at different time stamps, taking start
 % time of highest sampled respiration (abdomen or thorax) as the reference.
-tRef = tAbsHxResp(1,:);
-tResp = etime(tAbsHxResp,tRef); % Time starts from 0
-tTV = etime(tAbsHxTV,tRef); % Time starts relative to tHxResp
+tRef = tAbsHxEcg(1,:);
+tHeart = etime(tAbsHxEcg, tRef); % Time starts from 0
+tResp = etime(tAbsHxResp,tRef); % Time starts relative to tRef
+tTV = etime(tAbsHxTV,tRef); % Time starts relative to tRef
 tOffsetTV = tTV(1);
-tBR = etime(tAbsHxBR,tRef); % Time starts relative to tHxResp
+tBR = etime(tAbsHxBR,tRef); % Time starts relative to tRef
 tOffsetBR = tBR(1); 
-tHxInsp = etime(tAbsHxInsp,tRef); % Time starts relative to tHxResp
-tHxExp = etime(tAbsHxExp,tRef); % Time starts relative to tHxResp
+tHxInsp = etime(tAbsHxInsp,tRef); % Time starts relative to tRef
+tHxExp = etime(tAbsHxExp,tRef); % Time starts relative to tRef
+tHR = etime(tAbsHxHR,tRef);
+tHxRR = etime(tAbsHxRR,tRef);
 
 %% ------------------------------------------------------------------------
 % Process the NCS data to get respiration waveform - both amplitude 
-% and phase, after filtering out heartbeat.
+% and phase, after filtering out heartbeat, and get Heartbeat data after
+% filtering out respiration
 % *********************************************************************** %
 % Specify correct amplitude and phase sign, see if you can implement algo
 % to detect this as well. 
 % *********************************************************************** %
 fprintf('Change amplitude and phase sign if needed...\n');
-ncsFlipData = [-1,1]; % -1 to flip
 [ncsRespFiltered,~,~,~] = postProcess(0,1,1.4,ncsSync,ncsHighSampRate,ncsFlipData);
+[ncsHeartFiltered,~,~,~] = postProcess(0.9,10,15,ncsSync,ncsHighSampRate,ncsFlipData);
 
 %% ------------------------------------------------------------------------
-% Downsample NCS to hx respiration sample rate = 128 Hz
-ncsSampRate = hxRespSampRate;
-ncsResp = resample(ncsRespFiltered,ncsSampRate,ncsHighSampRate);
+% Downsample NCS resp to hx respiration sample rate = 128 Hz
+ncsRespSampRate = hxRespSampRate;
+ncsResp = resample(ncsRespFiltered,ncsRespSampRate,ncsHighSampRate);
+
+% Downsample NCS heart to hx ECG sample rate = 256 Hz
+ncsHeartSampRate = hxEcgSampRate;
+ncsHeart = resample(ncsHeartFiltered,ncsHeartSampRate,ncsHighSampRate);
 
 %% ------------------------------------------------------------------------
 % Plotting Hexoskin and NCS breaths with TV
@@ -93,9 +121,9 @@ figure('Units', 'pixels', ...
 nFig = 2;
 ax1(1) = subplot(nFig,1,1);
 yyaxis left
-plot(ax1(1),tResp,hxRespTh./max(hxRespTh),':','color','k','LineWidth',2);
+plot(ax1(1),tResp,hxRespTh./max(hxRespTh),':','color','k','LineWidth',2); %./max(hxRespTh)
 hold on
-plot(ax1(1),tResp,hxRespAbd./max(hxRespAbd),'-','color',[0.3,0.75,0.93]);
+plot(ax1(1),tResp,hxRespAbd./max(hxRespAbd),'-','color',[0.3,0.75,0.93]); %./max(hxRespAbd)
 plotCute1([],'a.u.',ax1(1),[],[],0);
 ylim([0.9967,1.001])
 hold off
@@ -122,7 +150,10 @@ linkaxes(ax1,'x')
 % Find 'inhalation end' and 'exhalation end' indices in amplitude and phase
 % inExAmp: Ending of inhalation - peak
 % inExPh: Ending of exhalation - minima
-[inExAmp, inExPh] = findInhaleExhale(ncsResp,ncsSampRate);
+% Considering respiration is between 8-60 breaths per minute - normal for
+% adult is 8-20 bpm.
+freqRangeBR = [4, 60]./60; % In Hz
+[inExAmp, inExPh] = findInhaleExhale(ncsResp,ncsRespSampRate,freqRangeBR,tResp);
 
 %% ------------------------------------------------------------------------
 % *********************************************************************** %
@@ -133,7 +164,7 @@ linkaxes(ax1,'x')
 calibTime = [40, 100]; % 10-50
 
 [tvCoeffAmpPhSum,tvCoeffAmp,tvCoeffPh,ncsUncalibAmpPhTV] = ...
-    ncsEstTV(ncsResp,inExAmp,inExPh,hxTV,ncsSampRate,hxSampRateTV,tOffsetTV,calibTime);
+    ncsEstTV(ncsResp,inExAmp,inExPh,hxTV,ncsRespSampRate,hxSampRateTV,tOffsetTV,calibTime);
 ncsTVAmpPhSum = tvCoeffAmpPhSum(1).*ncsUncalibAmpPhTV(:,1) + ...
                 tvCoeffAmpPhSum(2).*ncsUncalibAmpPhTV(:,2);
 ncsTVAmp = tvCoeffAmp.*ncsUncalibAmpPhTV(:,1);
@@ -168,9 +199,9 @@ figure('Units', 'pixels', ...
 nFig = 2;
 ax3(1) = subplot(nFig,1,1);
 yyaxis left
-plot(ax3(1),tResp,hxRespTh./max(hxRespTh),':','color','k');
+plot(ax3(1),tResp,hxRespTh./max(hxRespTh),':','color','k'); % ./max(hxRespTh)
 hold on
-plot(ax3(1),tResp,hxRespAbd./max(hxRespAbd),'-','color',[0.3,0.75,0.93]);
+plot(ax3(1),tResp,hxRespAbd./max(hxRespAbd),'-','color',[0.3,0.75,0.93]); % ./max(hxRespAbd)
 plotCute1([],'a.u.',ax3(1),[],[],0);
 ylim([0.995,1.001])
 hold off
@@ -196,7 +227,7 @@ linkaxes(ax3,'x')
 %% ------------------------------------------------------------------------
 % Calculating breath rate from NCS and comparing against Hexoskin. 
 
-[ncsBR,tNcsBR] = ncsEstBR(ncsResp,inExAmp,inExPh,ncsSampRate,tBR);
+[ncsBR,tNcsBR] = ncsEstBR(ncsResp,inExAmp,inExPh,ncsRespSampRate,tBR);
 
 figure('Units', 'pixels', 'Position', [100 100 900 500]);
 ax4 = gca;
@@ -207,7 +238,7 @@ plot(tNcsBR,ncsBR(:,2),'--','color',[0.9 0.5 0.2],'LineWidth',2);
 hold off
 grid on
 
-xLabel = 'Time (sec)';
+xLabel = 'Time (s)';
 yLabel = 'Breath Per Minute (BPM)';
 plotTitle = 'Estimated BR from Hexoskin NCS';
 plotLegend = {'Hx BR','NCS Amp BR','NCS Ph BR'};
@@ -217,7 +248,7 @@ axis(ax4,'tight')
 %% ------------------------------------------------------------------------
 % Calculating fractional inspiratory time (Ti/Tt)
 % Results using amplitude and phase waveform for NCS
-[ncsAmpTiTt,ncsPhTiTt] = ncsEstTiTt(ncsResp,inExAmp,inExPh,ncsSampRate);
+[ncsAmpTiTt,ncsPhTiTt] = ncsEstTiTt(ncsResp,inExAmp,inExPh,ncsRespSampRate);
 hxTiTt = hxEstTiTt(tHxInsp,tHxExp,hxInsp,hxExp);
 
 figure('Units', 'pixels', 'Position', [100 100 900 500]);
@@ -229,7 +260,7 @@ plot(ncsPhTiTt(:,1),ncsPhTiTt(:,2),'--','color',[0.9 0.5 0.2],'LineWidth',2);
 hold off
 grid on
 
-xLabel = 'Time (sec)';
+xLabel = 'Time (s)';
 yLabel = 'Ti/Tt';
 plotTitle = 'Fractional Inspiratory Time (Ti/Tt) from Hexoskin and NCS';
 plotLegend = {'Hx','NCS Amp','NCS Ph'};
@@ -237,5 +268,54 @@ plotCute1(xLabel,yLabel,ax5,plotTitle,plotLegend,1);
 axis(ax5,'tight')
 
 %% ------------------------------------------------------------------------
-% Results to report: 
+% Plotting Hexoskin and NCS heartbeat with HR
+% close all;
 
+figure('Units', 'pixels', ...
+    'Position', [100 100 1200 700]);
+
+nFig = 2;
+ax6(1) = subplot(nFig,1,1);
+yyaxis left
+plot(ax6(1),tHeart,hxEcg,':','color','k','LineWidth',2);
+
+yyaxis right
+plot(ax6(1),tHR,hxHR);
+plotCute1('Time (s)','mL',ax6(1),...
+    'Hexoskin Heartbeat',{'Hx ECG (a.u.)',...
+    'Heart Rate (BPM)'},1);
+
+ax6(2) = subplot(nFig,1,2);
+yyaxis left
+plot(ax6(2),tHeart,ncsHeart(:,1)); 
+plotCute1([],'a.u.',ax6(2),[],[],0);
+
+yyaxis right
+plot(ax6(2),tHeart,ncsHeart(:,2)); 
+plotCute1('Time (s)','a.u.',ax6(2),...
+    'NCS Heartbeat (amplitude & phase)',{'NCS Amp (a.u.)','NCS Ph (a.u.)'},1);
+ 
+linkaxes(ax6,'x')
+
+%% ------------------------------------------------------------------------
+% Peak detection in NCS Heartbeat
+
+freqRangeHR =  [0.5,220/60];
+[heartAmpMinMax, heartPhMinMax] = findInhaleExhale(ncsHeart,ncsHeartSampRate,freqRangeHR,tHeart);
+ncsHR = ncsEstHR(ncsHeart,heartAmpMinMax,heartPhMinMax,ncsHeartSampRate,tHR);
+
+figure('Units', 'pixels', 'Position', [100 100 900 500]);
+ax7 = gca;
+plot(tHR,hxHR,'LineWidth',2,'color',[0.5,0.2,0.7],'LineStyle',':');
+hold on
+plot(tHR,ncsHR(:,1),'color',[0 0.9 0],'LineWidth',2);
+plot(tHR,ncsHR(:,2),'--','color',[0.9 0.5 0.2],'LineWidth',2);
+hold off
+grid on
+
+xLabel = 'Time (s)';
+yLabel = 'Heart Rate (BPM)';
+plotTitle = 'Estimated HR from Hexoskin NCS';
+plotLegend = {'Hx HR','NCS Amp HR','NCS Ph HR'};
+plotCute1(xLabel,yLabel,ax7,plotTitle,plotLegend,1);
+axis(ax7,'tight')

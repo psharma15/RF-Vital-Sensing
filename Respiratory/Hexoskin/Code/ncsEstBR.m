@@ -66,14 +66,16 @@ ncsPhBR = zeros(length(tBR),1);
 
 tCycle = 0;
 idxAmpBRold = 1; % Previous cycle inhalation/ exhalation.
+nCycleAvg = 7; % Number of cycles except at the beginning.
+
 % Iteration starts from 2: 2 inhalation points for 1 breath cycle.
 for iter = 2:length(tAmpBR)
-    if iter <= 7
+    if iter <= nCycleAvg
         nCycle = iter - 1;
         tCycle = tCycle + tAmpBR(iter) - tAmpBR(iter-1);
     else
-        nCycle = 7;
-        tCycle = tAmpBR(iter) - tAmpBR(iter-7);
+        nCycle = nCycleAvg;
+        tCycle = tAmpBR(iter) - tAmpBR(iter-nCycleAvg);
     end
     idxAmpBR = find(tBR >= tAmpBR(iter),1);
     ncsAmpBR(idxAmpBRold:idxAmpBR-1) = ncsAmpBR(idxAmpBRold);
@@ -84,12 +86,12 @@ end
 tCycle = 0;
 idxPhBRold = 1;
 for iter = 2:length(tPhBR)
-    if iter <= 7
+    if iter <= nCycleAvg
         nCycle = iter - 1;
         tCycle = tCycle + tPhBR(iter) - tPhBR(iter-1);
     else
-        nCycle = 7;
-        tCycle = tPhBR(iter) -tPhBR(iter-7);
+        nCycle = nCycleAvg;
+        tCycle = tPhBR(iter) -tPhBR(iter-nCycleAvg);
     end
     idxPhBR = find(tBR >= tPhBR(iter),1);
     ncsPhBR(idxPhBRold:idxPhBR-1) = ncsPhBR(idxPhBRold);

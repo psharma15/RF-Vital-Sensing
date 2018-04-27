@@ -1,13 +1,15 @@
-% This function finds inhalation (inhalation end) and exhalation 
+% This function finds maxima (inhalation end) and minima 
 % (exhalation end) points in respiration waveform extracted from both 
 % amplitude and phase of NCS. 
+% This is originally written for respiration, hence all terms indicate
+% that. But is extended to Heartbeat waveform.
 % The peak detection is performed by AMPD (automatic multiscale based peak
 % detection). The source is: "An efficient algorithm for automatic peak
 % detection in noisy periodic and quasi-periodic signals", F Scholkmann.
 % Pragya Sharma, ps847@cornell.edu
 % April 15th, 2018.
 
-function [inExAmp,inExPh] = findInhaleExhale(data,fs)
+function [inExAmp,inExPh] = findInhaleExhale(data,fs,freqRange,t)
 % Input:
 %   data: [ncs Amp, ncs Ph]
 %   fs: Sampling frequency of data
@@ -18,9 +20,6 @@ function [inExAmp,inExPh] = findInhaleExhale(data,fs)
 
 %% Finding peaks: both maximum and minimum
 
-% Considering respiration is between 8-60 breaths per minute - normal for
-% adult is 8-20 bpm.
-freqRange = [4, 60]./60; % In Hz
 % peak detection function gives indices corresponding to inhalation and
 % exhalation. These indices correspond to location in data, thereby,
 % retaining the time information for each inhalation and exhalation.
@@ -59,7 +58,7 @@ end
 locExhalePh = locExhalePh(locExhalePh ~= 0);
 
 %% These are obtained maximas and minimas
-t = 0:(1/fs):((length(data(:,1))-1)/fs);
+% t = 0:(1/fs):((length(data(:,1))-1)/fs);
 
 figure
 ax(1) = subplot(2,1,1);
