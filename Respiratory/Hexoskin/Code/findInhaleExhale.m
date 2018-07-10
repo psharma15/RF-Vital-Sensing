@@ -66,7 +66,7 @@ plot(t,data(:,1)); xlabel('Time (sec)'); ylabel('NCS Amp')
 hold on
 plot(t(locInhaleAmp),data(locInhaleAmp,1),'*');
 plot(t(locExhaleAmp),data(locExhaleAmp,1),'o');
-grid on
+ax(1).XGrid = 'on';
 title('Inhalation and exhalation points from peak detection algorithm')
 
 ax(2) = subplot(2,1,2);
@@ -74,7 +74,7 @@ plot(t,data(:,2)); xlabel('Time (sec)'); ylabel('NCS Ph')
 hold on 
 plot(t(locInhalePh),data(locInhalePh,2),'*');
 plot(t(locExhalePh),data(locExhalePh,2),'o');
-
+ax(2).XGrid = 'on';
 grid on
 linkaxes(ax,'x')
 
@@ -176,7 +176,7 @@ plot(t,data(:,1)); xlabel('Time (sec)'); ylabel('NCS Amp')
 hold on
 plot(t(locInhaleAmpCorrected),data(locInhaleAmpCorrected,1),'*');
 plot(t(locExhaleAmpCorrected),data(locExhaleAmpCorrected,1),'o');
-grid on
+ax(1).XGrid = 'on';
 
 ax(2) = subplot(2,1,2);
 plot(t,data(:,2)); xlabel('Time (sec)'); ylabel('NCS Ph')
@@ -184,5 +184,5 @@ hold on
 plot(t(locInhalePhCorrected),data(locInhalePhCorrected,2),'*');
 plot(t(locExhalePhCorrected),data(locExhalePhCorrected,2),'o');
 
-grid on
+ax(2).XGrid = 'on';
 linkaxes(ax,'x')

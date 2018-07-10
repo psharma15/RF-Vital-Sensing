@@ -27,14 +27,14 @@ hxDataNumEcg = 3; % ECG_I data
 hxDataNumHR = 11; % Heart rate
 hxDataNumRR = 12; % RR interval 
 
-ncsDataNum = 8; % data at different time instants
-ncsFlipData = [-1,1]; % -1 to flip
+ncsDataNum = 14; % data at different time instants
+ncsFlipData = [1,1]; % -1 to flip
 
 % Manual time offset is by observation. 
 % 20.5 for '2', -1 for '3a: 1-13', 6 for '3b: 14:20'
-manualTimeOffset = -1; % sec: This is by observation 
-ncsTstart = 150; % Time is relative to NCS in seconds, keep 150 for stable
-dataDuration = 10*60-30-ncsTstart; % Leave last 30 sec abd data: 10*60-30-ncsTstart
+manualTimeOffset = 6; % sec: This is by observation 
+ncsTstart = 0; % Time is relative to NCS in seconds, keep 150 for stable
+dataDuration = 0; % Leave last 30 sec abd data: 10*60-30-ncsTstart
 
 %% ------------------------------------------------------------------------
 % Reading NCS-synchronized Hx waveforms
@@ -311,8 +311,6 @@ hold on
 plot(tHR,ncsHR(:,1),'color',[0 0.9 0],'LineWidth',2);
 plot(tHR,ncsHR(:,2),'--','color',[0.9 0.5 0.2],'LineWidth',2);
 hold off
-grid on
-
 xLabel = 'Time (s)';
 yLabel = 'Heart Rate (BPM)';
 plotTitle = 'Estimated HR from Hexoskin NCS';
