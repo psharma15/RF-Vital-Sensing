@@ -1,6 +1,12 @@
-function plotCute1(xLabel,yLabel,ax,plotTitle,plotLegend,showLegend)
+function plotCute1(xLabel,yLabel,ax,plotTitle,plotLegend,showLegend,varargin)
 %% PLOTCUTE1 takes 'x' and 'y' labels as input along with the axis, and 
 % improves the plot with fixed settings        
+
+if nargin == 7
+    legOrient = varargin{1};
+else
+    legOrient = 'Vertical'; % Default legend orientation
+end
 
 hXLabel = xlabel(ax,xLabel,'FontSize',10);
 hYLabel = ylabel(ax,yLabel,'FontSize',10); 
@@ -10,7 +16,8 @@ if showLegend
     hLegend = legend(plotLegend);
     set(hLegend,...
         'FontName'   , 'Helvetica',...
-        'FontSize'   , 10         ); % 6 for publication
+        'FontSize'   , 10         ,...
+        'Orientation', legOrient  ); % 6 for publication
 end
 
 set(gca                       , ...

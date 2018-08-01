@@ -8,8 +8,8 @@ function [dateTime,ampPh] = saveTDMStoMAT()
 % It uses convertTDMS.m to convert TDMS to mat.
 
 dataPath = ['D:\Research\SummerFall17Spring18\CnC\NCS\Respiratory\',...
-    'BreathPattern_Cough_Speak\Data\Pragya\Jul16\'];
-fileName = 'freq2G_1v2h';
+    'BreathPattern_Cough_Speak\Data\Yuna\July19_2018\'];
+fileName = 'freq2G_2v2h';
 saveFileName =  'freq2G_2v2h';
 [convertedData,ampPh] = callConvert(dataPath,fileName);
 dateTime = convertedData.Data.MeasuredData(5).Property(8).Value;

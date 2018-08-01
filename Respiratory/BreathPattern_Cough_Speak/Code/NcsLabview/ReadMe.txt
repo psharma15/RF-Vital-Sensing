@@ -1,5 +1,8 @@
 Refer to: D:\Research\SummerFall17Spring18\CnC\NCS\MotionDetectionSleep\MyExperiment\Labview
 
+Edit 18 July: Major edit - Removed phase unwrapping - as it creates phase jumps - that after filtering, downsampling etc. are difficult to take care of automatically.
+
+
 The above folder has codes for NCS data read.
 
 ncs_breath == ncs_v4_timer in other files.

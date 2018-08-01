@@ -23,6 +23,9 @@ function [inExAmp,inExPh] = findInhaleExhale(data,fs,freqRange,t)
 % peak detection function gives indices corresponding to inhalation and
 % exhalation. These indices correspond to location in data, thereby,
 % retaining the time information for each inhalation and exhalation.
+
+% Inhale == minima, Exhale == maxima -> Depends on the way ncs Amp and Ph
+% waveform look. Both need to be in phase.
 [locInhaleAmp,locExhaleAmp] = peakDetAMPD(data(:,1),freqRange,fs);
 [locInhalePh, locExhalePh]  = peakDetAMPD(data(:,2),freqRange,fs);
 

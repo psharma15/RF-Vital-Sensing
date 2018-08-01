@@ -14,8 +14,8 @@
 %% ------------------------------------------------------------------------
 % Provide input to function.
 dataPath = ['D:\Research\SummerFall17Spring18\CnC\NCS\Respiratory\',...
-    'BreathPattern_Cough_Speak\Data\Pragya\Jul16'];
-hxFolder = '\record_155405';
+    'BreathPattern_Cough_Speak\Data\Yuna\July12_2018'];
+hxFolder = '\Hexoskin';
 % hxDataNum: 1 = resp_abd, 2 = resp_thrx, 3 = ecg, 4 = tidal_vol_raw,
 % 5 = tidal_vol_adj, 6 = min_vent_raw, 7 = min_vent_adj
 hxDataNumRespAbd = 1; % Reading abdomen respiration
@@ -99,8 +99,9 @@ tHxRR = etime(tAbsHxRR,tRef);
 % Specify correct amplitude and phase sign, see if you can implement algo
 % to detect this as well. 
 % *********************************************************************** %
+
 fprintf('Change amplitude and phase sign if needed...\n');
-[ncsRespFiltered,~,~,~] = postProcess(0.05,0.4,0.9,ncsSync,ncsHighSampRate,ncsFlipData);
+[ncsRespFiltered,~,~,~] = postProcess(0.05,1,1.5,ncsSync,ncsHighSampRate,ncsFlipData);
 [ncsHeartFiltered,~,~,~] = postProcess(0.9,10,15,ncsSync,ncsHighSampRate,ncsFlipData);
 
 %% ------------------------------------------------------------------------
@@ -179,7 +180,7 @@ freqRangeBR = [4, 60]./60; % In Hz
 % Remember to provide correct calibration time. 
 % *********************************************************************** %
 % calibTime = [tHxTV(1), tHxTV(end)];
-calibTime = [40, 60]; % 10-50
+calibTime = [240, 260]; % 10-50
 
 [tvCoeffAmpPhSum,tvCoeffAmp,tvCoeffPh,ncsUncalibAmpPhTV] = ...
     ncsEstTV(ncsResp,inExAmp,inExPh,hxTV,ncsRespSampRate,hxSampRateTV,tOffsetTV,calibTime);
