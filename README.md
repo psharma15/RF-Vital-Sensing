@@ -10,6 +10,6 @@ As this setup provides comfortable non-invasive vital sign monitoring, it can be
 We have estimated two key respiratory parameters breath rate (BR) and lung volume (LV) that can identify various respiratory dynamics.
 
 ## References
-1. [P. Sharma and E. C. Kan, “Sleep scoring with a UHF RFID tag by near field coherent sensing,” in IEEE MTT-S Int. Microw. Symp. Dig., 2018, pp. 1419–1422.] (https://doi.org/10.1109/MWSYM.2018.8439216)
+1. P. Sharma and E. C. Kan, “Sleep scoring with a UHF RFID tag by near field coherent sensing,” in IEEE MTT-S Int. Microw. Symp. Dig., 2018, pp. 1419–1422. (https://doi.org/10.1109/MWSYM.2018.8439216)
 2. P. Sharma, X. Hui and E. C. Kan, "A wearable RF sensor for monitoring respiratory patterns," in IEEE Engineering in Medicine and Biology Society (EMBC), 2019 (Accepted).
-3. [X. Hui and E. C. Kan, “Monitoring vital signs over multiplexed radio by near-field coherent sensing,” Nat. Electron., vol. 1, pp. 74–78, 2018.] (https://www.nature.com/articles/s41928-017-0001-0)
+3. X. Hui and E. C. Kan, “Monitoring vital signs over multiplexed radio by near-field coherent sensing,” Nat. Electron., vol. 1, pp. 74–78, 2018. (https://www.nature.com/articles/s41928-017-0001-0)
