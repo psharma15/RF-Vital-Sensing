@@ -3,7 +3,7 @@
 % "An efficient algorithm for automatic peak detection in noisy periodic
 % and quasi-periodic signals", F Scholkmann.
 
-function [maximaIdx, minimaIdx] = peakDetAMPD(signal, freqRange, fs)
+function [minimaIdx, maximaIdx] = peakDetAMPD(signal, freqRange, fs)
 % Input: 
 %       signal: Input signal, 1-D array
 %       freqRange: Expected frequency range of input signal [min, max] Hz

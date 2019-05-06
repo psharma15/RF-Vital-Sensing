@@ -12,15 +12,17 @@ nCoeff = reconstructionCoeff; % Decomposition until reconstruction level
 tmpNcs = [0; cumsum(Lncs)];
 
 % Reconstructing detailed coefficient 'reconstructionCoeff'
-i = 2; % First is approximation coeff 
+i = 2; % First is approximation coeff cA_<last_decomp_level>
 CncsNew = zeros(length(Cncs),1);
+% Second is last detail coeff cA_<last_decomp_level>. Only keeping this for
+% reconstruction.
 CncsNew(tmpNcs(i):tmpNcs(i+1)) = Cncs(tmpNcs(i):tmpNcs(i+1));
 reconstructedNcs = waverec(CncsNew,Lncs,wName); 
 
 tStart = t(1);
 
-nSampT30 = find(t>=30+tStart,1); %Index at t=30 sec
-[rRest,pRest,~,~] = corrcoef(ncs(1:nSampT30),reconstructedNcs(1:nSampT30));
+nSampT60 = find(t>=60+tStart,1); %Index at t=30 sec
+[rRest,pRest,~,~] = corrcoef(ncs(1:nSampT60),reconstructedNcs(1:nSampT60));
 
 % nSampT65 = find(t>=65+tStart,1); %Index at t=65 sec
 % nSampT95 = find(t>=95+tStart,1); 
@@ -41,8 +43,8 @@ if dispOn ==1
     grid on
     axis 'tight'
     
-    fprintf('Correlation for first 30 sec: %f',rRest(1,2));
-    fprintf('\nP-value for first 30 sec: %e\n', pRest(1,2));
+    fprintf('Correlation for first 60 sec: %f',rRest(1,2));
+    fprintf('\nP-value for first 60 sec: %e\n', pRest(1,2));
 %     fprintf('Correlation for rest of the : %f',rMotion(1,2));
 %     fprintf('\nP-value at Motion: %e\n', pMotion(1,2));
 end

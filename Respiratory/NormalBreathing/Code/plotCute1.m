@@ -1,24 +1,50 @@
-function plotCute1(xLabel,yLabel,ax,plotTitle,plotLegend,showLegend)
+function plotCute1(xLabel,yLabel,ax,plotTitle,plotLegend,showLegend,varargin)
 %% PLOTCUTE1 takes 'x' and 'y' labels as input along with the axis, and 
 % improves the plot with fixed settings        
 
-hXLabel = xlabel(ax,xLabel,'FontSize',10);
-hYLabel = ylabel(ax,yLabel,'FontSize',10); 
-hTitle = title(ax,plotTitle);
+fontSize = 10;
+
+if nargin == 7
+    legOrient = varargin{1};
+else
+    legOrient = 'Vertical'; % Default legend orientation
+end
+
+set(gca                       , ...
+    'FontName'   , 'Helvetica', ...
+    'FontSize'   , fontSize   ); % 8 for publication
+
+if ~isempty(xLabel)
+    hXLabel = xlabel(ax,xLabel,'FontSize',10);
+    set(hXLabel, ...
+    'FontName'   , 'Helvetica',...
+    'FontSize'   , fontSize        ); % 8 for publication
+else
+    set(gca,'XTickLabels',[]);
+end
+
+if ~isempty(yLabel)
+    hYLabel = ylabel(ax,yLabel,'FontSize',10); 
+    set(hYLabel, ...
+    'FontName'   , 'Helvetica',...
+    'FontSize'   , fontSize        ); % 8 for publication
+else
+    set(ax,'yticklabel',[]) 
+end
 
 if showLegend
     hLegend = legend(plotLegend);
     set(hLegend,...
         'FontName'   , 'Helvetica',...
-        'FontSize'   , 6         );
+        'FontSize'   , fontSize   ,...
+        'Orientation', legOrient  ); % 6 for publication
 end
 
-set(gca                       , ...
-    'FontName'   , 'Helvetica', ...
-    'FontSize'   , 8          );
-set([hXLabel, hYLabel,hTitle], ...
+hTitle = title(ax,plotTitle);
+set(hTitle, ...
     'FontName'   , 'Helvetica',...
-    'FontSize'   , 8         );
+    'FontSize'   , fontSize   ); % 8 for publication
+
 set(ax, ...
   'Box'         , 'off'     , ...
   'TickDir'     , 'out'     , ...
@@ -31,5 +57,6 @@ set(ax, ...
   'LineWidth'   , 1         ); %'YTick'       , -0.008:0.002:0.008, ...
 
 ax.XGrid = 'off';
+ax.YGrid = 'off';
 
 end

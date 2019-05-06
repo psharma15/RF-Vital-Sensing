@@ -20,6 +20,7 @@ addpath(codePostProcessPath);
 f3db = 0.6;
 fp = 10; fst = 11;
 
+
 [ncs25,~,ncsUnfiltAmp25,ncsUnfiltPh25,~] = postProcess2(f3db,fp,fst,dataPath,'b8_5.mat',-1);
 [ncs24,~,ncsUnfiltAmp24,ncsUnfiltPh24,~] = postProcess2(f3db,fp,fst,dataPath,'b8_4.mat',-1,420,535);
 [ncs23,~,ncsUnfiltAmp23,ncsUnfiltPh23,~] = postProcess2(f3db,fp,fst,dataPath,'b8_4.mat',-1,140,290);
@@ -45,9 +46,30 @@ fp = 10; fst = 11;
 
 close all;
 
+
+ncsCell = {ncs2,ncs5,ncs6,ncs7,ncs8,ncs9,ncs10,ncs11,ncs12,ncs13,ncs14,ncs15,ncs16,...
+    ncs17,ncs18,ncs19,ncs20,ncs21,ncs22,ncs23,ncs24,ncs25};
+ncsUnfiltAmp = {ncsUnfiltAmp2,ncsUnfiltAmp5,ncsUnfiltAmp6,ncsUnfiltAmp7,ncsUnfiltAmp8,...
+    ncsUnfiltAmp9,ncsUnfiltAmp10,ncsUnfiltAmp11,ncsUnfiltAmp12,ncsUnfiltAmp13,...
+    ncsUnfiltAmp14,ncsUnfiltAmp15,ncsUnfiltAmp16,ncsUnfiltAmp17,ncsUnfiltAmp18,...
+    ncsUnfiltAmp19,ncsUnfiltAmp20,ncsUnfiltAmp21,ncsUnfiltAmp22,ncsUnfiltAmp23,...
+    ncsUnfiltAmp24,ncsUnfiltAmp25};
+ncsUnfiltPh = {ncsUnfiltPh2,ncsUnfiltPh5,ncsUnfiltPh6,ncsUnfiltPh7,ncsUnfiltPh8,...
+    ncsUnfiltPh9,ncsUnfiltPh10,ncsUnfiltPh11,ncsUnfiltPh12,ncsUnfiltPh13,...
+    ncsUnfiltPh14,ncsUnfiltPh15,ncsUnfiltPh16,ncsUnfiltPh17,ncsUnfiltPh18,...
+    ncsUnfiltPh19,ncsUnfiltPh20,ncsUnfiltPh21,ncsUnfiltPh22,ncsUnfiltPh23,...
+    ncsUnfiltPh24,ncsUnfiltPh25};
+
+dataSet = [];
+for i=1:length(ncsCell)
+    
+    dataSet = [dataSet; 5*1e-2*i*ones(length(cell2mat(ncsCell(1,i))),1)];
+end
+
 ncs = [ncs2;ncs5;ncs6;ncs7;ncs8;ncs9;ncs10;ncs11;ncs12;ncs13;ncs14;ncs15;ncs16;...
     ncs17;ncs18;ncs19;ncs20;ncs21;ncs22;ncs23;ncs24;ncs25];
 
+    
 ncsAmpUnfilt = [ncsUnfiltAmp2;ncsUnfiltAmp5;ncsUnfiltAmp6;ncsUnfiltAmp7;...
     ncsUnfiltAmp8;ncsUnfiltAmp9;ncsUnfiltAmp10;ncsUnfiltAmp11;ncsUnfiltAmp12;...
     ncsUnfiltAmp13;ncsUnfiltAmp14;ncsUnfiltAmp15;ncsUnfiltAmp16;ncsUnfiltAmp17;...
@@ -59,19 +81,29 @@ ncsPhUnfilt = [ncsUnfiltPh2;ncsUnfiltPh5;ncsUnfiltAmp6;ncsUnfiltPh7;...
     ncsUnfiltPh18;ncsUnfiltPh19;ncsUnfiltPh20;ncsUnfiltPh21;ncsUnfiltPh22;...
     ncsUnfiltPh23;ncsUnfiltPh24;ncsUnfiltPh25];
 
-clearvars -except fs ncs ncsAmpUnfilt ncsPhUnfilt codePostProcessPath 
+ampPh = {ncsUnfiltAmp;ncsUnfiltPh};
+save([dataPath,'\ncsUnfiltMD'],'ampPh');
+
+clearvars -except fs ncs ncsAmpUnfilt ncsPhUnfilt codePostProcessPath threshPrediction dataSet ncsCell ncsUnfilt
 
 nSample = length(ncs);
 idx = 1:nSample;
 t = ((idx-1)/fs)';
 
 figure
-yyaxis left
 plot(t,ncsAmpUnfilt)
-yyaxis right
-plot(t,ncsPhUnfilt)
+
+figure
+plot(t,ncs)
+hold on
+plot(t,dataSet*max(ncs)*2)
+hold off
+axis('tight')
+xlabel('Time (s)','FontSize',10)
+ylabel('Heartbeat (a.u.)','FontSize',10)
 
 rmpath(codePostProcessPath);
+
 
 %%
 codeMDPath = 'D:\Research\SummerFall17Spring18\CnC\NCS\MotionDetectionSleep\MDCodes';
@@ -108,7 +140,7 @@ X = [];
 figure('Units', 'pixels', ...
     'Position', [100 100 500 300]);
 ax2 = gca;
-h1 = plot(ax2,t,ncs,':');
+h1 = plot(ax2,t,ncs);
 hold on
 
 h2 = [];
@@ -132,6 +164,8 @@ while (nStart <= length(tSample)) && (tSample(nStart) <= tSample(end))
     %% Peak Detection
     % Simple First-order Derivative, with just one apriori condition
     [~,locs] = findpeaks(recNcsd8Window,'MinPeakDistance',minPeakInterval);
+    
+    plot(tWindow(locs),ncsWindow(locs),'o','MarkerEdgeColor','none','MarkerFaceColor','k','MarkerSize',2);
     
     nStart = nEnd + 1;
     
@@ -332,7 +366,7 @@ while (nStart <= length(tSample)) && (tSample(nStart) <= tSample(end))
             h2 = plot(ax2,tSample(relIdx(relIdxCount,1):relIdx(relIdxCount,2)),...
                 ncsSample(relIdx(relIdxCount,1):relIdx(relIdxCount,2)),'color',[0.3,0.75,0.93]); %[0.3,0.75,0.93]
         else
-            classPredTimeSeries(relIdx(relIdxCount,1):relIdx(relIdxCount,2)) = 1; % Motion
+            classPredTimeSeries(relIdx(relIdxCount,1):relIdx(relIdxCount,2)) = 1; % Rest
             h3 = plot(ax2,tSample(relIdx(relIdxCount,1):relIdx(relIdxCount,2)),...
                 ncsSample(relIdx(relIdxCount,1):relIdx(relIdxCount,2)),'k');
         end        

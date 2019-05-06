@@ -45,7 +45,7 @@ tTrunc = t(sampStart:sampEnd);
 % High Pass filter - for dc or dc and breath removal
 if f3db > 0
     % Option to perform HP filter.
-    orderHP = 20;
+    orderHP = 20; % 20 original
     filtHP = fdesign.highpass('N,F3db',orderHP,f3db,fs); % Nonlinear phase filter but better filtering characteristics
     HdHP = design(filtHP,'butter'); % 'butter' with 'N,F3db' specifications
     ncsAmpHP = filtfilt(HdHP.sosMatrix,HdHP.ScaleValues,ncsUnfiltAmpTrunc);
@@ -56,7 +56,7 @@ else
 end
 
 % Low pass filter 
-filtLP = fdesign.lowpass('Fp,Fst,Ap,Ast',fp,fst,0.1,80,fs); % Change Ast to 10 if filtfilt creates error
+filtLP = fdesign.lowpass('Fp,Fst,Ap,Ast',fp,fst,0.1,10,fs); % Change Ast from 80 to 10 if filtfilt creates error
 HdLP = design(filtLP,'kaiserwin'); %kaiserwin is much faster than equiripple without much degradation (?)
 ncsAmpLP = filtfilt(HdLP.Numerator,1,ncsAmpHP); % Taking care of group delay
 ncsPhLP = filtfilt(HdLP.Numerator,1,ncsPhHP); % Taking care of group delay

@@ -2,6 +2,22 @@
 % obtained from ncsHxCompare.m
 
 %% 
+figure('Units', 'pixels','Position', [100 100 600 700]);
+nFig = 3;
+ax1(1) = subplot(nFig,1,1);
+plot(ax1(1),tResp,ncsResp(:,1),'LineWidth',1.5); 
+plotCute1('Time (s)','a.u.',ax1(1),[],[],0);
+
+ax1(2) = subplot(nFig,1,2);
+plot(ax1(2),tTV,ncsTVAmp,'LineWidth',2);
+plotCute1('Time (s)','Respiratory Volume (mL)',ax1(2),[],[],0);
+
+ax1(3) = subplot(nFig,1,3);
+plot(ax1(3),tBR,ncsBR(:,1),'LineWidth',2);
+plotCute1('Time (s)','Breath Rate (BPM)',ax1(3),[],[],0);
+
+linkaxes(ax1,'x');
+%%
 figure('Units', 'pixels', ...
     'Position', [100 100 1200 700]);
 % tHxResp = 0:1/hx
@@ -168,25 +184,32 @@ xlim(ax2,[95,140])
 % Plot NCS original Amp and phase and corresponding resp and heartbeat
 degSign = char(0176);
 
-tSync = 0:1/ncsHighSampRate:(length(ncsSync) - 1)/ncsHighSampRate;
+tSync = 0:1/ncsSampRate:(length(ncsSync) - 1)/ncsSampRate;
+
+tStartSec = 2;
+tEndSec = 18;
+tStart = tStartSec*ncsSampRate+1; % 1
+tEnd = tEndSec*ncsSampRate+1; % length(tSync)
 
 nFig = 3;
 figure('Units', 'pixels', 'Position', [100 100 400 400]);
 
 ax4(1) = subplot(nFig,1,1);
 yyaxis left
-plot(ax4(1), tSync, ncsSync(:,1),'color',[0.3,0.75,0.93],'LineWidth',1.5);
+plot(ax4(1), tSync(tStart:tEnd)-tStartSec, ncsSync(tStart:tEnd,1),'color',[0.3,0.75,0.93],'LineWidth',1.5);
 plotCute1([],'Amplitude (V)',ax4(1),[],[],0);
-ylim(ax4(1),[5e-3, 10e-3])
+% ylim(ax4(1),[5e-3, 10e-3])
 
 yyaxis right
-plot(ax4(1), tSync, ncsSync(:,2),':','color','k','LineWidth',2);
+plot(ax4(1), tSync(tStart:tEnd)-tStartSec, ncsSync(tStart:tEnd,2),':','color','k','LineWidth',1);
 plotCute1([],['Phase (',degSign,')'],ax4(1),[],{'NCS Amplitude', 'NCS Phase'},1);
 
 ax4(2) = subplot(nFig,1,2);
-plot(ax4(2),tResp,ncsResp(:,2),':','color','k','LineWidth',2);
-plotCute1([],'Respiration (a.u.)',ax4(2),[],[],0);
+plot(ax4(2),tSync(tStart:tEnd)-tStartSec,ncsRespProcessed(tStart:tEnd,2),':','color','k','LineWidth',2);
+plotCute1([],'Respiration (a.u.)',ax4(2),[],'Respiration',1);
 
 ax4(3) = subplot(nFig,1,3);
-plot(ax4(3),tHeart,ncsHeart(:,1));
-plotCute1('Time (s)','Heartbeat (a.u.)',ax4(3),[],[],0);
+plot(ax4(3),tSync(tStart:tEnd)-tStartSec,ncsHeartProcessed(tStart:tEnd,1),'color',[0.3,0.75,0.93]);
+plotCute1('Time (s)','Heartbeat (a.u.)',ax4(3),[],'Heartbeat',1);
+
+linkaxes(ax4,'x')

@@ -3,8 +3,8 @@
 % April 24, 2018
 % Pragya Sharma, ps847@cornell.edu
 
-function [ncsDataTrunc,ncsTimeTrunc,ncsSampRate,hxDataTrunc,hxDateTimeTrunc,hxSampRate] = ...
-    ncsHxRawSync(dataPath,hxFolder,hxDataNum,ncsDataNum,...
+function [ncsDataTrunc,ncsTimeTrunc,hxDataTrunc,hxDateTimeTrunc,hxSampRate] = ...
+    ncsHxRawSync(dataPath,hxFolder,hxDataNum,ncsFileName,ncsSampRate,...
     manualTimeOffset,dataDuration,ncsTstart)
     
 %% Input to function
@@ -12,7 +12,7 @@ function [ncsDataTrunc,ncsTimeTrunc,ncsSampRate,hxDataTrunc,hxDateTimeTrunc,hxSa
 %     'Hexoskin\Data\2'];
 % hxFolder = '\user_13412';
 % hxDataNum = 2; % dataNum: 1 = resp_abd, 2 = resp_thrx, 3 = ecg
-% ncsDataNum = 2; % data at different time instants
+% ncsFileName = 'freq2G_1v2a'; % data at different time instants
 % manualTimeOffset = 20.5; % sec: This is by observation.
 % dataDuration = 0;
 % ncsTstart = 0*60; % Time is relative to NCS in seconds
@@ -22,8 +22,8 @@ function [ncsDataTrunc,ncsTimeTrunc,ncsSampRate,hxDataTrunc,hxDateTimeTrunc,hxSa
     readHxData([dataPath, hxFolder],hxDataNum);
 
 %% Reading NCS data
-[ncsData, ncsSampRate, ncsStartDateTime] = ...
-    readNcsData(dataPath,ncsDataNum);
+[ncsData, ncsStartDateTime] = ...
+    readNcsData(dataPath,ncsFileName);
 
 %% Find Hx data start offset, assuming Hx data started before NCS data
 % Compute the time elapsed to 0.01-second accuracy.

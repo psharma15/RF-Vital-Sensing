@@ -7,10 +7,9 @@ function [dateTime,ampPh] = saveTDMStoMAT()
 % TDMS to mat, and saveFile name is the name of the saved mat file
 % It uses convertTDMS.m to convert TDMS to mat.
 
-dataPath = ['D:\Research\SummerFall17Spring18\CnC\NCS\Respiratory\',...
-    'BreathPattern_Cough_Speak\Data\Yuna\July19_2018\'];
-fileName = 'freq2G_2v2h';
-saveFileName =  'freq2G_2v2h';
+dataPath = 'E:\NCS\Respiratory\BreathPattern_Cough_Speak\Data\Pragya\JanFeb2019\Feb15\';
+fileName = 'freq1_8G_v3a 0215_1552';
+saveFileName =  fileName;
 [convertedData,ampPh] = callConvert(dataPath,fileName);
 dateTime = convertedData.Data.MeasuredData(5).Property(8).Value;
 saveFileName = [dataPath,saveFileName,'.mat'];

@@ -64,12 +64,12 @@ function [ConvertedData,ConvertVer,ChanNames,GroupNames,ci]=convertTDMS(varargin
 %to a new file.  See: https://decibel.ni.com/content/docs/DOC-32817
 %
 %  See Also: simpleconvertTDMS
-
+%
 %-------------------------------------------------------------------------
 %Brad Humphreys - v1.0 2008-04-23
 %ZIN Technologies
 %-------------------------------------------------------------------------
-
+%
 %-------------------------------------------------------------------------
 %Brad Humphreys - v1.1 2008-07-03
 %ZIN Technologies
@@ -79,14 +79,14 @@ function [ConvertedData,ConvertVer,ChanNames,GroupNames,ci]=convertTDMS(varargin
 %-Corrected significant problem where it was assumed that once an object
 %    existsed, it would in in every subsequent segement.  This is not true.
 %-------------------------------------------------------------------------
-
+%
 %-------------------------------------------------------------------------
 %Grant Lohsen - v1.2 2009-11-15
 %Georgia Tech Research Institute
 %-Converts TDMS v2 files
 %Folks, it's not pretty but I don't have time to make it pretty. Enjoy.
 %-------------------------------------------------------------------------
-
+%
 %-------------------------------------------------------------------------
 %Jeff Sitterle - v1.3 2010-01-10
 %Georgia Tech Research Institute
@@ -96,13 +96,13 @@ function [ConvertedData,ConvertVer,ChanNames,GroupNames,ci]=convertTDMS(varargin
 %description in text form
 %Vast speed improvement as save was the previous longest task
 %-------------------------------------------------------------------------
-
+%
 %-------------------------------------------------------------------------
 %Grant Lohsen - v1.4 2009-04-15
 %Georgia Tech Research Institute
 %Reads file header info and stores in the Root Structure.
 %-------------------------------------------------------------------------
-
+%
 %-------------------------------------------------------------------------
 %Robert Seltzer - v1.5 2010-07-14
 %BorgWarner Morse TEC
@@ -122,7 +122,7 @@ function [ConvertedData,ConvertVer,ChanNames,GroupNames,ci]=convertTDMS(varargin
 %-Added option to save the data in a MAT file.
 %-Fixed "invalid field name" error caused by excessive string lengths.
 %-------------------------------------------------------------------------
-
+%
 %-------------------------------------------------------------------------
 %Robert Seltzer - v1.6 2010-09-01
 %BorgWarner Morse TEC
@@ -132,14 +132,14 @@ function [ConvertedData,ConvertVer,ChanNames,GroupNames,ci]=convertTDMS(varargin
 %-Added capability to process both fragmented or defragmented data.
 %-Fixed the "field" error found by Lawrence.
 %-------------------------------------------------------------------------
-
+%
 %-------------------------------------------------------------------------
 %Christian Buxel - V1.7 2010-09-17
 %RWTH Aachen
 %-Tested in Matlab2007b.
 %-Added support for german umlauts (�,�,�,�,�,�,�) in 'propsName'
 %-------------------------------------------------------------------------
-
+%
 %-------------------------------------------------------------------------
 %Andr� R�egg - V1.7 2010-09-29
 %Supercomputing Systems AG
@@ -149,7 +149,7 @@ function [ConvertedData,ConvertVer,ChanNames,GroupNames,ci]=convertTDMS(varargin
 %-Fixed error if object consists of several segments with identical segment
 % information (if rawdataindex==0, not all segments were loaded)
 %-------------------------------------------------------------------------
-
+%
 %-------------------------------------------------------------------------
 %Robert Seltzer - v1.7 2010-09-30
 %BorgWarner Morse TEC
@@ -161,7 +161,7 @@ function [ConvertedData,ConvertVer,ChanNames,GroupNames,ci]=convertTDMS(varargin
 % explaining to the user what has happened and how to fix it. Only tested
 % with a very limited number of "special" characters.
 %-------------------------------------------------------------------------
-
+%
 %-------------------------------------------------------------------------
 %Robert Seltzer - v1.8 2010-10-12
 %BorgWarner Morse TEC
@@ -181,13 +181,13 @@ function [ConvertedData,ConvertVer,ChanNames,GroupNames,ci]=convertTDMS(varargin
 % 1 hour.
 %-Tested in MATLAB 2010b with a limited number of diverse TDMS files.
 %-------------------------------------------------------------------------
-
+%
 %-------------------------------------------------------------------------
 %Robert Seltzer - v1.8 2010-10-19
 %BorgWarner Morse TEC
 %-Fixed an error found by Terenzio Girotto with the 'save' routine.
 %-------------------------------------------------------------------------
-
+%
 %-------------------------------------------------------------------------
 %Robert Seltzer - v1.8 2010-10-25
 %BorgWarner Morse TEC
@@ -197,8 +197,8 @@ function [ConvertedData,ConvertVer,ChanNames,GroupNames,ci]=convertTDMS(varargin
 %-Added 'GroupNames' as an optional output variable.
 %-Fixed an error with capturing the properties of the Root object
 %-------------------------------------------------------------------------
-
-
+%
+%
 %-------------------------------------------------------------------------
 %Philip Top - v1.9 2010-11-09
 %John Breneman
@@ -210,19 +210,19 @@ function [ConvertedData,ConvertVer,ChanNames,GroupNames,ci]=convertTDMS(varargin
 %-used matlab input parser instead of nargin switch
 %-vectorized timestamp reads for substantial speedup
 %-------------------------------------------------------------------------
-
+%
 %-------------------------------------------------------------------------
 %Robert Seltzer - v1.9 2010-11-10
 %BorgWarner Morse TEC
 %-Fixed an error error in the 'offset' calculation for strings
 %-------------------------------------------------------------------------
-
+%
 %-------------------------------------------------------------------------
 %Philip Top - v1.95 2011-5-10
 %Fix Bug with out of order file segments
 %Fix some issues with string array reads for newer version files,
 %-------------------------------------------------------------------------
-
+%
 %-------------------------------------------------------------------------
 %Brad Humphreys - v1.96 2013-10-9
 %Fixed problem with error catch messages themselves (interleaved, version,
@@ -235,20 +235,19 @@ function [ConvertedData,ConvertVer,ChanNames,GroupNames,ci]=convertTDMS(varargin
 %       -Big and Little Endian storage
 % Does not work with DAQmxRawData
 %-------------------------------------------------------------------------
-
+%
 %-------------------------------------------------------------------------
 %Brad Humphreys - v1.97 2013-11-13
 %Added information to help documentation on how to deal with DAQmxRaw Data.
 %-------------------------------------------------------------------------
-
-
+%
 %-------------------------------------------------------------------------
 %Brad Humphreys - v1.98 2014-5-27
 %Per G. Lohsen's suggestion, added check to verify that first caharters are
 % TDMs.  If not, errors out and lets user know that the selected file is
 % not a TDMS file.
 %-------------------------------------------------------------------------
-
+%
 %-------------------------------------------------------------------------
 %Sebastian Schwarzendahl (alias Haench) - v1.99 2014-10-23
 % Added support for complex data types 
@@ -1249,9 +1248,6 @@ for kk=1:length(fnm)    %Loop through objects
 end
 end
 
-
-
-
 function [DataStructure,GroupNames]=postProcess(ob,index)
 %Re-organize the 'ob' structure into a more user friendly format for output.
 
@@ -1471,7 +1467,6 @@ end
 
 end
 
-
 function SegInfo=addChanCount(SegInfo,channelinfo)
 %This function determines the number of channels in each segement by
 %looping through the channels in channelinfo.  It looks at their index,
@@ -1521,9 +1516,6 @@ switch(LVType)
         error('LVData type %d is not defined',LVType)
 end
 end
-
-
-
 
 function matType=LV2MatlabDataType(LVType)
 %Cross Refernce Labview TDMS Data type to MATLAB

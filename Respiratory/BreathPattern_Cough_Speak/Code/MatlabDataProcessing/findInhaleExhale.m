@@ -1,4 +1,8 @@
-% This function finds maxima (inhalation end) and minima 
+% Updating on 04 Nov 2018, maxima == exhalation, minima == inhalation.
+% Although this feature existed, to match it to Hexoskin waveforms, the
+% consecutive same max/min were treated wrong.
+%
+% This function finds minima (inhalation end) and maxima 
 % (exhalation end) points in respiration waveform extracted from both 
 % amplitude and phase of NCS. 
 % This is originally written for respiration, hence all terms indicate
@@ -9,7 +13,7 @@
 % Pragya Sharma, ps847@cornell.edu
 % April 15th, 2018.
 
-function [inExAmp,inExPh] = findInhaleExhale(data,fs,freqRange,t)
+function [inExAmp,inExPh] = findInhaleExhale2(data,fs,freqRange,t)
 % Input:
 %   data: [ncs Amp, ncs Ph]
 %   fs: Sampling frequency of data
@@ -122,8 +126,8 @@ for iter = 2:length(inExAmpIdx)
             % This is the max/ min data pt among consecutive max/ min
             dataMaxMin = data(inExAmpIdx(iter-1),1); 
         end
-        if ((inExAmpIndicator(iter) == 1) && (data(inExAmpIdx(iter),1) > dataMaxMin)) ...
-                || ((inExAmpIndicator(iter) == 0) && (-data(inExAmpIdx(iter),1) > -dataMaxMin))
+        if ((inExAmpIndicator(iter) == 0) && (data(inExAmpIdx(iter),1) > dataMaxMin)) ...
+                || ((inExAmpIndicator(iter) == 1) && (-data(inExAmpIdx(iter),1) > -dataMaxMin))
             dataMaxMin = data(inExAmpIdx(iter),1);
             tempMaxMin = [inExAmpIdx(iter), inExAmpIndicator(iter), ...
                 counter-1];
@@ -158,8 +162,8 @@ for iter = 2:length(inExPhIdx)
             % This is the max/ min data pt among consecutive max/ min
             dataMaxMin = data(inExPhIdx(iter-1),2); 
         end
-        if ((inExPhIndicator(iter) == 1) && (data(inExPhIdx(iter),2) > dataMaxMin)) ...
-                || ((inExPhIndicator(iter) == 0) && (-data(inExPhIdx(iter),2) > -dataMaxMin))
+        if ((inExPhIndicator(iter) == 0) && (data(inExPhIdx(iter),2) > dataMaxMin)) ...
+                || ((inExPhIndicator(iter) == 1) && (-data(inExPhIdx(iter),2) > -dataMaxMin))
             dataMaxMin = data(inExPhIdx(iter),2);
             tempMaxMin = [inExPhIdx(iter), inExPhIndicator(iter), ...
                 counter-1];

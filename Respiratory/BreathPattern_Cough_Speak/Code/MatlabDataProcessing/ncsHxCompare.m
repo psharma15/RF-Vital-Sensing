@@ -14,9 +14,8 @@
 
 %% ------------------------------------------------------------------------
 % Provide input to function.
-dataPath = ['D:\Research\SummerFall17Spring18\CnC\NCS\Respiratory\',...
-    'BreathPattern_Cough_Speak\Data\Yuna\July19_2018'];
-hxFolder = '\user_13937';
+dataPath = ['E:\NCS\Respiratory\BreathPattern_Cough_Speak\Data\Pragya\JanFeb2019\Feb15'];
+hxFolder = '\user_13412';
 % hxDataNum: 1 = resp_abd, 2 = resp_thrx, 3 = ecg, 4 = tidal_vol_raw,
 % 5 = tidal_vol_adj, 6 = min_vent_raw, 7 = min_vent_adj
 hxDataNumRespAbd = 1; % Reading abdomen respiration
@@ -28,13 +27,17 @@ hxDataNumEcg = 3; % ECG_I data
 hxDataNumHR = 11; % Heart rate
 hxDataNumRR = 12; % RR interval 
 
-ncsFileName = '\freq2G_2v2g'; % data at different time instants
+ncsFileName = '\freq1_8G_v3a 0215_1552'; % data at different time instants
 ncsSampRate = 500; % NCS sampling rate in Hz
 % Manual time offset is by observation. Use following settings:
-% Yuna_Jul12: 18.4, Yuna_Jul18: 15.57, Yuna_Jul19: -.455
-% Pragya_Jul16: -3.16
-% 
-manualTimeOffset = -.455; % sec: This is by observation 
+% Yuna_Jul12_2018: 18.4, Yuna_Jul18_2018: 15.57, Yuna_Jul19_2018: -.455
+% Pragya_Jul16_2018: -3.16
+% Pragya_Jan31_2019: -3.812
+% Pragya_Feb1_2019: Cough: 18.08 AND change ncsSampRate to 80.
+% Pragya_Feb1_2019: IsoVolumetric: 0
+% Pragya_Feb15_2019: -1.982
+% Pragya_TwoTx_v1a 0215_1708: Start data from t=45.27, offset=-36.3
+manualTimeOffset = -1.982; % sec: This is by observation 
 ncsTstart = 0; % Time is relative to NCS in seconds, keep 150 for stable
 dataDuration = 0; % Leave last 30 sec abd data: 10*60-30-ncsTstart
 
@@ -108,41 +111,19 @@ tHxRR = etime(tAbsHxRR,tRef);
 % *********************************************************************** %
 ncsFlipData = [1,1]; % -1 to flip
 
-phUnwrap = 0;
-
-if phUnwrap == 1
-    ncsPh = ncsSync(:,2);
-    %% This is not a right way to unwrap
-    for i = 2:length(ncsPh)
-        if ncsPh(i) < 250
-            ncsPh(i) = 360 + ncsPh(i);
-        end
-    end
-    figure
-    plot([ncsPh,ncsSync(:,2)]);
-    ncsSync(:,2) = ncsPh;
-end
-
-% if phUnwrap == 1
-%     ncsPh = ncsSync(:,2);
-%     %% This is not a right way to unwrap
-%     ncsPhRad = deg2rad(ncsPh);
-%     ncsPhRadUnwrapped = unwrap(ncsPhRad);
-%     ncsPh = rad2deg(ncsPhRadUnwrapped);
-%     figure
-%     plot([ncsPh,ncsSync(:,2)],'*');
-% end
-
 fprintf('Change amplitude and phase sign by %d and % d respectively...\n',ncsFlipData(1),ncsFlipData(2));
 
-[ncsRespFiltered,~,~,~] = postProcess(0.0,10,12,ncsSync,ncsSampRate,ncsFlipData);
+[ncsRespFiltered,~,~,tTrunc] = postProcess(0.0,5,10,ncsSync,ncsSampRate,ncsFlipData);
 ncsRespDetrend = detrend(ncsRespFiltered); % Linear detrending
-hold on
+
+% [ncsRespHP,~,~,~] = postProcess(25,500,550,ncsSync,ncsSampRate,ncsFlipData);
+
+figure
 yyaxis left
 plot(ncsRespDetrend(:,1));
 yyaxis right
 plot(ncsRespDetrend(:,2));
-
+% 
 % opol = 2; % Order of polynomial to fit
 % tFitResp = [0:1/ncsSampRate:((length(ncsRespDetrend)-1)/ncsSampRate)]';
 % [p1,s1,mu1] = polyfit(tFitResp,ncsRespDetrend(:,1),opol);
@@ -158,15 +139,16 @@ plot(ncsRespDetrend(:,2));
 
 ncsRespProcessed = ncsRespDetrend;
 
-[ncsHeartFiltered,~,~,~] = postProcess(0.9,10,15,ncsSync,ncsSampRate,ncsFlipData);
+[ncsHeartFiltered,~,~,~] = postProcess(0.6,10,12,ncsSync,ncsSampRate,ncsFlipData);
+title('Heart')
 ncsHeartProcessed = ncsHeartFiltered;
 
 %% ------------------------------------------------------------------------
-% Downsample NCS resp to hx respiration sample rate = 128 Hz
+% Resample NCS resp to hx respiration sample rate = 128 Hz
 ncsRespSampRate = hxRespSampRate;
 ncsResp = resample(ncsRespProcessed,ncsRespSampRate,ncsSampRate);
 
-% Downsample NCS heart to hx ECG sample rate = 256 Hz
+% Resample NCS heart to hx ECG sample rate = 256 Hz
 ncsHeartSampRate = hxEcgSampRate;
 ncsHeart = resample(ncsHeartProcessed,ncsHeartSampRate,ncsSampRate);
 
@@ -204,24 +186,24 @@ yyaxis left
 plot(ax0(1),tResp,hxRespTh./max(hxRespTh),':','color','k','LineWidth',2); %./max(hxRespTh)
 hold on
 plot(ax0(1),tResp,hxRespAbd./max(hxRespAbd),'-','color',[0.3,0.75,0.93]); %./max(hxRespAbd)
-plotCute1([],'a.u.',ax0(1),[],[],0);
+plotCute1('Time (s)','a.u.',ax0(1),[],[],0);
 % ylim([0.9967,1.001])
 hold off
 
 yyaxis right
 plot(ax0(1),tTV,hxTV);
-plotCute1('Time (sec)','mL',ax0(1),...
+plotCute1('Time (s)','mL',ax0(1),...
     'Hexoskin Respiration (thorax & abdomen) and Tidal Volume',{'Thorax (a.u.)',...
     'Abdomen (a.u.)','Tidal Volume (mL)'},1);
 
 ax0(2) = subplot(nFig,1,2);
 yyaxis left
 plot(ax0(2),tResp,ncsResp(:,1)); 
-plotCute1([],'a.u.',ax0(2),[],[],0);
+plotCute1('Time (s)','a.u.',ax0(2),[],[],0);
 
 yyaxis right
 plot(ax0(2),tResp,ncsResp(:,2)); 
-plotCute1('Time (sec)','a.u.',ax0(2),...
+plotCute1('Time (s)','a.u.',ax0(2),...
     'NCS Respiration (amplitude & phase)',{'NCS Amp (a.u.)','NCS Ph (a.u.)'},1);
  
 linkaxes(ax0,'x')
@@ -235,21 +217,21 @@ nFig = 2;
 ax1(1) = subplot(nFig,1,1);
 yyaxis left
 plot(ax1(1),tResp,hxRespTh,'color',[0.6,0.2,0.6],'LineWidth',1); 
-plotCute1([],'Thorax (mL)',ax1(1),[],[],0);
+plotCute1('Time (s)','Thorax (mL)',ax1(1),[],[],0);
 yyaxis right
 plot(ax1(1),tResp,hxRespAbd,'-','color',[0.3,0.75,0.93]); 
-plotCute1('Time (sec)','Abdomen (mL)',ax1(1),...
+plotCute1('Time (s)','Abdomen (mL)',ax1(1),...
     'Hexoskin Respiration (thorax & abdomen)',{'Thorax (a.u.)',...
     'Abdomen (a.u.)'},1,legHorz);
 
 ax1(2) = subplot(nFig,1,2);
 yyaxis left
 plot(ax1(2),tResp,ncsResp(:,1)); 
-plotCute1([],'a.u.',ax1(2),[],[],0);
+plotCute1('Time (s)','a.u.',ax1(2),[],[],0);
 
 yyaxis right
 plot(ax1(2),tResp,ncsResp(:,2)); 
-plotCute1('Time (sec)','a.u.',ax1(2),...
+plotCute1('Time (s)','a.u.',ax1(2),...
     'NCS Respiration (amplitude & phase)',{'NCS Amp (a.u.)','NCS Ph (a.u.)'},1,legHorz);
  
 linkaxes(ax1,'x')
@@ -260,8 +242,13 @@ linkaxes(ax1,'x')
 % inExPh: Ending of exhalation - minima
 % Considering respiration is between 8-60 breaths per minute - normal for
 % adult is 8-20 bpm.
-freqRangeBR = [4, 60]./60; % In Hz
+% For the way findInhaleExhale function is written (to discard consecutive
+% max and min), inhalation is supposed to be maxima (==1) and exhalation is
+% supposed to be minima (==0).
+freqRangeBR = [20, 80]./60; % In Hz
 [inExAmp, inExPh] = findInhaleExhale(ncsResp,ncsRespSampRate,freqRangeBR,tResp);
+freqRangeBR2 = [20,80]./60;
+[inExAmpHx, inExPhHx] = findInhaleExhale([hxRespTh,hxRespAbd],hxRespSampRate,freqRangeBR2,tResp);
 
 %% ------------------------------------------------------------------------
 % *********************************************************************** %
@@ -269,13 +256,27 @@ freqRangeBR = [4, 60]./60; % In Hz
 % Remember to provide correct calibration time. 
 % *********************************************************************** %
 % calibTime = [tHxTV(1), tHxTV(end)];
-calibTime = [30, 40]; 
+calibTime = [15, 80]; 
+fitFunc = 'quad';
+% [tvCoeffAmpPhSum,tvCoeffAmp,tvCoeffPh,ncsUncalibAmpPhTV] = ...
+%     ncsEstTV(ncsResp,inExAmp,inExPh,hxTV,ncsRespSampRate,hxSampRateTV,fitFunc,tOffsetTV,calibTime);
 
 [tvCoeffAmpPhSum,tvCoeffAmp,tvCoeffPh,ncsUncalibAmpPhTV] = ...
-    ncsEstTV(ncsResp,inExAmp,inExPh,hxTV,ncsRespSampRate,hxSampRateTV,tOffsetTV,calibTime);
+    ncsEstTV2(ncsResp,inExAmp,inExPh,hxTV,ncsRespSampRate,hxSampRateTV,...
+    fitFunc,tOffsetTV,calibTime,[35,60],0.25);
+
 ncsTVAmpPhSum = tvCoeffAmpPhSum(1).*ncsUncalibAmpPhTV(:,1) + ...
                 tvCoeffAmpPhSum(2).*ncsUncalibAmpPhTV(:,2);
-ncsTVAmp = tvCoeffAmp.*ncsUncalibAmpPhTV(:,1);
+            
+switch(fitFunc)
+    case 'linear'
+        ncsTVAmp = tvCoeffAmp.*ncsUncalibAmpPhTV(:,1);
+    case 'quad'
+        ncsTVAmp = tvCoeffAmp(1).*(ncsUncalibAmpPhTV(:,1).^2)+...
+                   tvCoeffAmp(2).*(ncsUncalibAmpPhTV(:,1))+tvCoeffAmp(3);
+    otherwise
+        fprintf('Enter correct fitFunc value.\n');
+end
 ncsTVPh = tvCoeffPh.*ncsUncalibAmpPhTV(:,2);
 
 figure('Units', 'pixels', ...
@@ -312,8 +313,8 @@ yyaxis left
 plot(ax3(1),tResp,hxRespTh./max(hxRespTh),':','color','k'); % ./max(hxRespTh)
 hold on
 plot(ax3(1),tResp,hxRespAbd./max(hxRespAbd),'-','color',[0.3,0.75,0.93]); % ./max(hxRespAbd)
-plotCute1([],'a.u.',ax3(1),[],[],0);
-ylim([0.995,1.001])
+plotCute1('Time (s)','a.u.',ax3(1),[],[],0);
+ylim([0.99,1.001])
 hold off
 
 yyaxis right
@@ -325,11 +326,11 @@ plotCute1('Time (sec)','BPM',ax3(1),...
 ax3(2) = subplot(nFig,1,2);
 yyaxis left
 plot(ax3(2),tResp,ncsResp(:,1)); 
-plotCute1([],'a.u.',ax3(2),[],[],0);
+plotCute1('Time (s)','a.u.',ax3(2),[],[],0);
 
 yyaxis right
 plot(ax3(2),tResp,ncsResp(:,2)); 
-plotCute1('Time (sec)','a.u',ax3(2),...
+plotCute1('Time (s)','a.u',ax3(2),...
     'NCS Respiration (amplitude & phase)',{'NCS Amp (a.u.)','NCS Ph (a.u.)'},1);
  
 linkaxes(ax3,'x')
@@ -337,11 +338,18 @@ linkaxes(ax3,'x')
 %% ------------------------------------------------------------------------
 % Calculating breath rate from NCS and comparing against Hexoskin. 
 
-[ncsBR,tNcsBR] = ncsEstBR(ncsResp,inExAmp,inExPh,ncsRespSampRate,tBR);
+% tBR2 = tBR(1):0.1:tBR(end);
+% The calibration time: shd ensure that the peaks are correct. They may be
+% wrong even during normal breathing if window is too small.
+[ncsBR,tNcsBR] = ncsEstBR2(ncsResp,inExAmp,inExPh,ncsRespSampRate,tBR,[35,60],0.15);
+[hxBR2,tHxBR2] = ncsEstBR2([hxRespTh,hxRespAbd],inExAmpHx,inExPhHx,ncsRespSampRate,tBR,[35,60],0.15);
+% [ncsBR,tNcsBR] = ncsEstBR(ncsResp,inExAmp,inExPh,ncsRespSampRate,tBR);
+% [hxBR2,tHxBR2] = ncsEstBR([hxRespTh,hxRespAbd],inExAmpHx,inExPhHx,ncsRespSampRate,tBR);
+% ****** Updating Hexosking BR calculation.
 
 figure('Units', 'pixels', 'Position', [100 100 550 200]);
 ax4 = gca;
-plot(tBR,hxBR,'LineWidth',2,'color',[0.5,0.2,0.7],'LineStyle',':');
+plot(tHxBR2,hxBR2(:,2),'LineWidth',2,'color',[0.5,0.2,0.7],'LineStyle',':');
 hold on
 plot(tNcsBR,ncsBR(:,1),'color',[0 0.9 0],'LineWidth',2);
 plot(tNcsBR,ncsBR(:,2),'--','color',[0.9 0.5 0.2],'LineWidth',2);
@@ -415,7 +423,7 @@ if ifWavelet == 1
     % Going for wavelet decomposition when heart waveform is poor - this would
     % lose HRV but can improve HR estimation
     wName = 'db10';
-    recCoeff = 8; % Reconstructed coefficient
+    recCoeff = 7; % Reconstructed coefficient
     [ncsHeartAmpWavelet,~,~] = wavedecrec1(ncsHeart(:,1),tHeart,wName,recCoeff,0);
     [ncsHeartPhWavelet,~,~] = wavedecrec1(ncsHeart(:,2),tHeart,wName,recCoeff,0);
     ncsHeartProcessed = [ncsHeartAmpWavelet,ncsHeartPhWavelet];

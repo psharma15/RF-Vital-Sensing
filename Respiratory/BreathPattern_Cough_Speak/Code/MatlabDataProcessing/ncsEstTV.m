@@ -3,7 +3,7 @@
 % Pragya Sharma, ps847@cornell.edu
 
 function [tvCoeffAmpPhSum,tvCoeffAmp,tvCoeffPh,ncsTV] = ...
-    ncsEstTV(ncsResp,inExAmp,inExPh,hxTV,ncsSampRate,hxSampRateTV,tOffsetTV,calibTime)
+    ncsEstTV(ncsResp,inExAmp,inExPh,hxTV,ncsSampRate,hxSampRateTV,fitFunc,tOffsetTV,calibTime)
 %% Input and Output:
 % ncsResp: [ncs amp, ncs ph]
 % hxTv: Hexoskin Tidal volume estimation
@@ -144,9 +144,19 @@ modelCalibrationAmpPhSum = fit([ampTVcalibTrunc(:) phTVcalibTrunc(:)],...
 tvCoeffAmpPhSum = coeffvalues(modelCalibrationAmpPhSum);
 
 % Fitting Amp
-fitAmp = @(A,x) A.*x;
-modelCalibrationAmp = fit(ampTVcalibTrunc(:),hxTVcalibTrunc(:),fitAmp,...
+switch(fitFunc)
+    case 'linear'
+        fitAmp = @(A,x) A.*x;
+        modelCalibrationAmp = fit(ampTVcalibTrunc(:),hxTVcalibTrunc(:),fitAmp,...
                           'StartPoint',startPt(1));
+    case 'quad'
+        fitAmp = @(A,B,C,x) A.*(x.^2) + B.*x + C;
+        modelCalibrationAmp = fit(ampTVcalibTrunc(:),hxTVcalibTrunc(:),fitAmp,...
+                          'StartPoint',[0.5e2,0.5e5,0]);
+
+    otherwise
+        fprintf('Enter correct fitting function. \n'); 
+end
 tvCoeffAmp = coeffvalues(modelCalibrationAmp);
 
 % Fitting Phase
