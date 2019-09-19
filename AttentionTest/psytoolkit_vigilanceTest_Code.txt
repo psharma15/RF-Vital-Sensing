@@ -1,0 +1,94 @@
+options
+  startbutton 0
+##fullscreen
+
+bitmaps
+  instructionTrial
+  instructionTest
+  clock_circle
+  clock_hand2
+  thankyou
+
+fonts
+  arial 18
+  
+task trialInstr
+  show bitmap instructionTrial
+  delay 30000  
+  clear 1
+  
+task testInstr
+  show bitmap instructionTest
+  delay 10000
+  clear 2
+  
+task vigilance
+  keys space
+  ## -- update hand location (steps of 3.6 degrees)
+  ##    note: a skip does never repeat
+  set &randomnumber random 1 10
+  set &hand_position increase 36
+  if &randomnumber == 10
+    set &hand_position increase 54 ## increase a bit more 1 in 10 times
+    ## set &skipped 1 ## skipped is 1 when previous trial was a skip
+  fi
+  ##if &randomnumber < 10
+  ##  set &skipped 0
+  ##fi
+  if &hand_position >= 3600
+    set &hand_position 0
+  fi
+  ## -- now draw clock
+  draw off
+    show bitmap clock_circle
+    rotate next &hand_position
+    show bitmap clock_hand2 0 40
+    if &missed_detection == 1 ## of previous trial, show feedback now
+      show circle 0 0 30   255 0 0 ## negative feedback (should have pressed in previous trial)
+      set &missed_detection 0
+    fi
+  draw on
+  ## -- now wait for key press (often people should not respond
+  readkey 1 1000    
+  set $time_val time-since-start
+  if RT < 1000
+    if &randomnumber == 10
+      show circle 0 0 30   0 255 0 ## positive feedback
+      set $correct_detection 1
+    fi
+    if &randomnumber < 10
+      show circle 0 0 30   255 0 0 ## negative feedback (should not have pressed)
+      set $incorrect_detection 1
+    fi
+    set $resttime expression 1000 - RT
+    delay $resttime
+  fi
+  if STATUS == TIMEOUT && &randomnumber == 10
+    set &missed_detection 1 ## show error message in next trial
+  fi
+  ## -- save data
+  save $time_val RT STATUS &hand_position &randomnumber $correct_detection $incorrect_detection &missed_detection BLOCKNAME
+  
+block trialInstr
+  maxtime 1m
+  tasklist
+    trialInstr 1
+  end
+  
+block trial
+  maxtime 1m
+  tasklist 
+    vigilance 30
+  end
+  
+block testInstr
+  maxtime 1m
+  tasklist
+    testInstr 1
+  end
+
+block test
+  maxtime 5m
+  tasklist
+    vigilance 99999
+  end
