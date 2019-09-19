@@ -1,7 +1,7 @@
 # Lung Volume, BR, HR, HRV Analysis
 
 *New and improved codes for doing various analysis of NCS vital signs data, Updated Fall 2019*
-
+------------------------------------------------------------------------------------------------------------
 ## Measurement devices and data recording software:
 
 ### BIOPAC reference measurement (Biopac Acqknowledge)
@@ -21,7 +21,7 @@
 * Now two-independent B200 mini with different carrier frequencies can be used for thorax and abdomen. 
 * Labview code saves NCS data at 50kHz for each study routine separately, with time stamp accurate to milliseconds.
 * Synchronized audio/ visual instructions for performing the routine along with viusal timer information.
-
+-------------------------------------------------------------------------------------------------------------
 ## Data analysis codes:
 The code hierarchy is: 
 * filterLpHp.m (Filtering any waveforms)
@@ -29,7 +29,6 @@ The code hierarchy is:
 	* peakDet3.m (Finding the peaks using efficient, [Lu et al., "A semi-automatic method for peak and valley detection in free-breathing respiratory waveforms," Med Phys, 2006] algorithm)
 * zeroCrossDet.m (Efficient zero-cross (ZC) detection along with slope information - for a noisy waveform)
 
---------------------------------------------------------------------------------------------------------------------------
 
 * ncsBioProcess.m (Synchronizes and gets NCS-Biopac Lung Volume, can add BR and HR)
 	* ncsBioSync.m (Synchronizing NCS and Biopac waveforms)
@@ -43,7 +42,6 @@ The code hierarchy is:
 	* bioBeltVol.m (Using calibrated coefficients to estimate volume from Biopac belts, using findMaxMin.m)
 	* ncsVol (Using calibrated coefficients to estimate volume from NCS respiration, using findMaxMin.m)
 	
---------------------------------------------------------------------------------------------------------------------------
 
 * ncsAttnTestProcess.m (Synchronizes NCS-Biopac-Attention test observation and gets HRV information)
 	* ncsBioSync.m (Synchronizing NCS and Biopac waveforms)
@@ -54,7 +52,7 @@ The code hierarchy is:
 	* ecgHR.m (Estimates Heart Rate from Biopac ECG, using Matlab's function findpeaks.m)
 	* hrvFeatureEst (Estimates Heart Rate Variation (HRV) features from NCS fundamental or harmonic heartbeat and ECG waveforms)
 	
-** Following is some more detail about different parts of code:**
+**Following is some more detail about different parts of code:**
 
 ### Volume Estimation
 
