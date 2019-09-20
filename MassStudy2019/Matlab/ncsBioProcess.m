@@ -7,40 +7,39 @@
 
 %% ------------------------------------------------------------------------
 % Provide input to function.
-dataPath = 'C:\Research\NCS\HumanStudyData\Case7\';
-ncsFile = '0828_104608Routine2a'; % data at different time instants
+dataPath = 'C:\Research\NCS\HumanStudyData\Case9\';
+ncsCalibFile = '0830_100444Calib1';
+ncsFile = '0830_101035Routine3'; % data at different time instants
 %ncsReactionTimeFile = '0613_210551Routine2b_ReactionTime';
-bioFile = 'bio_case7_2019-08-28T10_40_21';
-bioCalibFile = 'bio_case7_2019-08-28T09_50_43';
-fsNcsHigh = 50e3; % NCS sampling rate in Hz
-fsBioHigh = 2e3;
-tStartEndOff = [5,1]; % Start and end offset wrt NCS data in seconds
-tManualOff = 0; % Manual offset between NCS and BIOPAC in seconds
-ncsCalibFile = '0828_103057Calib1';
-tCalibStartEndOff = [0.5,0.5]; % Start and end offset wrt NCS data in seconds
-fsDS = [500, 500]; % [Ncs,Bio] downsampling frequencies
-signNcs = [-1 -1 1 -1]; % sign[ampTh phTh ampAbd phAbd]
-tManualOffCalib = tManualOff;
-signNcsCalib = [-1 -1 1 1];
-unwrapPh = [1 1];
-unwrapPhCalib = unwrapPh;
+bioFile = 'bio_case9_2019-08-30T09_36_42';
+bioCalibFile = 'bio_case9_2019-08-30T09_36_42';
+
+fsNcsHigh = 50e3; fsBioHigh = 2e3; % Sampling rate in Hz
+
+tOffNcsStEnd = [50,1]; tOffNcsStEndCalib = [0.5,0.5]; % Time offset wrt NCS start and end in sec.
+tOffNcsThAbd = [1,1]; % [Routine,calib] Manual time offset between NCS Th/Abd in sec. +ve means Abd is shifted to right.
+tOffNcsBio = [0, 0]; % [Routine,calib] Manual time offset b/w NCS & BIOPAC in sec 
+
+signNcs = [-1 1 1 -1]; signNcsCalib = [-1 1 1 -1]; % sign[ampTh phTh ampAbd phAbd]
 
 %% ------------------------------------------------------------------------
 % Define conditions for optional processing here
 ifCalib = 1; % If some associated calibration data is needed
 ifLoadCalibCoeff = 0; % If pre-saved calibration coefficient are present
 ifDownSamp = [1 1]; % If [ncs biopac] data is to be downsampled
+fsDS = [500, 500]; % [Ncs,Bio] downsampling frequencies
+unwrapPh = [1 1]; unwrapPhCalib = unwrapPh;
 
 %% ------------------------------------------------------------------------
 % Reading synchronized data
 [ncs,bio,~,~,tNcs,tBio,fig(1)] = ncsBioSync(dataPath,ncsFile,bioFile,fsNcsHigh,...
-                                 fsBioHigh,tStartEndOff(1),tStartEndOff(2),...
-                                 tManualOff,ifDownSamp,fsDS,signNcs,unwrapPh);
+                                 fsBioHigh,tOffNcsStEnd,tOffNcsThAbd(1),...
+                                 tOffNcsBio(1),ifDownSamp,fsDS,signNcs,unwrapPh);
                              
 [ncsCalib,bioCalib,~,fs,tNcsCalib,tBioCalib,fig(2)] = ...
     ncsBioSync(dataPath,ncsCalibFile,bioCalibFile,fsNcsHigh,...
-               fsBioHigh,tCalibStartEndOff(1),tCalibStartEndOff(2),...
-               tManualOffCalib,ifDownSamp,fsDS,signNcsCalib,unwrapPhCalib);
+               fsBioHigh,tOffNcsStEndCalib,tOffNcsThAbd(2),...
+               tOffNcsBio(2),ifDownSamp,fsDS,signNcsCalib,unwrapPhCalib);
 
                              
 %% Optional: Using cross correlation to estimate time shift, in case
@@ -59,20 +58,20 @@ fprintf('Suggested NCS calibration time offset is %f\n',tDevCalib);
 % For volume calibration, signals need to be high pass filtered to
 % remove baseline: both biopac belts, and volume airflow
 opts1.filtType = 'LpHp';
-opts1.f3db = 0.05; opts1.orderHP = 8;
-opts1.fpLP = 0.6; opts1.fstLP = 1;
+opts1.f3db = 0.05; opts1.orderHP = 5;
+opts1.fpLP = 0.8; opts1.fstLP = 1.2;
 bioCalib(:,2:3) = filterLpHp(bioCalib(:,2:3),fs(2),opts1);
 bio(:,2:3) = filterLpHp(bio(:,2:3),fs(2),opts1);
 
-opts2.filtType = 'LpHp'; opts2.orderHP = 8;
-opts2.f3db = 0.05; opts2.fpLP = 0.6; opts2.fstLP = 1;
+opts2.filtType = 'LpHp'; opts2.orderHP = 5;
+opts2.f3db = 0.05; opts2.fpLP = 0.8; opts2.fstLP = 1.2;
 ncsCalib(:,3) = filterLpHp(ncsCalib(:,3),fs(1),opts2); % abd amp
 ncsCalib(:,1) = filterLpHp(ncsCalib(:,1),fs(1),opts2); % th amp
 ncsCalib(:,4) = filterLpHp(ncsCalib(:,4),fs(1),opts2); % abd ph
 ncsCalib(:,2) = filterLpHp(ncsCalib(:,2),fs(1),opts2); % th ph
 
 opts2.filtType = 'LpHp'; 
-opts2.f3db = 0.05; opts2.fpLP = .6; opts2.fstLP = 1;
+opts2.f3db = 0.05; opts2.fpLP = .8; opts2.fstLP = 1.2;
 ncsRespAbd = filterLpHp(ncs(:,3),fs(1),opts2);
 ncsRespTh = filterLpHp(ncs(:,1),fs(1),opts2);
 ncsRespAbdPh = filterLpHp(ncs(:,4),fs(1),opts2);
@@ -99,16 +98,17 @@ if ifCalib == 1
     opts1.calibType = 'vol'; opts1.fitEqn = 'BiasedLinear'; 
     opts1.tWin = 2; opts1.minInterceptDist = 0.1;
     volAirflow = filterLpHp(volAirflow,fs(2),opts1);
-    
+%     volAirflow = volAirflow - .1;
+
     % Start and stop calibration times: Performing calibration during
     % normal breathing only: ONLY FOR calibType='vol'
-    opts1.tCalib = [8,15]; 
+    opts1.tCalib = [9,18]; 
     [beltCalibCoeff,vBeltCalib,gof] = bioBeltVolCalib([bioCalib(:,2),bioCalib(:,3)],fs(2),tvAirflow,volAirflow,opts1); 
         
     opts2.tCalib = opts1.tCalib; 
     opts2.calibType = 'vol';     opts2.fitEqn = 'BiasedLinear'; 
     opts2.tWin = 4;              opts2.minInterceptDist = 0.2;
-    [ncsCalibCoeff,vNcsCalib] = ncsVolCalib([ncsCalib(:,2),ncsCalib(:,3)],fs(1),tvAirflow,volAirflow,opts2);
+    [ncsCalibCoeff,vNcsCalib] = ncsVolCalib([ncsCalib(:,3),ncsCalib(:,4)],fs(1),tvAirflow,volAirflow,opts2);
        
     % Calibration phase: Plot Biopac and NCS volumes compared to airflow volume
     fig(4) = figure('Position',[400 200 800 600]);
@@ -136,7 +136,7 @@ opts1.tWin = 4; opts1.minInterceptDist = 0.2;
 vBelt = bioBeltVol(bio(:,2:3),beltCalibCoeff,fs(2),opts1);
 
 opts2.tWin = 4;
-vNcs = ncsVol([ncsRespThPh,ncsRespAbd],ncsCalibCoeff,fs(1),opts2);
+vNcs = ncsVol([ncsRespAbd,ncsRespAbdPh],ncsCalibCoeff,fs(1),opts2);
 
 % Plot calibrated Biopac and NCS volumes (both using calib coefficients)
 fig(5) = figure('Position',[400 200 600 600]);
@@ -182,21 +182,34 @@ rCorrCalibBeltNcs = corrcoef(vBeltCalib(nCompCalib(1):nCompCalib(2)),...
 fprintf('rmse Vol(ncs,belt) = %3.2f, corr Vol(ncs,belt) = %3.2f. \n',...
     rmseVolCalibBeltNcs,rCorrCalibBeltNcs(1,2));
 
-tComp = [120, 210]; % [20, 310] Start and end times for comparison. Ignoring coughing etc.
+tComp = [1, 221]; % [20, 310] Start and end times for comparison. Ignoring coughing etc.
 nComp = tComp.*fs(1) + 1; % Assuming same fs.
-rmseVol = sqrt(mean((vBelt(nComp(1):nComp(2)) - vNcs(nComp(1):nComp(2))).^2));
-rCorr = corrcoef(vBelt(nComp(1):nComp(2)),vNcs(nComp(1):nComp(2)));
+vBelt = vBelt(:);vNcs = vNcs(:);
+vBeltNoNoise = [];
+vNcsNoNoise = [];
+for i = 1:size(tComp,1)
+    vBeltNoNoise = [vBeltNoNoise; vBelt(nComp(i,1):nComp(i,2))];
+    vNcsNoNoise = [vNcsNoNoise; vNcs(nComp(i,1):nComp(i,2))];
+end
+    
+rmseVol = sqrt(mean((vBeltNoNoise - vNcsNoNoise).^2));
+rCorr = corrcoef(vBeltNoNoise,vNcsNoNoise);
 fprintf('------------------- Post Calibration (t: [%d,%d]s) ------------------- \n',tComp(1),tComp(2));
 fprintf('rmse Vol(ncs,belt) = %3.2f, corr Vol(ncs,belt) = %3.2f. \n',...
     rmseVol,rCorr(1,2));
 
+volDataSaveFormat = [rmseVolCalibBeltAirflow, rCorrCalibBeltAirflow(1,2),...
+                     rmseVolCalibNcsAirflow, rCorrCalibNcsAirflow(1,2),...
+                     rmseVolCalibBeltNcs, rCorrCalibBeltNcs(1,2),...
+                     rmseVol, rCorr(1,2)];
+
 %% ------------------------------------------------------------------------
-savefig(fig, [dataPath,'Analysis\',ncsFile,'_linCalibVol.fig']);
-save([dataPath,'Analysis\',ncsFile,'_linCalibVol.mat'], 'ncs','bio','fs',...
-    'ncsCalib','bioCalib','meanDev','ncsRespAbd','ncsRespTh','tvAirflow',...
-    'volAirflow','beltCalibCoeff','vBeltCalib','ncsCalibCoeff','vNcsCalib',...
-    'vBelt','vNcs','tBio','tNcs','tBioCalib','tNcsCalib','opts1','opts2',...
-    'tStartEndOff','tManualOff','ncsCalibFile','tCalibStartEndOff',...
-    'signNcs','signNcsCalib','tManualOffCalib');
+% savefig(fig, [dataPath,'Analysis\',ncsFile,'_linCalibVol.fig']);
+% save([dataPath,'Analysis\',ncsFile,'_linCalibVol.mat'], 'ncs','bio','fs',...
+%     'ncsCalib','bioCalib','meanDev','ncsRespAbd','ncsRespTh','tvAirflow',...
+%     'volAirflow','beltCalibCoeff','vBeltCalib','ncsCalibCoeff','vNcsCalib',...
+%     'vBelt','vNcs','tBio','tNcs','tBioCalib','tNcsCalib','opts1','opts2',...
+%     'tStartEndOff','tManualOff','ncsCalibFile','tCalibStartEndOff',...
+%     'signNcs','signNcsCalib','tManualOffCalib');
 
 

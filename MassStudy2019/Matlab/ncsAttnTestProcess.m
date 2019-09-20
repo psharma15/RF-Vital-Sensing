@@ -29,46 +29,49 @@
 % -------------------------------------------------------------------------
 
 % Provide input to function.
-dataPath = 'C:\Research\NCS\HumanStudyData\Case7\';
-ncsCalibFile = '0828_103057Calib1';
-ncsRelaxFile = '0828_104608Routine2a'; % NCS file when listening to music
-ncsAttnTestFile = '0828_105440Routine2b'; % NCS data during clock test
-bioFile = 'bio_case7_2019-08-28T10_40_21';
-bioCalibFile = 'bio_case7_2019-08-28T09_50_43';
-rtFile = 'attn_case7_0828';
+dataPath = 'C:\Research\NCS\HumanStudyData\Case8\';
+ncsCalibFile = '0828_132142Calib4';
+ncsRelaxFile = '0828_133802Routine2a'; % NCS file when listening to music
+ncsAttnTestFile = '0828_134555Routine2b'; % NCS data during clock test
+bioFile = 'bio_case8_2019-08-28T13_30_45';
+bioCalibFile = 'bio_case8_2019-08-28T12_17_27';
+rtFile = 'attn_case8_0828';
 fsNcsHigh = 50e3; % NCS sampling rate in Hz
 fsBioHigh = 2e3;
-tStartEndOffAttn = [13,10]; % Start and end offset wrt NCS data in seconds. 
-tStartEndOffRelax = [5,2];
-tManualOff = 0.0; % Manual offset between NCS and BIOPAC in seconds. Biopac is offset wrt NCS.
-tCalibStartEndOff = [3,3]; % Start and end offset wrt NCS data in seconds
+
+tOffNcsStEndRelax = [5,2]; % Start and end offset wrt NCS data in seconds. 
+tOffNcsStEndAttn = [5,10]; 
+tOffNcsStEndCalib = [3,3]; 
+
+tOffNcsThAbd = [0,0,0]; %[Relax, Attn, Calib] Manual offset between NCS Th/Abd in seconds. +ve means Abd is shifted to right.
+tOffNcsBio = [0,0,0]; % [Relax, Attn, Calib] Manual offset between NCS and BIOPAC in seconds. Biopac is offset wrt NCS.
+
+signNcs = [-1 -1 -1 -1]; signNcsCalib = [-1 -1 -1 -1]; % sign[ampTh phTh ampAbd phAbd]
+
+%% ------------------------------------------------------------------------
+% Define conditions for optional processing here
+ifVolCalib = 0; % If some associated calibration data is needed
+%ifLoadCalibCoeff = 0; % If pre-saved calibration coefficient are present
+ifDownSamp = [1 1]; % If [ncs biopac] data is to be downsampled
 fsDS = [500, 500]; % [Ncs,Bio] downsampling frequencies
-signNcs = [-1 -1 1 -1]; % sign[ampTh phTh ampAbd phAbd]
-tManualOffCalib = tManualOff;
-signNcsCalib = [-1 -1 1 1];
 unwrapPh = [1 1];
 unwrapPhCalib = unwrapPh;
 
 %% ------------------------------------------------------------------------
-% Define conditions for optional processing here
-ifVolCalib = 1; % If some associated calibration data is needed
-%ifLoadCalibCoeff = 0; % If pre-saved calibration coefficient are present
-ifDownSamp = [1 1]; % If [ncs biopac] data is to be downsampled
-
-%% ------------------------------------------------------------------------
 % Reading synchronized data
-[ncsAttn,bioAttn,~,fs,tAttn,~,fig(1)] = ncsBioSync(dataPath,ncsAttnTestFile,bioFile,fsNcsHigh,...
-                                 fsBioHigh,tStartEndOffAttn(1),tStartEndOffAttn(2),...
-                                 tManualOff,ifDownSamp,fsDS,signNcs,unwrapPh);
-                             
 [ncsRelax,bioRelax,~,~,tRelax,~,fig(2)] = ncsBioSync(dataPath,ncsRelaxFile,bioFile,fsNcsHigh,...
-                                 fsBioHigh,tStartEndOffRelax(1),tStartEndOffRelax(2),...
-                                 tManualOff,ifDownSamp,fsDS,signNcs,unwrapPh);
+                                 fsBioHigh,tOffNcsStEndRelax,...
+                                 tOffNcsBio(1),ifDownSamp,fsDS,signNcs,unwrapPh);
+
+[ncsAttn,bioAttn,~,fs,tAttn,~,fig(1)] = ncsBioSync(dataPath,ncsAttnTestFile,bioFile,fsNcsHigh,...
+                                 fsBioHigh,tOffNcsStEndAttn,...
+                                 tOffNcsBio(2),ifDownSamp,fsDS,signNcs,unwrapPh);
+                             
           
 [ncsCalib,bioCalib,~,~,tCalib,~,fig(3)] = ...
     ncsBioSync(dataPath,ncsCalibFile,bioCalibFile,fsNcsHigh,...
-               fsBioHigh,tCalibStartEndOff(1),tCalibStartEndOff(2),...
-               tManualOffCalib,ifDownSamp,fsDS,signNcsCalib,unwrapPhCalib);
+               fsBioHigh,tOffNcsStEndCalib,...
+               tOffNcsBio(3),ifDownSamp,fsDS,signNcsCalib,unwrapPhCalib);
 
 %% Optional: Using cross correlation to estimate time shift, in case
 % manually is difficult.
@@ -228,7 +231,7 @@ tManualRToff = 0; % 0 sec offset
 rtTime = rtData{:,1}/1000; % Converting ms to s
 % Correcting time offset introduced above, with 15s offset due to 'click to
 % start' waiting time. As that is manual, additional manual offset is done.
-rtTime = rtTime - tStartEndOffAttn(1) + 15 + tManualRToff;
+rtTime = rtTime - tOffNcsStEndAttn(1) + 15 + tManualRToff;
 rtDataNew = [rtData,array2table(rtTime(:),'VariableNames',{'Time'})];
 
 % Cases when it jumped and was correctly detected.
@@ -388,6 +391,9 @@ opts3.minInterceptDist = 0.2;
 pkMaxNcsRelax = ncsRelaxHrPeak(1).idx(ncsRelaxHrPeak(1).ind == 1);
 
 [hrBioRelax, bioRelaxHrPeak] = ecgHR(bioRelax(:,1),fs(2),opts3);
+ 
+%%
+close all
 
 %% 
 % -------------------------------------------------------------------------
@@ -515,7 +521,8 @@ plotCute1('Frequency (Hz)','Power (a.u.)',ax2(3),titl,leg,1,'Horizontal');
 % plotCute1('Time (s)','Reaction Time (ms)',ax2(4),[],leg,1);
 % 
 linkaxes(ax2([1:2]),'x');
-
+%%
+close all
 %% Heartbeat second harmonic
 opts2.f3db = 2.1; opts2.fpLP = 3.1; opts2.fstLP = 3.3;
 ncsRelaxHrTh1Harm = filterLpHp(ncsRelax(:,1),fs(1),opts2);
@@ -604,81 +611,105 @@ plotCute1('Frequency (Hz)','Power (a.u.)',ax2(3),titl,leg,1,'Horizontal');
 % plotCute1('Time (s)','Reaction Time (ms)',ax2(4),[],leg,1);
 % 
 linkaxes(ax2([1:2]),'x');
+%%
+close all;
 
 %% Plot both fundamental and harmonic overlayed
 % During relaxed stage
-figure('Position',[300,100,600,550])
+figure('Position',[300,100,600,700])
 nFig = 3;
 ax1(1) = subplot(nFig,1,1);
-plot(hrvNcsRelax.tRR,hrvNcsRelax.rrInterval,'-');hold on
-plot(hrvNcsRelax2Harm.tRR,hrvNcsRelax2Harm.rrInterval,'-');
-plot(hrvBioRelax.tRR,hrvBioRelax.rrInterval,'-');
-titl = ['Relaxation: Normal RR interval time'];
+plot(hrvNcsRelax.tRR,hrvNcsRelax.rrInterval,'-','color',[1,0.7,0.4]);hold on
+plot(hrvNcsRelax2Harm.tRR,hrvNcsRelax2Harm.rrInterval,'-','color',[0.2,0.6,1]);
+plot(hrvBioRelax.tRR,hrvBioRelax.rrInterval,'-','color',[0.5,0.5,0.5]);
+titl = ['Relaxation Exercise'];
 leg = {'NCS','NCS 2^{nd} Harm','ECG'};
-plotCute1('Time (s)','RR time (ms)',ax1(1),titl,leg,1);
+plotCute1([],'RR time (ms)',ax1(1),titl,leg,1,'Horizontal');
 
 ax1(2) = subplot(nFig,1,2);
-plot(hrvNcsRelax.tRR,hrvNcsRelax.hr); hold on;
-plot(hrvNcsRelax2Harm.tRR,hrvNcsRelax2Harm.hr);
-plot(hrvBioRelax.tRR,hrvBioRelax.hr);
+plot(hrvNcsRelax.tRR,hrvNcsRelax.hr,'color',[1,0.7,0.4]); hold on;
+plot(hrvNcsRelax2Harm.tRR,hrvNcsRelax2Harm.hr,'color',[0.2,0.6,1]);
+plot(hrvBioRelax.tRR,hrvBioRelax.hr,'color',[0.5,0.5,0.5]);
 leg = {'NCS','NCS 2^{nd} Harm','ECG'};
 titl = 'Heart Rate';
-plotCute1('Time (s)','HR (BPM)',ax1(2),titl,leg,1,'Horizontal');
+plotCute1('Time (s)','HR (BPM)',ax1(2),[],[],0);
 
 ax1(3) = subplot(nFig,1,3);
-plot(hrvNcsRelax.fftFreqXaxis,hrvNcsRelax.fftPowYaxis); hold on
-plot(hrvNcsRelax2Harm.fftFreqXaxis,hrvNcsRelax2Harm.fftPowYaxis);
-plot(hrvBioRelax.fftFreqXaxis,hrvBioRelax.fftPowYaxis);
+plot(hrvNcsRelax.fftFreqXaxis,hrvNcsRelax.fftPowYaxis,'color',[1,0.7,0.4]); hold on
+plot(hrvNcsRelax2Harm.fftFreqXaxis,hrvNcsRelax2Harm.fftPowYaxis,'color',[0.2,0.6,1]);
+plot(hrvBioRelax.fftFreqXaxis,hrvBioRelax.fftPowYaxis,'color',[0.5,0.5,0.5]);
 leg = {'NCS','NCS 2^{nd} Harm','ECG'};
 titl = 'Frequency Analysis';
 xlim([0.04,0.7])
-plotCute1('Frequency (Hz)','Power (a.u.)',ax1(3),titl,leg,1,'Horizontal');
+plotCute1('Frequency (Hz)','Power (a.u.)',ax1(3),titl,[],0);
 
 linkaxes(ax1(1:2),'x');
 
 % During attention test
 
-figure('Position',[100,100,600,550])
+figure('Position',[100,100,600,700])
 nFig = 4;
 ax2(1) = subplot(nFig,1,1);
-plot(hrvNcsAttn.tRR,hrvNcsAttn.rrInterval,'-');hold on
-plot(hrvNcsAttn2Harm.tRR,hrvNcsAttn2Harm.rrInterval,'-');
-plot(hrvBioAttn.tRR,hrvBioAttn.rrInterval,'-');
-titl = ['Attention: Normal RR interval time'];
+plot(hrvNcsAttn.tRR,hrvNcsAttn.rrInterval,'-','color',[1,0.7,0.4]);hold on
+plot(hrvNcsAttn2Harm.tRR,hrvNcsAttn2Harm.rrInterval,'-','color',[0.2,0.6,1]);
+plot(hrvBioAttn.tRR,hrvBioAttn.rrInterval,'-','color',[0.5,0.5,0.5]);
+titl = ['Attention Test'];
 leg = {'NCS','NCS 2^{nd} Harm','ECG'};
-plotCute1('Time (s)','RR time (ms)',ax2(1),titl,leg,1);
+plotCute1([],'RR time (ms)',ax2(1),titl,leg,1,'Horizontal');
 
 ax2(2) = subplot(nFig,1,2);
-plot(hrvNcsAttn.tRR,hrvNcsAttn.hr);
-hold on;
-plot(hrvNcsAttn2Harm.tRR,hrvNcsAttn2Harm.hr);
-plot(hrvBioAttn.tRR,hrvBioAttn.hr);
+plot(hrvNcsAttn.tRR,hrvNcsAttn.hr,'color',[1,0.7,0.4]);hold on;
+plot(hrvNcsAttn2Harm.tRR,hrvNcsAttn2Harm.hr,'color',[0.2,0.6,1]);
+plot(hrvBioAttn.tRR,hrvBioAttn.hr,'color',[0.5,0.5,0.5]);
 leg = {'NCS','NCS 2^{nd} Harm','ECG'};
 titl = 'Heart Rate';
-plotCute1('Time (s)','HR (BPM)',ax2(2),titl,leg,1,'Horizontal');
+plotCute1([],'HR (BPM)',ax2(2),[],[],0);
 
 
-ax2(3) = subplot(nFig,1,3);
-plot(hrvNcsAttn.fftFreqXaxis,hrvNcsAttn.fftPowYaxis);hold on
-
-plot(hrvNcsAttn2Harm.fftFreqXaxis,hrvNcsAttn2Harm.fftPowYaxis); 
-plot(hrvBioAttn.fftFreqXaxis,hrvBioAttn.fftPowYaxis);
+ax2(4) = subplot(nFig,1,4);
+plot(hrvNcsAttn.fftFreqXaxis,hrvNcsAttn.fftPowYaxis,'color',[1,0.7,0.4]);hold on
+plot(hrvNcsAttn2Harm.fftFreqXaxis,hrvNcsAttn2Harm.fftPowYaxis,'color',[0.2,0.6,1]); 
+plot(hrvBioAttn.fftFreqXaxis,hrvBioAttn.fftPowYaxis,'color',[0.5,0.5,0.5]);
 leg = {'NCS','NCS 2^{nd} Harm','ECG'};
 titl = 'Frequency Analysis';
 xlim([0.04,0.7])
-plotCute1('Frequency (Hz)','Power (a.u.)',ax2(3),titl,leg,1,'Horizontal');
+plotCute1('Frequency (Hz)','Power (a.u.)',ax2(4),titl,[],0,'Horizontal');
 
-ax2(4) = subplot(nFig,1,4);
-stem(rtTime(idxJumpDet),rtData{idxJumpDet,2},'go'); hold on
-stem(rtTime(idxJumpMiss),rtData{idxJumpMiss,2},'r+');
-stem(rtTime(idxNoJumpWrong),rtData{idxNoJumpWrong,2},'rs');
+ax2(3) = subplot(nFig,1,3);
+stem(rtTime(idxJumpDet),rtData{idxJumpDet,2},'o','color',[0.7,1,0.4]); hold on
+stem(rtTime(idxJumpMiss),rtData{idxJumpMiss,2},'+','color',[1,0.4,0.4]);
+stem(rtTime(idxNoJumpWrong),rtData{idxNoJumpWrong,2},'s','color',[1,0.4,0.4]);
 ylim([0,1500])
 leg = {'True Jump','Missed Jump','Wrong'};
-plotCute1('Time (s)','Reaction Time (ms)',ax2(4),[],leg,1);
+plotCute1('Time (s)','Reaction Time (ms)',ax2(3),[],leg,1,'Horizontal');
 
-linkaxes(ax2([1:2]),'x');
+linkaxes(ax2([1:3]),'x');
 
 %% Saving the results
+hrvSaveFormatNcsRelax = [hrvNcsRelax.meanRR, hrvNcsRelax.sdnn, hrvNcsRelax.meanHR,...
+    hrvNcsRelax.rmssd, hrvNcsRelax.sdsdRR, hrvNcsRelax.pNN50,hrvNcsRelax.LFpow,...
+    hrvNcsRelax.HFpow,hrvNcsRelax.LFHFratio];
+hrvSaveFormatBioRelax = [hrvBioRelax.meanRR, hrvBioRelax.sdnn, hrvBioRelax.meanHR,...
+    hrvBioRelax.rmssd, hrvBioRelax.sdsdRR, hrvBioRelax.pNN50,hrvBioRelax.LFpow,...
+    hrvBioRelax.HFpow,hrvBioRelax.LFHFratio];
+hrvSaveFormatNcsAttn = [hrvNcsAttn.meanRR, hrvNcsAttn.sdnn, hrvNcsAttn.meanHR,...
+    hrvNcsAttn.rmssd, hrvNcsAttn.sdsdRR, hrvNcsAttn.pNN50,hrvNcsAttn.LFpow,...
+    hrvNcsAttn.HFpow,hrvNcsAttn.LFHFratio];
+hrvSaveFormatBioAttn = [hrvBioAttn.meanRR, hrvBioAttn.sdnn, hrvBioAttn.meanHR,...
+    hrvBioAttn.rmssd, hrvBioAttn.sdsdRR, hrvBioAttn.pNN50,hrvBioAttn.LFpow,...
+    hrvBioAttn.HFpow,hrvBioAttn.LFHFratio];
+hrvSaveFormatNcsRelax2Harm = [hrvNcsRelax2Harm.meanRR, hrvNcsRelax2Harm.sdnn, hrvNcsRelax2Harm.meanHR,...
+    hrvNcsRelax2Harm.rmssd, hrvNcsRelax2Harm.sdsdRR, hrvNcsRelax2Harm.pNN50,hrvNcsRelax2Harm.LFpow,...
+    hrvNcsRelax2Harm.HFpow,hrvNcsRelax2Harm.LFHFratio];
+hrvSaveFormatNcsAttn2Harm = [hrvNcsAttn2Harm.meanRR, hrvNcsAttn2Harm.sdnn, hrvNcsAttn2Harm.meanHR,...
+    hrvNcsAttn2Harm.rmssd, hrvNcsAttn2Harm.sdsdRR, hrvNcsAttn2Harm.pNN50,hrvNcsAttn2Harm.LFpow,...
+    hrvNcsAttn2Harm.HFpow,hrvNcsAttn2Harm.LFHFratio];
+hrvSaveFormat = [hrvSaveFormatBioRelax;hrvSaveFormatBioAttn;...
+                 hrvSaveFormatNcsRelax;hrvSaveFormatNcsAttn;...
+                 hrvSaveFormatNcsRelax2Harm;hrvSaveFormatNcsAttn2Harm];
+
+            
+         
 %savefig(fig, [dataPath,'Analysis\',ncsAttnTestFile,'_RT.fig']);
 % save([dataPath,'Analysis\',ncsAttnTestFile,'_RT.mat'], ...
 %     'ncsRelaxHrTh','ncsAttnHrThPh',...

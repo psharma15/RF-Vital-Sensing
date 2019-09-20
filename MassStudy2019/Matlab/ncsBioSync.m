@@ -4,8 +4,8 @@
 % Pragya Sharma, ps847@cornell.edu
 
 function [ncs,bio,mic,fs,tNcs,tBio,fig] = ...
-    ncsBioSync(dataPath,ncsFile,bioFile,fsNcs,fsBio,tStartOff,tEndOff,...
-    tManualOff,ifDownSamp,fsDS,signNcs,unwrapPh)
+    ncsBioSync(dataPath,ncsFile,bioFile,fsNcs,fsBio,tOffNcsStEnd,tOffNcsThAbd,...
+    tOffNcsBio,ifDownSamp,fsDS,signNcs,unwrapPh)
 % -------------------------------------------------------------------------
 % Inputs:
 % dataPath: Path for NCS and BIOPAC data
@@ -13,9 +13,9 @@ function [ncs,bio,mic,fs,tNcs,tBio,fig] = ...
 % bioFile: Name of BIOPAC file
 % fsNcs: Sampling frequency of NCS in Hz. Usual is 50 kHz
 % fsBio: Sampling frequency of BIOPAC in Hz. Usual is 2 kHz
-% tStartOff: Start time offset to NCS waveform (to truncate NCS waveform)
-% tEndOff: End time offset to NCS waveform (to truncate NCS waveform)
-% tManualOFf: If NCS start time or BIOPAC start times are not accurate
+% tStEndOff: [Start,End] time offset to NCS waveform (to truncate NCS waveform)
+% tOffNcsThAbd: Time offset to sync Thorax and abdomen in sec
+% tOffNcsBio: If NCS start time or BIOPAC start times are not accurate
 % and needs any manual adjustment. Or difference only due to missing 
 % fractional seconds information in BIOPAC time.
 % -------------------------------------------------------------------------
@@ -56,27 +56,31 @@ else
 end
 
 % Finding starting index for NCS and BIOPAC
-tRelNcsStart = tNcsStart + [0 0 0 0 0 tStartOff];
-tRelBioStart = tRelNcsStart + [0 0 0 0 0 tManualOff]; 
+% Taking NCS thorax as reference
+tRelNcsStart = tNcsStart + [0 0 0 0 0 tOffNcsStEnd(1)];
+tRelBioStart = tRelNcsStart + [0 0 0 0 0 tOffNcsBio]; 
 
 tDiffNcs = etime(tRelNcsStart,tNcsStart);
 tDiffBio = etime(tRelBioStart,tBioStart);
 
 ncsStartSamp = int64(tDiffNcs*fs(1)+1);
+ncsAbdStartSamp = ncsStartSamp - int64(tOffNcsThAbd*fs(1)); % By default it moves abdomen waveform to the right
 bioStartSamp = int64(tDiffBio*fs(2)+1);
 
 % Finding stopping index for NCS and BIOPAC
 tNcsStop = tNcsStart + [0 0 0 0 0 1].*(length(ncsUnsync)/fs(1));
-tRelNcsStop = tNcsStop - [ 0 0 0 0 0 tEndOff];
-tBioStop = tRelNcsStop + [0 0 0 0 0 tManualOff]; 
+tRelNcsStop = tNcsStop - [ 0 0 0 0 0 tOffNcsStEnd(2)];
+tBioStop = tRelNcsStop + [0 0 0 0 0 tOffNcsBio]; 
 
 tDiffNcs = etime(tRelNcsStop,tNcsStart);
 tDiffBio = etime(tBioStop,tBioStart);
 
 ncsStopSamp = int64(tDiffNcs*fs(1));
+ncsAbdStopSamp = ncsStopSamp - int64(tOffNcsThAbd*fs(2)); % Shifting by same number of samples as earlier shifted right
 bioStopSamp = int64(tDiffBio*fs(2));
 
-ncs = ncsUnsync(ncsStartSamp:ncsStopSamp,:);
+ncs(:,1:2) = ncsUnsync(ncsStartSamp:ncsStopSamp,1:2); % [Amp,Ph] Th
+ncs(:,3:4) = ncsUnsync(ncsAbdStartSamp:ncsAbdStopSamp,3:4); % [Amp,Ph] Abd
 if size(mic,1) ~=0
     mic = mic(ncsStartSamp:ncsStopSamp);
 end
