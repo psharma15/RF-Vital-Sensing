@@ -1,4 +1,4 @@
-# Lung Volume, BR, HR, HRV Analysis
+# Lung Volume, Breath Rate, Heart Rate, Heart Rate Variation Analysis
 
 *New and improved codes for doing various analysis of NCS vital signs data, Updated Fall 2019*
 
