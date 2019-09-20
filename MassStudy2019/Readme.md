@@ -15,14 +15,14 @@
 	* Finger Photoplethysmograph (PPG).
 * Using Biopac Acqknowledge software to read the data and the start timestamp, accurate to seconds.
 
-### USRP B210 or (B200 mini + B200) for NCS thorax (near heart) and NCS abdomen measurements (Labview)
-* This has updated over the months - initially a B210 MIMO was implemented with same carrier frequency and different IF for thorax and abdomen NCS measurements. This MIMO is baseband synchronized.
+### Ettus USRP for NCS thorax (near heart) and NCS abdomen measurements (Labview)
+* This has updated over the months - initially a Ettus B210 MIMO was implemented with same carrier frequency and different IF for thorax and abdomen NCS measurements. This MIMO was baseband synchronized.
 * This setup also used a mic to record audio data (required by the study protocol, removed in following setup due to time constraint).
 * The abdomen sensor was much affected by motion of the wire. So setup updated to work with more portable B200mini.
-* The new Labview code was update of the previous version to software synchronize NCS thorax and abdomen.
-* Now two-independent B200 mini with different carrier frequencies can be used for thorax and abdomen. 
-* Labview code saves NCS data at 50kHz for each study routine separately, with time stamp accurate to milliseconds.
-* Synchronized audio/ visual instructions for performing the routine along with viusal timer information.
+* The new Labview code is updated version that includes software synchronization of NCS thorax and abdomen data coming from different SDR units (for eg., two B200 minis, or one B200 mini and one B200).
+* These two-independent units are used with different carrier frequencies for thorax (1.82 GHz) and abdomen (1.9 GHz), with same IF (51 kHz). 
+* Labview code saves NCS data at 50kHz for each study routine automatically when selected, with start time-stamp accurate to milliseconds.
+* Synchronized audio and visual instructions for performing the routines along with viusal timer.
 
 -------------------------------------------------------------------------------------------------------------
 
