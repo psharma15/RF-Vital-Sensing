@@ -21,20 +21,21 @@ This folder orgainization is not in terms of code, but in terms of progress of t
   * Focusing on normal breathing peak detection using modified Automated Multiscale Peak Detection (AMPD) algorithm, that is mostly automated, with no manually tuned threshold parameters.
   * Estimating lung volume by volume calibration, 
   * HR and BR estimation following the peak detection.
-* Respiratory (Breath Pattern, Coughing, Speaking)
+* Respiratory (Breath Pattern, Coughing, Speaking) [2]
   * Performing data collection and analysis with different breathing conditions (simulating various apnea and respiratory disorders), coughing and speaking.
   * Data analysis is similar coding as previous, but these abnormal breathing conditions require some more changes in the HR, BR estimation post-processing, as the peak-detection is prone to error.
   * Added Labview codes (improved versions are in recent folders).
 * Attention Test
- * It includes a psychological test (Mackworth clock test)to detect attention and vigilance, aimed to compare HRV feature variation during relaxed and attention phases between NCS and reference instrument.
- * The test is written on PsyToolkit free-available online software (https://psytoolkit.org).
- * The script is based on https://www.psytoolkit.org/acknowledgements.html.
+  * It includes a psychological test (Mackworth clock test)to detect attention and vigilance.
+  * Aim is to compare HRV feature variation during relaxed and attention phases between NCS and reference instrument.
+  * The test is written on PsyToolkit free-available online software (https://psytoolkit.org).
+  * The script is based on https://www.psytoolkit.org/acknowledgements.html.
 * Mass Study 2019
  * This project covers codes from all the previous projects with improved algorithm for peak detection etc..
  * The aim is to test the system for multiple people in multiple postures, hence many updates were needed:
-  * Reference instrument is updated to Biopac system (https://www.biopac.com/).
-  * Codes are automated as much as possible, with no tuning needed (once parameters are set) from person-to-person.
-  * refer to the Readme of this for further details regarding hardware and code structure. 
+   * Reference instrument is updated to Biopac system (https://www.biopac.com/).
+   * Codes are automated as much as possible, with no tuning needed (once parameters are set) from person-to-person.
+   * refer to the Readme of this for further details regarding hardware and code structure. 
  
 
 
