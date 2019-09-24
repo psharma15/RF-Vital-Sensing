@@ -15,25 +15,21 @@ This folder orgainization is not in terms of code, but in terms of progress of t
 * Motion detection in sleep [1]
   * NCS with synchronized external ECG heartbeat waveform (reference instrument only added towards the end of this work, so the paper does not have refernce HR during motion corrected phase)
   * So far only Matlab codes are added, earlier Labview codes are in 'EcgNcsCorrelation'.
-  
 * Respiratory (Normal Breathing)
   * A new reference: Hexoskin smart shirt is used for majority of this work.
   * Reference measurements from Hexoskin: ECG heart, thorax and abdomen chest belts respiration with calibrated lung volume estimate.
   * Focusing on normal breathing peak detection using modified Automated Multiscale Peak Detection (AMPD) algorithm, that is mostly automated, with no manually tuned threshold parameters.
   * Estimating lung volume by volume calibration, 
   * HR and BR estimation following the peak detection.
-
 * Respiratory (Breath Pattern, Coughing, Speaking)
   * Performing data collection and analysis with different breathing conditions (simulating various apnea and respiratory disorders), coughing and speaking.
   * Data analysis is similar coding as previous, but these abnormal breathing conditions require some more changes in the HR, BR estimation post-processing, as the peak-detection is prone to error.
   * Added Labview codes (improved versions are in recent folders).
-  
 * Attention Test
  * It includes a psychological test (Mackworth clock test)to detect attention and vigilance, aimed to compare HRV feature variation during relaxed and attention phases between NCS and reference instrument.
  * The test is written on PsyToolkit free-available online software (https://psytoolkit.org).
  * The script is based on https://www.psytoolkit.org/acknowledgements.html.
- 
-* MassStudy2019
+* Mass Study 2019
  * This project covers codes from all the previous projects with improved algorithm for peak detection etc..
  * The aim is to test the system for multiple people in multiple postures, hence many updates were needed:
   * Reference instrument is updated to Biopac system (https://www.biopac.com/).
