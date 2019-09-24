@@ -1,0 +1,6 @@
+bmd101Parser_v1.vi is first working version, without heart rate extraction, which is added in v1.1.
+Version bmd101Parser_v2.vi is to remove sudden jerks observed in the earlier versions (debug and correct) and saving the data.
+
+bmd101Parser_v2 is entirely different in terms of data processing. It is based on-
+Parser.vi:
+How to parse serial data?: https://forums.ni.com/t5/LabVIEW/how-to-parse-serial-data/td-p/1637064
