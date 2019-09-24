@@ -29,7 +29,8 @@
 % -------------------------------------------------------------------------
 
 % Provide input to function.
-dataPath = 'C:\Research\NCS\HumanStudyData\Case8\';
+caseNum = 7;
+dataPath = ['C:\Research\NCS\HumanStudyData\Case',num2str(caseNum),'\'];
 ncsCalibFile = '0828_132142Calib4';
 ncsRelaxFile = '0828_133802Routine2a'; % NCS file when listening to music
 ncsAttnTestFile = '0828_134555Routine2b'; % NCS data during clock test
@@ -744,4 +745,4 @@ hrvSaveFormat = [hrvSaveFormatBioRelax;hrvSaveFormatBioAttn;...
 %     'tCalibStartEndOff',...
 %     'ncsCalibFile','tCalibStartEndOff');
 
-save([dataPath,'Analysis\',ncsAttnTestFile,'_AttnTest.mat']);
+save([dataPath,'Analysis\case',num2str(caseNum),'_',ncsFile(12:end),'AttnTest.mat']);

@@ -9,8 +9,17 @@
 
 function [hrvNcs,hrvEcg,pkNcs,pkEcg] = hrvFeatureEst(dataNcs,dataEcg,fs,opts)
 
-[hrvNcs,pkNcs] = hrvFeatureEstNcs(dataNcs,fs(1),opts);
-[hrvEcg,pkEcg] = hrvFeatureEstEcg(dataEcg,fs(2),opts);
+if size(dataNcs,1) > 1
+    [hrvNcs,pkNcs] = hrvFeatureEstNcs(dataNcs,fs(1),opts);
+else
+    hrvNcs = []; pkNcs = [];
+end
+
+if size(dataEcg,1) > 1
+    [hrvEcg,pkEcg] = hrvFeatureEstEcg(dataEcg,fs(2),opts);
+else
+    hrvEcg = []; pkEcg = [];
+end
 
 end
 

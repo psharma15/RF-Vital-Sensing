@@ -7,12 +7,16 @@
 
 %% ------------------------------------------------------------------------
 % Provide input to function.
-dataPath = 'C:\Research\NCS\HumanStudyData\Case7\';
-ncsCalibFile = '0828_100648calib3';
-ncsFile = '0828_101237Routine3'; % data at different time instants
+clear;clc
+
+%%
+caseNum = 10;
+dataPath = ['C:\Research\NCS\HumanStudyData\Case',num2str(caseNum),'\'];
+ncsCalibFile = '0830_132313calib3';
+ncsFile = '0830_132942Routine3'; % data at different time instants
 %ncsReactionTimeFile = '0613_210551Routine2b_ReactionTime';
-bioFile = 'bio_case7_2019-08-28T09_50_43';
-bioCalibFile = 'bio_case7_2019-08-28T09_50_43';
+bioFile = 'caseNum_2019-08-30T13_03_36';
+bioCalibFile = 'caseNum_2019-08-30T13_03_36';
 
 fsNcsHigh = 50e3; fsBioHigh = 2e3; % Sampling rate in Hz
 
@@ -109,7 +113,7 @@ fprintf('Done. \n');
 % specified time duration (should change to overall?)
 
 % Re calculating - you can change the time
-tCorr = [20,40]; % Correlate NCS respiration with Biopac to determine sign
+tCorr = [2,100]; % Correlate NCS respiration with Biopac to determine sign
 
 [r1,~] = corrcoef(bio(tCorr(1)*fs(2):tCorr(2)*fs(2),2),ncsRespThAmp(tCorr(1)*fs(1):tCorr(2)*fs(1))); 
 r1 = r1(1,2);
@@ -121,27 +125,33 @@ r3 = r3(1,2);
 r4 = r4(1,2); 
 
 
-[~,idxRespCorr] = max(abs([r1,r2,rC1,rC2]));
+[~,idxRespCorr] = max(abs([r1,r2,rC1,rC2])); % Find max out of both routine and calibration waveform
 thMinCorr = 0.6;
 if ((idxRespCorr == 1) && (abs(rC1) >= thMinCorr)) || ((idxRespCorr == 3) && (abs(r1) >= thMinCorr))
 % Strict conditions to use amplitude as respiration, default is phase
     ncsRespTh = ncsRespThAmp;
     ncsCalibRespTh = ncsCalibRespThAmp;
+    rRespThBio = r1;
     fprintf('Thorax: Using NCS Amplitude waveform for respiration.\n');
+    rRespCalibThBio = rC1;
+
 else
+    rRespThBio = r2; rRespCalibThBio = rC2;
     ncsRespTh = ncsRespThPh; 
     ncsCalibRespTh = ncsCalibRespThPh;
     fprintf('Thorax: Using NCS Phase waveform for respiration.\n');
 end
 
-[~,idxRespCorr] = max(abs([r3,r4,rC3,rC4]));
+[~,idxRespCorr] = max(abs([r3,r4,rC3,rC4])); % Find max out of both routine and calibration waveform
 thMinCorr = 0.6;
 if ((idxRespCorr == 1) && (abs(rC3) >= thMinCorr)) || ((idxRespCorr == 3) && (abs(r3) >= thMinCorr))
 % Strict conditions to use amplitude as respiration, default is phase
+    rRespAbdBio = r3; rRespCalibAbdBio = rC3;
     ncsRespAbd = ncsRespAbdAmp;
     ncsCalibRespAbd = ncsCalibRespAbdAmp;
     fprintf('Abdomen: Using NCS Amplitude waveform for respiration.\n');
 else
+    rRespAbdBio = r4; rRespCalibAbdBio = rC4;
     ncsRespAbd = ncsRespAbdPh; 
     ncsCalibRespAbd = ncsCalibRespAbdPh;
     fprintf('Abdomen: Using NCS Phase waveform for respiration.\n');
@@ -167,7 +177,7 @@ lagsMax = lags(rMaxIdx);
 tDevCalibThAbd = lagsMax/fs(1);
 fprintf('Suggested NCS Th-Abd calibration time offset is %f\n',tDevCalibThAbd); 
 
-tCorr = [30, 50]; 
+tCorr = [10, 50]; 
 nStart = tCorr(1)*fs(1); % Assuming same fs for both ncs and biopac
 nEnd = tCorr(2)*fs(1); 
 [r, lags] = xcorr(bio(nStart:nEnd,3),ncsRespTh(nStart:nEnd),maxLag);
@@ -190,9 +200,10 @@ fprintf('Suggested NCS Th-Abd time offset is %f\n',tDevThAbd);
 % threshold: Ideally minimum should be sampling frequency
 
 fprintf('Performing synchronization based on time-shift estimate...   ');
+thMinCorr = 0.6;
 tOffMinMax = [0.005, 1.1];
 % First the calibration waveforms (Bio, NCS Th):
-if (abs(tDevCalib)>=tOffMinMax(1)) && (abs(tDevCalib) <= tOffMinMax(2))
+if (abs(tDevCalib)>=tOffMinMax(1)) && (abs(tDevCalib) <= tOffMinMax(2)) && (abs(rRespCalibThBio) > thMinCorr)
     nSampDev = abs(tDevCalib) * fs(1); % same BIO and NCS frequencies
     if tDevCalib > 0
         bioCalib = bioCalib(nSampDev+1:end,:);
@@ -202,9 +213,10 @@ if (abs(tDevCalib)>=tOffMinMax(1)) && (abs(tDevCalib) <= tOffMinMax(2))
         ncsCalib = ncsCalib(nSampDev+1:end,:);
     end
     tNcsCalib = tNcsCalib(1:end-nSampDev);
+    fprintf('Sync: NCS calib Th with Biopac.\n');
 end
 % Calibration waveforms (NCS Th, NCS Abd):
-if (abs(tDevCalibThAbd)>=tOffMinMax(1)) && (abs(tDevCalibThAbd) <= tOffMinMax(2))
+if (abs(tDevCalibThAbd)>=tOffMinMax(1)) && (abs(tDevCalibThAbd) <= tOffMinMax(2)) && (abs(rRespCalibAbdBio) > thMinCorr) && (abs(rRespCalibThBio) > thMinCorr)
     nSampDev = abs(tDevCalibThAbd) * fs(1); % same BIO and NCS frequencies
     temp = ncsCalib; % Temporary variable
     ncsCalib = zeros(size(ncsCalib,1)-nSampDev,4);
@@ -218,12 +230,13 @@ if (abs(tDevCalibThAbd)>=tOffMinMax(1)) && (abs(tDevCalibThAbd) <= tOffMinMax(2)
         bioCalib = bioCalib(1:end-nSampDev,:);
     end
     tNcsCalib = tNcsCalib(1:end-nSampDev);
+    fprintf('Sync: NCS calib Th with NCS calib Abd.\n');
 end     
 
 tBioCalib = tNcsCalib; % Make sure sampling frequencies are set same
 
 % Waveforms from routine (Bio, NCS Th):
-if (abs(tDev)>=tOffMinMax(1)) && (abs(tDev) <= tOffMinMax(2))
+if (abs(tDev)>=tOffMinMax(1)) && (abs(tDev) <= tOffMinMax(2)) && (abs(rRespThBio)> thMinCorr) 
     nSampDev = abs(tDev) * fs(1); % same BIO and NCS frequencies
     if tDev > 0
         bio = bio(nSampDev+1:end,:);
@@ -233,9 +246,10 @@ if (abs(tDev)>=tOffMinMax(1)) && (abs(tDev) <= tOffMinMax(2))
         ncs = ncs(nSampDev+1:end,:);
     end
     tNcs = tNcs(1:end-nSampDev);
+    fprintf('Sync: NCS Th with Biopac.\n');
 end
 % Calibration waveforms (NCS Th, NCS Abd):
-if (abs(tDevThAbd)>=tOffMinMax(1)) && (abs(tDevThAbd) <= tOffMinMax(2))
+if (abs(tDevThAbd)>=tOffMinMax(1)) && (abs(tDevThAbd) <= tOffMinMax(2)) && (abs(rRespThBio)>thMinCorr) && (abs(rRespAbdBio)>thMinCorr)
     nSampDev = abs(tDevThAbd) * fs(1); % same BIO and NCS frequencies
     temp = ncs; % Temporary variable
     ncs = zeros(size(ncs,1)-nSampDev,4);
@@ -249,6 +263,7 @@ if (abs(tDevThAbd)>=tOffMinMax(1)) && (abs(tDevThAbd) <= tOffMinMax(2))
         bio = bio(1:end-nSampDev,:);
     end
     tNcs = tNcs(1:end-nSampDev);
+    fprintf('Sync: NCS Th with NCS Abd.\n');
 end        
    
 tBio = tNcs;
@@ -335,7 +350,7 @@ if ((idxRespCorr == 1) && (abs(rC3) >= thMinCorr)) || ((idxRespCorr == 3) && (ab
     fprintf('Abdomen: Using NCS Amplitude waveform for respiration.\n');
 else
     ncsRespAbd = ncsRespAbdPh; 
-    ncsCalibRespAbd = ncsCalibRespabdPh;
+    ncsCalibRespAbd = ncsCalibRespAbdPh;
     fprintf('Abdomen: Using NCS Phase waveform for respiration.\n');
 end
 
@@ -424,6 +439,8 @@ ax(3) = subplot(3,1,3);
 stairs(tQualIdxResp,qualIdxResp);
 ylim([-0.25,1.25]);
 linkaxes(ax,'x');
+
+fprintf('Estimated NCS respiration quality index.\n');
 
 %% Assigning data quality (heartbeat)
 % First divide the time into epochs of 4 s
@@ -533,11 +550,14 @@ text (tQualIdxHeart(end-10),-0.11,'0: Poor Quality')
 % ylim([-0.25,1.25])
 linkaxes(ax,'x');
 
+fprintf('Estimated NCS heartbeat quality index.\n');
+
 %% ------------------------------------------------------------------------
 % Calibration phase If calibration is selected, we calculate lung volume or 
 % tidal volume from BIOPAC airflow data.
 
 if ifCalib == 1
+    fprintf('Performing volume calibration... \n');
     rng(5)
     % Baseline estimation: Mean deviation from zero when no airflow.
     % Using the routine's data to estimate that.
@@ -558,7 +578,7 @@ if ifCalib == 1
 
     % Start and stop calibration times: Performing calibration during
     % normal breathing only: ONLY FOR calibType='vol'
-    opts1.tCalib = [9,15]; 
+    opts1.tCalib = [9,17]; 
     [beltCalibCoeff,vBeltCalib,gof] = bioBeltVolCalib([bioCalib(:,2),bioCalib(:,3)],fs(2),tvAirflow,volAirflow,opts1); 
         
     opts2.tCalib = opts1.tCalib; 
@@ -587,6 +607,8 @@ if ifCalib == 1
     leg = {'Airflow','Belt','NCS'};
     plotCute1('Time (s)','Volume (L)',ax1(3),[],leg,1,'Horizontal');
     linkaxes(ax1,'x')
+    
+    fprintf('Vol calibration Done.\n');
 end
 
 %%
@@ -594,11 +616,16 @@ close all
 
 %% ------------------------------------------------------------------------
 % Use generated calibration coefficients to estimate Biopac and NCS Vol/TV
+
+fprintf('Performing Volume estimation... ');
+
 opts1.tWin = 4; opts1.minInterceptDist = 0.2;
 vBelt = bioBeltVol(bio(:,2:3),beltCalibCoeff,fs(2),opts1);
 
 opts2.tWin = 4;
 vNcs = ncsVol([ncsRespTh,ncsRespAbd],ncsCalibCoeff,fs(1),opts2);
+
+fprintf('Done.\n');
 
 % Plot calibrated Biopac and NCS volumes (both using calib coefficients)
 fig(5) = figure('Position',[400 200 600 600]);
@@ -664,17 +691,30 @@ end
 
 
 %% Respiration BR estimation
+
+fprintf('Performing BR estimation... \n');
 ncsResp = ncsRespAbd;
 
 opts3.tWinBR = 15; % Window on which br is estimated
 opts3.tWin = 4; % Window for peak detection moving average
 opts3.minInterceptDist = 0.15; 
-[brNcs,ncsRespPk] = brEst(ncsResp,fs(1),opts3);
-pkMaxNcs = ncsRespPk(1).idx(ncsRespPk(1).ind == 1);
+opts3.calibPk = 1; % Calibrate out peaks of small height (max-min)
+opts3.calibMinPkRatio = 0.3;
 
-bioResp = bio(:,3);
+[brNcs,ncsRespPk] = brEst(ncsResp,fs(1),opts3);
+pkMaxNcs = ncsRespPk.idx(ncsRespPk.ind == 1);
+pkMinNcs = ncsRespPk.idx(ncsRespPk.ind == 0);
+pkMaxNcs = pkMaxNcs(ncsRespPk.idxValidPk);
+pkMinNcs = pkMinNcs(ncsRespPk.idxValidPk);
+
+bioResp = bio(:,2);
 [brBio,bioRespPk] = brEst(bioResp,fs(1),opts3);
-pkMaxBio = bioRespPk(1).idx(bioRespPk(1).ind == 1);
+pkMaxBio = bioRespPk.idx(bioRespPk.ind == 1);
+pkMinBio = bioRespPk.idx(bioRespPk.ind == 0);
+pkMaxBio = pkMaxBio(bioRespPk.idxValidPk);
+pkMinBio = pkMinBio(bioRespPk.idxValidPk);
+
+fprintf('Done.\n');
 
 figure('Position',[100,100,600,600]);
 nFig = 3;
@@ -682,15 +722,19 @@ ax1 = [];
 ax1(1) = subplot(nFig,1,1);
 plot(tNcs,ncsResp);hold on
 plot(tNcs(pkMaxNcs),ncsResp(pkMaxNcs),'o');
+plot(tNcs(pkMinNcs),ncsResp(pkMinNcs),'*');
 
 ax1(2) = subplot(nFig,1,2);
 plot(tNcs,bioResp); hold on
 plot(tNcs(pkMaxBio), bioResp(pkMaxBio),'o');
+plot(tNcs(pkMinBio),bioResp(pkMinBio),'*');
 
 ax1(3) = subplot(nFig,1,3);
 plot(tNcs,brNcs);
 hold on
 plot(tNcs,brBio);
+
+linkaxes(ax1,'x')
 
 %% 
 close all;
@@ -700,18 +744,70 @@ close all;
 % opts2.orderHP = 5; opts2.Ast = 20;
 % opts2.f3db = 0.7; opts2.fpLP = 1.5; opts2.fstLP = 1.8;
 
+fprintf('Performing HR estimation... \n');
+
+% Filtering ECG
+opts2.filtType = 'LpHp';
+opts2.f3db = 4; opts2.fpLP = 20; opts2.fstLP = 25;
+ecgFilt = filterLpHp(bio(:,1),fs(2),opts2);
+
 opts3.tWinHR = 4; % Same for ECG and NCS
 opts3.tWin = 0.5;
 opts3.minInterceptDist = 0.05;
 [hrNcs, ncsHeartPk] = hrEst(ncsHeart,fs(1),opts3);
-pkMaxNcs = ncsHeartPk(1).idx(ncsHeartPk(1).ind == 1);
+pkMaxNcs = ncsHeartPk.idx(ncsHeartPk.ind == 1);
+opts3.minPkHt = 0.2;
+[hrBio, pkMaxBio] = ecgHR(bio(:,1),fs(2),opts3);
 
-[hrBio, bioHeartPk] = ecgHR(bio(:,1),fs(2),opts3);
 figure
-plot(tNcs,hrNcs)
-hold on
-plot(tNcs,hrBio)
+clear ax1
+nFig = 3;
+ax1(1) = subplot(nFig,1,1);
+plot(tNcs,ncsHeart);hold on
+plot(tNcs(pkMaxNcs),ncsHeart(pkMaxNcs),'^');
 
+ax1(2) = subplot(nFig,1,2);
+plot(tNcs,ecgFilt); hold on
+plot(tNcs(pkMaxBio),ecgFilt(pkMaxBio),'^');
+
+ax1(3) = subplot(nFig,1,3);
+plot(tNcs,hrNcs); hold on
+plot(tNcs,hrBio);
+legend({'NCS','Ecg'});
+linkaxes(ax1,'x');
+
+% --------------------------------------------------------------------
+% Using RR interval
+% opts.tWinHR = 3;
+% opts.tWin = 0.5;
+% opts.minInterceptDist = 0.1;
+% opts.minEcgPkHt = 0.2;
+% opts.pkAmpRelRejThresh = 0.2; 
+% opts.tRRthresh = [0.4,1.2]; 
+% 
+% % Getting harmonic of heartbeat
+% opts2.filtType = 'LpHp';
+% opts2.f3db = 2.1; opts2.fpLP = 3.1; opts2.fstLP = 3.3;
+% ncsHeart2Harm = filterLpHp(ncs(:,idxHeartCorr),fs(1),opts2);
+% 
+% opts.harmNum = 1;
+% [hrvNcs,hrvBio,~,~] = hrvFeatureEst(ncsHeart,ecgFilt,fs,opts);
+% 
+% opts.harmNum = 2;
+% 
+% [hrvNcs2ndHarm,~,~,~] = hrvFeatureEst(ncsHeart2Harm,[],fs,opts);
+% 
+% figure
+% plot(hrvNcs.tRR,hrvNcs.hr)
+% hold on
+% plot(hrvNcs2ndHarm.tRR,hrvNcs2ndHarm.hr)
+% plot(hrvBio.tRR,hrvBio.hr)
+% legend({'NCS','NCS 2^{nd} Harm','ECG'})
+% ylabel('Heart Rate (BPM)')
+% xlabel('Time (s)')
+
+% -------------------------------------------------------------------------
+fprintf('Done.\n');
 close all
 
 %% ------------------------------------------------------------------------
@@ -722,7 +818,7 @@ close all
 %     'vBelt','vNcs','tBio','tNcs','tBioCalib','tNcsCalib','opts1','opts2',...
 %     'tStartEndOff','tManualOff','ncsCalibFile','tCalibStartEndOff',...
 %     'signNcs','signNcsCalib','tManualOffCalib');
-save([dataPath,'Analysis\',ncsFile,'_Vol_BR_HR.mat'], 'ncs','bio','fs',...
+save([dataPath,'Analysis\case',num2str(caseNum),'_',ncsFile(12:end),'_Vol_BR_HR.mat'], 'ncs','bio','fs',...
     'ncsCalib','bioCalib','ncsRespAbd','ncsRespTh','ncsHeart','tvAirflow',...
     'volAirflow','beltCalibCoeff','ncsCalibCoeff',...
     'tNcs','tNcsCalib','opts1','opts2',...

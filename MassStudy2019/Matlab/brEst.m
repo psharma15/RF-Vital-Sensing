@@ -4,6 +4,19 @@ if ~isfield(opts,'tWinBR')
     opts.tWinBR = 8;
     fprintf('Default BR estimation window: %3.2f\n',opts.tWinBR);
 end
+if ~isfield(opts,'calibPk')
+    opts.calibPk = 0; % Do not calibrate by default
+else
+    if ~isfield(opts,'calibT')
+        opts.calibT = [20,40]; 
+        fprintf('Default BR estimation peak calibration window [%d, %d].\n',opts.calibT(1),opts.calibT(2));
+    end
+    if ~isfield(opts,'calibMinPkRatio')
+        opts.calibMinPkRatio = 0.4;
+        fprintf('Default min peak height can be %d%% of avg peak height in calibration window.\n',100*opts.calibMinPkRatio);
+    end
+end
+
 t = (0:(length(ncsData)-1))/fs;
 
 % -------------------------------------------------------------------------
@@ -26,24 +39,37 @@ end
 pkMax2 = pk(1).idx(pk(1).ind == 1);
 pkMin2 = pk(1).idx(pk(1).ind == 0);
 
-% This is the change in Pk-Pk thorax and abdomen signal
-del2 = zeros(length(ncsData),1);
+if opts.calibPk == 1
+    fprintf('\nBR: Performing calibration of NCS pk-pk height.\n')
+    % This is the change in Pk-Pk thorax and abdomen signal
+    del2 = zeros(length(pkMax2),1);
 
-% So for a cycle, considering there exists 2 minima and 2 maxima point:
-% Calculation is peformed using the difference between maxima and first
-% minima. The update is performed at the end of cycle to be consistent with
-% TV from airflow calculation. And this value is held until next update or
-% the end of the waveform.
-for i = 1:length(pkMax2)
-    if i<length(pkMax2)
-        del2(pkMin2(i+1):pkMin2(i+2)) = abs(ncsData(pkMax2(i),1)-ncsData(pkMin2(i),1)); % Making it positive always
-    else
-        del2(pkMin2(i+1):end) = abs(ncsData(pkMax2(i),1)-ncsData(pkMin2(i),1));
+    % So for a cycle, considering there exists 2 minima and 2 maxima point:
+    % Calculation is peformed using the difference between maxima and first
+    % minima. The update is performed at the end of cycle to be consistent with
+    % TV from airflow calculation. And this value is held until next update or
+    % the end of the waveform.
+    for i = 1:length(pkMax2)
+            del2(i) = abs(ncsData(pkMax2(i),1)-ncsData(pkMin2(i),1)); % Making it positive always
     end
+
+    tBRmax1 = t(pkMax2);
+    idx2Calib = ((tBRmax1 >= opts.calibT(1))&(tBRmax1 <= opts.calibT(2)));
+    delNcs2Calib = mean(del2(idx2Calib)); 
+    fprintf('delNCS2Calib = %f\n',delNcs2Calib);
+
+    idxPk = (del2 >= opts.calibMinPkRatio*delNcs2Calib);
+
+    pkMax2 = pkMax2(idxPk); % Only keep indices that satisfy, otherwise ignore
+    pkMin2 = pkMin2(idxPk);
+    
+    pk(1).idxValidPk = idxPk;
 end
 
 fig1 = figure;
 nFig = size(ncsData,2)+1;
+
+%%
 if size(ncsData,2) == 2
     if pk(2).ind(1) == 1
         pk(2).ind = pk(2).ind(2:end);
@@ -58,20 +84,26 @@ if size(ncsData,2) == 2
     pkMax1 = pk(2).idx(pk(2).ind == 1);
     pkMin1 = pk(2).idx(pk(2).ind == 0);
 
-    del1 = zeros(length(ncsData),1);
-
-    for i = 1:length(pkMax1)
-        if i<length(pkMax1)
-            del1(pkMin1(i+1):pkMin1(i+2)) = abs(ncsData(pkMax1(i),2)-ncsData(pkMin1(i),2)); % Making it positive always
-        else
-            del1(pkMin1(i+1):end) = abs(ncsData(pkMax1(i),2)-ncsData(pkMin1(i),2));
+    if opts.calibPk == 1
+        fprintf('BR: Performing calibration of NCS pk-pk height.\n');
+        del1 = zeros(length(pkMax1),1);
+        for i = 1:length(pkMax1)
+                del1(i) = abs(ncsData(pkMax1(i),1)-ncsData(pkMin1(i),1)); % Making it positive always
         end
-    end
 
+        tBRmax2 = t(pkMax1);
+        idx1Calib = ((tBRmax2 >= opts.calibT(1))&(tBRmax2 <= opts.calibT(2)));
+        delNcs1Calib = mean(del1(idx1Calib)); 
+        fprintf('delNCS1Calib = %f\n',delNcs1Calib);
+
+        idxPk = (del1 >= opts.calibMinPkRatio*delNcs1Calib);
+
+        pkMax1 = pkMax1(idxPk); % Only keep indices that satisfy, otherwise ignore
+        pkMin1 = pkMin1(idxPk);
+        pk(2).idxValidPk = idxPk;
+    end
     %% Find breath rate in last tWinBR sec (or slightly less)
     br = zeros(length(t),2);
-    tBRmax1 = t(pkMax2);
-    tBRmax2 = t(pkMax1);
     
     for iter = 1:length(t)
 
@@ -120,8 +152,8 @@ if size(ncsData,2) == 2
 
 
 else
-    
-    %% Find breath rate in last tWinBR sec (or slightly less)
+%% Only one NCS column    
+    % Find breath rate in last tWinBR sec (or slightly less)
     br = zeros(length(t),1);
     t = t(:);
     tBRmax1 = t(pkMax2);
@@ -134,7 +166,8 @@ else
             br(iter,1) = 0;
         else
             br(iter,1) = (idxBR(2)- idxBR(1))/(tBRmax1(idxBR(2))-tBRmax1(idxBR(1)));
-    %         ncsAmpBR(iter) = (idxAmpBR(2)- idxAmpBR(1))/tWinBR;
+    %         ncsAmpBR(iter) = (idxAmpBR(2)- idxAmpBR(1))/tWinBR; % This is wrong
+  
         end
 
     end
