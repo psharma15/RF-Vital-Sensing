@@ -1,13 +1,33 @@
-Vital Sign Monitoring by Radio Frequency based Near-Field Coherent Sensing
+#Vital Sign Monitoring by Radio Frequency based Near-Field Coherent Sensing
 ==========================================================================================================================================
 *Code for applications of radio frequency (RF) based near-field coherent sensing (NCS) in vital sign detection.*
 
+## Overview
 NCS can record dielectric boundary movement of internal organs and body surfaces in the near-field region of the transmitter (Tx)
 antenna. NCS can be implemented as either passive or active setup, with the Tx antenna on the chest, with optimal placement to get vital sign of interest (heart or breath or both). For the former setup, passive radiofrequency identification (RFID) tags can be put on the person's clothes to maximize the wearer comfort and minimize the tag cost, while receiver (Rx) can get the vital sign in the far-field. Mechanical movements that result in dynamic dielectric boundary changes are modulated onto the radio signals with unique digital identification (ID), which can be readily extended to monitor multiple tags and persons by a single RFID reader with good channel isolation. In the active tag approach, both Tx and Rx antennas are placed on the chest as a self-contained mobile unit without need of an external reference reader, which is then feasible for both indoor and outdoor applications. NCS is less sensitive to wearer movement and ambient motion which can be filtered out as the common-mode signal and is thus more feasible for continuous monitoring. 
 
 As this setup provides comfortable non-invasive vital sign monitoring, it can be used for long-term monitoring. Among others, it can help improve diagnostics of respiratory diseases and sleep apnea, which can often be undetected and untreated due to lack of continous monitoring. With the ease of placing two independent sensors, we can easily differentiate thorax and abdomen breathing patterns to identify obstructive sleep apnea (OSA) by its thoracoabdominal asynchrony. 
 
 We have estimated two key respiratory parameters breath rate (BR) and lung volume (LV) that can identify various respiratory dynamics, and also compared with reference signals derived from airflow pneumotach and calibrated chest belts. Additionally we can also get accurate heart rate variation (HRV) features from NCS that are compared with derived features from electrocardiogram (ECG) and photoplethysmograph (PPG).
+
+## File organization
+This folder orgainization is not in terms of code, but in terms of progress of the project. Initially individual components were focused:
+* Motion detection in sleep [1]
+  * NCS with synchronized external ECG heartbeat waveform (reference instrument only added towards the end of this work, so the paper does not have refernce HR during motion corrected phase)
+  * So far only Matlab codes are added, earlier Labview codes are not updated.
+  
+* Respiratory 
+(Normal Breathing)
+  * A new reference: Hexoskin smart shirt is used for majority of this work.
+  * Reference measurements from Hexoskin: ECG heart, thorax and abdomen chest belts respiration with calibrated lung volume estimate.
+  * Focusing on normal breathing peak detection (modified AMPD algorithm), volume calibration, HR and BR estimation.
+(Breath Pattern, Coughing, Speaking)
+  * Performing data collection and analysis with different breathing conditions (simulating various apnea and respiratory disorders), coughing and speaking.
+  * Data analysis is similar coding as previous, but these abnormal breathing conditions require some more changes in the HR, BR estimation post-processing, as the peak-detection is prone to error.
+  * Added Labview codes (improved versions are in recent folders).
+  
+* 
+
 
 ## References
 1. P. Sharma and E. C. Kan, “Sleep scoring with a UHF RFID tag by near field coherent sensing,” in IEEE MTT-S Int. Microw. Symp. Dig., 2018, pp. 1419–1422. (https://doi.org/10.1109/MWSYM.2018.8439216)
