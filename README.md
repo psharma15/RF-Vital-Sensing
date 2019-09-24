@@ -14,13 +14,15 @@ We have estimated two key respiratory parameters breath rate (BR) and lung volum
 This folder orgainization is not in terms of code, but in terms of progress of the project. Initially individual components were focused:
 * Motion detection in sleep [1]
   * NCS with synchronized external ECG heartbeat waveform (reference instrument only added towards the end of this work, so the paper does not have refernce HR during motion corrected phase)
-  * So far only Matlab codes are added, earlier Labview codes are not updated.
+  * So far only Matlab codes are added, earlier Labview codes are in 'EcgNcsCorrelation'.
   
 * Respiratory 
+
 (Normal Breathing)
   * A new reference: Hexoskin smart shirt is used for majority of this work.
   * Reference measurements from Hexoskin: ECG heart, thorax and abdomen chest belts respiration with calibrated lung volume estimate.
   * Focusing on normal breathing peak detection (modified AMPD algorithm), volume calibration, HR and BR estimation.
+
 (Breath Pattern, Coughing, Speaking)
   * Performing data collection and analysis with different breathing conditions (simulating various apnea and respiratory disorders), coughing and speaking.
   * Data analysis is similar coding as previous, but these abnormal breathing conditions require some more changes in the HR, BR estimation post-processing, as the peak-detection is prone to error.
