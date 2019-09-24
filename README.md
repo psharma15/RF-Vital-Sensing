@@ -31,11 +31,11 @@ This folder orgainization is not in terms of code, but in terms of progress of t
   * The test is written on PsyToolkit free-available online software (https://psytoolkit.org).
   * The script is based on https://www.psytoolkit.org/acknowledgements.html.
 * Mass Study 2019
- * This project covers codes from all the previous projects with improved algorithm for peak detection etc..
- * The aim is to test the system for multiple people in multiple postures, hence many updates were needed:
-   * Reference instrument is updated to Biopac system (https://www.biopac.com/).
-   * Codes are automated as much as possible, with no tuning needed (once parameters are set) from person-to-person.
-   * refer to the Readme of this for further details regarding hardware and code structure. 
+  * This project covers codes from all the previous projects with improved algorithm for peak detection etc..
+  * The aim is to test the system for multiple people in multiple postures, hence many updates were needed:
+    * Reference instrument is updated to Biopac system (https://www.biopac.com/).
+    * Codes are automated as much as possible, with no tuning needed (once parameters are set) from person-to-person.
+    * refer to the Readme of this for further details regarding hardware and code structure. 
  
 
 
