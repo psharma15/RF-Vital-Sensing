@@ -11,7 +11,7 @@ As this setup provides comfortable non-invasive vital sign monitoring, it can be
 We have estimated two key respiratory parameters breath rate (BR) and lung volume (LV) that can identify various respiratory dynamics, and also compared with reference signals derived from airflow pneumotach and calibrated chest belts. Additionally we can also get accurate heart rate variation (HRV) features from NCS that are compared with derived features from reference instruments.
 
 ## File organization
-This folder orgainization is not in terms of code, but in terms of progress of the project. Initially individual components were focused:
+This folder orgainization is not in terms of code, but in terms of progress of the project. Initially individual components were focused (following are listed in the order oldest to current projects):
 * **Motion detection in sleep [1]**
   * NCS with synchronized external ECG heartbeat waveform (reference instrument only added towards the end of this work, so the paper does not have refernce HR during motion corrected phase)
   * So far only Matlab codes are added, earlier Labview codes are in **EcgNcsCorrelation**.
