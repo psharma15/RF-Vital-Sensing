@@ -40,7 +40,7 @@ pkMax2 = pk(1).idx(pk(1).ind == 1);
 pkMin2 = pk(1).idx(pk(1).ind == 0);
 
 if opts.calibPk == 1
-    fprintf('\nBR: Performing calibration of NCS pk-pk height.\n')
+    fprintf('\nBR: Performing calibration of pk-pk height.\n')
     % This is the change in Pk-Pk thorax and abdomen signal
     del2 = zeros(length(pkMax2),1);
 
@@ -56,7 +56,7 @@ if opts.calibPk == 1
     tBRmax1 = t(pkMax2);
     idx2Calib = ((tBRmax1 >= opts.calibT(1))&(tBRmax1 <= opts.calibT(2)));
     delNcs2Calib = mean(del2(idx2Calib)); 
-    fprintf('delNCS2Calib = %f\n',delNcs2Calib);
+%     fprintf('delNCS2Calib = %f\n',delNcs2Calib);
 
     idxPk = (del2 >= opts.calibMinPkRatio*delNcs2Calib);
 
@@ -85,7 +85,7 @@ if size(ncsData,2) == 2
     pkMin1 = pk(2).idx(pk(2).ind == 0);
 
     if opts.calibPk == 1
-        fprintf('BR: Performing calibration of NCS pk-pk height.\n');
+        fprintf('BR: Performing calibration of pk-pk height.\n');
         del1 = zeros(length(pkMax1),1);
         for i = 1:length(pkMax1)
                 del1(i) = abs(ncsData(pkMax1(i),1)-ncsData(pkMin1(i),1)); % Making it positive always
@@ -94,7 +94,7 @@ if size(ncsData,2) == 2
         tBRmax2 = t(pkMax1);
         idx1Calib = ((tBRmax2 >= opts.calibT(1))&(tBRmax2 <= opts.calibT(2)));
         delNcs1Calib = mean(del1(idx1Calib)); 
-        fprintf('delNCS1Calib = %f\n',delNcs1Calib);
+%         fprintf('delNCS1Calib = %f\n',delNcs1Calib);
 
         idxPk = (del1 >= opts.calibMinPkRatio*delNcs1Calib);
 

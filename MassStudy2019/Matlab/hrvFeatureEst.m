@@ -31,7 +31,7 @@ if ~isfield(opts,'tWinHR')
 end
 if ~isfield(opts,'delPkCalibTime')
     % Make sure this time interval has no wrong beat
-    opts.delPkCalibTime = [0 10];
+    opts.delPkCalibTime = [0 30];
     fprintf('Heartbeat peak amplitude calibration window: [%2.1f, %2.1f]s. \n',opts.delPkCalibTime);
 end
 if ~isfield(opts,'pkAmpRelRejThresh')
@@ -120,6 +120,11 @@ tRR = tRR(idxRRinterval);
 % Since other correction uses next rrInterval that could be incorrect,
 % editing that
 nWinRRcorrect = 10; % Use last 10 RR intervals mean to correct
+if length(rrInterval)< nWinRRcorrect*2
+    nWinRRcorrect = 1;
+    fprintf('Changing nWinRRcorrect.\n');
+    
+end
 for i = 1:nWinRRcorrect
     if (rrInterval(i) < (1/1.3)*mean(rrInterval(i+1:nWinRRcorrect))) || (rrInterval(i) > 1.3*mean(rrInterval(i+1:nWinRRcorrect)))
         rrInterval(i) = mean(rrInterval(i+1:nWinRRcorrect));
