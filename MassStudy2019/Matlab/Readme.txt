@@ -1,5 +1,3 @@
-So most of the codes are for processing NCS extracted from Labview-USRP.
+The current codes are for processing NCS extracted from Labview-USRP.
 
-Other setup is Matlab-BlueTooth - Jianlin's setup. 
-
-Trying to segregate different setups.
+Other setup is Matlab-BlueTooth reader - setup (check archive).
