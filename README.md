@@ -106,6 +106,7 @@ This folder orgainization is in terms of progress of the project. Initially indi
 <p align="center">
   <img width="460" height="300" src="./Figure/isoVol_twoSensor.png">
 </p>
+
   * Data analysis is similar coding as previous, but these abnormal breathing conditions require some more changes in the HR, BR estimation post-processing, as the peak-detection is prone to error.
   * Added Labview codes (improved versions are in recent folders).
 * **Mass Study 2019**
