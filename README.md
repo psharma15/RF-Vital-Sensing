@@ -10,7 +10,9 @@ Vital Sign Monitoring by Radio Frequency (RF) Near-Field Coherent Sensing (NCS)
 RF NCS can record dielectric boundary movement of internal organs and body surfaces in the near-field region of the transmitter (Tx)
 antenna by modulating the carrier. For a harmonic tag, RF schematic is shown below. NCS is extracted as the modulated I-Q amplitude and phase.
 
-![RF Schematic](./Figure/RF_Schematic2.png)
+<p align="center">
+  <img width="400" src="./Figure/RF_Schematic2.png">
+</p>
 
 NCS can be implemented as either passive or active setup, with the Tx antenna on the chest, with optimal placement to get vital sign of interest (heart or breath or both). For the former setup, passive radiofrequency identification (RFID) tags can be put on the person's clothes to maximize the wearer comfort and minimize the tag cost, while receiver (Rx) can get the vital sign in the far-field. Mechanical movements that result in dynamic dielectric boundary changes are modulated onto the radio signals with unique digital identification (ID), which can be readily extended to monitor multiple tags and persons by a single RFID reader with good channel isolation. In the active tag approach, both Tx and Rx antennas are placed on the chest as a self-contained mobile unit without need of an external reference reader, which is then feasible for both indoor and outdoor applications. NCS is less sensitive to wearer movement and ambient motion which can be filtered out as the common-mode signal and is thus more feasible for continuous monitoring. 
 
@@ -84,7 +86,7 @@ This folder orgainization is in terms of progress of the project. Initially indi
 * **Motion detection in sleep [1]**
 
 <p align="center">
-  <src="./Figure/sleepSetup1.jpg">
+  <img width="450" src="./Figure/sleepSetup1.jpg">
 </p>
 
   * NCS with synchronized external ECG heartbeat waveform (reference instrument only added towards the end of this work, so the paper does not have refernce HR during motion corrected phase).
@@ -92,7 +94,7 @@ This folder orgainization is in terms of progress of the project. Initially indi
   * Data processing is based on training at the rest state, and detect any other motion as outlier, while not misclassifying if the signal is weaker when a person turns. The processing is shown below.
   
 <p align="center">
-  <src="./Figure/motionDataProcess.png">
+  <img width="300" src="./Figure/motionDataProcess.png">
 </p>
 	
 * **Respiratory (Normal Breathing)**
@@ -103,7 +105,7 @@ This folder orgainization is in terms of progress of the project. Initially indi
   	* HR and BR estimation following the peak detection.
 
 <p align="center">
-  <src="./Figure/HexoskinSetup1.jpg">
+  <img width="500" src="./Figure/HexoskinSetup1.png">
 </p>
 
 * **Respiratory (Breath Pattern, Coughing, Speaking) [2]**
@@ -114,7 +116,7 @@ This folder orgainization is in terms of progress of the project. Initially indi
   	* Added Labview codes (improved versions are in recent folders).
 	
 <p align="center">
-  <src="./Figure/isoVol_twoSensor.png">
+  <img width="600" src="./Figure/isoVol_twoSensor.png">
 </p>	
 	
 * **Mass Study 2019**
@@ -125,7 +127,7 @@ This folder orgainization is in terms of progress of the project. Initially indi
     * refer to the Readme of this for further details regarding hardware and code structure. 
     
 <p align="center">
-  <src="./Figure/MassStudySetup.jpg">
+  <img width="300" src="./Figure/MassStudySetup.jpg">
 </p>    
     
 * **Attention Test**
