@@ -60,7 +60,7 @@ Lung volume is an important parameter to be measured for respiratory health moni
 * This waveform is noisy and may have several ZC near the actual ZC, and needs accurate detection, this is implemented in zeroCrossDet.m. Following the volume estimation, we fit this volume to calibrate Biopac belts.
 * NCS is calibrated (small calibration period of <10s) using the reference volume estimate (instantaneous volume with Biopac, and per breath volume with Hexoskin). Calibration involves fitting equations, with linear or quadrativ fitting (we have tried both, with linear being more accurate for most cases), using least-square fitting implemented by Matlab toolbox.
 
-### Peak Detection
+### BR and HR Estimation by Peak Detection
 
 * Several peak detection algorithms have been tried, with mimimum tuning parameters and efficient peak detection for non-stationary respiration waveforms, specially with the presence of different breathing (normal, slow-deep, fast breathing and breath hold durations).
 * Earlier codes have used Automated Multiscaled Based Peak Detection (AMPD) algorith. 
