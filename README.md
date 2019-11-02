@@ -103,10 +103,13 @@ This folder orgainization is in terms of progress of the project. Initially indi
   * One NCS sensor, near xiphoid process is used for detecting central sleep apnea (CSA) and observing respiratory-disordered breathing like Cheyne-Stokes, Biot's, Ataxic and Kussmaul breathing. 
   * We can further observe separte thoracic and abdominal breathing patterns, present in obstructive sleep apnea (OSA) by placing two NCS sensors near thorax and abdomen as shown in the figure.
 
-![OSA Two Sensor](./Figure/isoVol_twoSensor.png)
+<p align="center">
+  <img width="460" height="300" src="./Figure/isoVol_twoSensor.png">
+</p>
   * Data analysis is similar coding as previous, but these abnormal breathing conditions require some more changes in the HR, BR estimation post-processing, as the peak-detection is prone to error.
   * Added Labview codes (improved versions are in recent folders).
 * **Mass Study 2019**
+
 ![Mass Study Setup](./Figure/MassStudySetup.jpg)
   * This project covers codes from all the previous projects with improved algorithm for peak detection etc.
   * The aim is to test the system for multiple people in multiple postures, hence many updates were needed:
