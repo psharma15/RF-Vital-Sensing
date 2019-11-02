@@ -1,10 +1,10 @@
-Vital Sign Monitoring by Radio Frequency based Near-Field Coherent Sensing
+Vital Sign Monitoring by Radio Frequency (RF) Near-Field Coherent Sensing (NCS)
 ========================================================================================================================================
 *Code for applications of radio frequency (RF) based near-field coherent sensing (NCS) in vital sign detection.*
 
 ## NCS Overview
 ----------------------------------------------------------------------------------------------------------------------------------------
-NCS can record dielectric boundary movement of internal organs and body surfaces in the near-field region of the transmitter (Tx)
+RF NCS can record dielectric boundary movement of internal organs and body surfaces in the near-field region of the transmitter (Tx)
 antenna. NCS can be implemented as either passive or active setup, with the Tx antenna on the chest, with optimal placement to get vital sign of interest (heart or breath or both). For the former setup, passive radiofrequency identification (RFID) tags can be put on the person's clothes to maximize the wearer comfort and minimize the tag cost, while receiver (Rx) can get the vital sign in the far-field. Mechanical movements that result in dynamic dielectric boundary changes are modulated onto the radio signals with unique digital identification (ID), which can be readily extended to monitor multiple tags and persons by a single RFID reader with good channel isolation. In the active tag approach, both Tx and Rx antennas are placed on the chest as a self-contained mobile unit without need of an external reference reader, which is then feasible for both indoor and outdoor applications. NCS is less sensitive to wearer movement and ambient motion which can be filtered out as the common-mode signal and is thus more feasible for continuous monitoring. 
 
 As this setup provides comfortable non-invasive vital sign monitoring, it can be used for long-term monitoring. Among others, it can help improve diagnostics of respiratory diseases and sleep apnea, which can often be undetected and untreated due to lack of continous monitoring. With the ease of placing two independent sensors, we can easily differentiate thorax and abdomen breathing patterns to identify obstructive sleep apnea (OSA) by its thoracoabdominal asynchrony. 
@@ -15,10 +15,10 @@ We have estimated two key respiratory parameters breath rate (BR) and lung volum
 ----------------------------------------------------------------------------------------------------------------------------------------
 ### Hexoskin Smart Shirt reference
 * Provides following sensors:
- * Fabric-electode Electrocardiogram (ECG)
- * Respiratory Inductance Plethysmography (RIP) chest belts
- * Accelerometer
- * Pre-calibrated Tidal Volume (TV)
+ 	* Fabric-electode Electrocardiogram (ECG)
+ 	* Respiratory Inductance Plethysmography (RIP) chest belts
+ 	* Accelerometer
+* Also provides pre-calibrated Tidal Volume (TV) with limited accuracy.
 
 ### BIOPAC reference measurement (Biopac MP36R)
 * Transducers include:
@@ -42,18 +42,18 @@ We have estimated two key respiratory parameters breath rate (BR) and lung volum
 ------------------------------------------------------------------------------------------------------------
 ### Volume Estimation
 
-* So far we have estimated tidal volume from NCS and compared that with Hexosking pre-estimated tidal volume, which is defined as scaled version of difference between maximumk-inspiratory and minimum-expiratory respiration waveform for each respiration cycle.
+Lung volume is an important parameter to be measured for respiratory health monitoring. We can estimate instantaneous volume of air being exchanged by the lungs by calibrating the respiratory motion detected by the NCS.  
+* Hexoskin provides pre-calibrated tidal volume, TV (lung volume only during normal breathing) estimate @1Hz sampling rate. 
 * With Biopac airflow, we can get more accurate instantaneous volume information by integrating the airflow for each respiration cycle.
 * Airflow waveform shows positive airflow during inspiration and negative airflow during expiration, with zero-crossing (ZC) at the inspire/expire transition. 
-* This waveform is noisy and may have several ZC near the actual ZC, and needs accurate detection, this is implemented in zeroCrossDet.m
-* Following the volume estimation, we fit this volume to calibrate Biopac belts and NCS respiration and we have several fitting equations to perform this. We have used Matlab Toolbox to do this fitting. 
-* This calibration period ranges between 5-25 s. Once the calibration coefficients are estimated, they can be used to estimate the volume from belts and NCS, which are compared against each other.
+* This waveform is noisy and may have several ZC near the actual ZC, and needs accurate detection, this is implemented in zeroCrossDet.m. Following the volume estimation, we fit this volume to calibrate Biopac belts.
+* NCS is calibrated (small calibration period of <10s) using the reference volume estimate (instantaneous volume with Biopac, and per breath volume with Hexoskin). Calibration involves fitting equations, with linear or quadrativ fitting (we have tried both, with linear being more accurate for most cases), using least-square fitting implemented by Matlab toolbox.
 
 ### Peak Detection
 
 * Several peak detection algorithms have been tried, with mimimum tuning parameters and efficient peak detection for non-stationary respiration waveforms, specially with the presence of different breathing (normal, slow-deep, fast breathing and breath hold durations).
 * Earlier codes have used Automated Multiscaled Based Peak Detection (AMPD) algorith. 
-* For this version, I've switched to a semi-automated method, with slightly more tuning parameters, but that stay fix for most cases (unless the frequency varation is huge, say breathing and heartbeat).
+* For newer versions, I've switched to a semi-automated method, W. Lu, "A semi-automatic method for peak and valley detection in free-breathing respiratory waveforms.". It has slightly more tuning parameters, but they stay fix (unless the frequency varation is huge, say breathing and heartbeat).
 * Refer to above source for this algorithm, slight modifications have been made to implement this algorithm, which works well and provides both maxima and minima peaks with identifying information to distinguish maxima with minima.
 
 ### Heart Rate Variation
@@ -66,7 +66,8 @@ We have estimated two key respiratory parameters breath rate (BR) and lung volum
 	* pNN50 (Number of pairs of *adjacent* NN intervals differing by more than 50ms, divided by total number of all NN intervals)
 	* LF power (Power in 0.04-0.15 Hz)
 	* HF power (Power in 0.15-0.7 Hz)
-* We have tried both fundamental and harmonic NCS, as peak from Harmonic is much more accurate, but with *low* SNR.
+	* 2D LF/HF graph
+* We have tried both fundamental and harmonic NCS to estimate RR interval, as peak from Harmonic is much more accurate, but with *low* SNR.
 
 ## File organization
 ----------------------------------------------------------------------------------------------------------------------------------------
@@ -96,9 +97,8 @@ This folder orgainization is not in terms of code, but in terms of progress of t
     * Codes are automated as much as possible, with no tuning needed (once parameters are set) from person-to-person.
     * refer to the Readme of this for further details regarding hardware and code structure. 
  
-
-
 ## References
+----------------------------------------------------------------------------------------------------------------------------------------
 1. P. Sharma and E. C. Kan, “Sleep scoring with a UHF RFID tag by near field coherent sensing,” in IEEE MTT-S Int. Microw. Symp. Dig., 2018, pp. 1419–1422. (https://doi.org/10.1109/MWSYM.2018.8439216)
-2. P. Sharma, X. Hui and E. C. Kan, "A wearable RF sensor for monitoring respiratory patterns," in IEEE Engineering in Medicine and Biology Society (EMBC), 2019 (Accepted).
+2. P. Sharma, X. Hui and E. C. Kan, "A wearable RF sensor for monitoring respiratory patterns," in IEEE Engineering in Medicine and Biology Society (EMBC), 2019 (https://doi.org/10.1109/EMBC.2019.8857870).
 3. X. Hui and E. C. Kan, “Monitoring vital signs over multiplexed radio by near-field coherent sensing,” Nat. Electron., vol. 1, pp. 74–78, 2018. (https://www.nature.com/articles/s41928-017-0001-0)
