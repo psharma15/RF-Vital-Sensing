@@ -8,7 +8,10 @@ Vital Sign Monitoring by Radio Frequency (RF) Near-Field Coherent Sensing (NCS)
 ![Respiration Heartbeat Signal](./Figure/NcsHeartResp.jpg)
 
 RF NCS can record dielectric boundary movement of internal organs and body surfaces in the near-field region of the transmitter (Tx)
-antenna. NCS can be implemented as either passive or active setup, with the Tx antenna on the chest, with optimal placement to get vital sign of interest (heart or breath or both). For the former setup, passive radiofrequency identification (RFID) tags can be put on the person's clothes to maximize the wearer comfort and minimize the tag cost, while receiver (Rx) can get the vital sign in the far-field. Mechanical movements that result in dynamic dielectric boundary changes are modulated onto the radio signals with unique digital identification (ID), which can be readily extended to monitor multiple tags and persons by a single RFID reader with good channel isolation. In the active tag approach, both Tx and Rx antennas are placed on the chest as a self-contained mobile unit without need of an external reference reader, which is then feasible for both indoor and outdoor applications. NCS is less sensitive to wearer movement and ambient motion which can be filtered out as the common-mode signal and is thus more feasible for continuous monitoring. 
+antenna by modulating the carrier. For a harmonic tag, RF schematic is shown below. NCS is extracted as the modulated I-Q amplitude and phase.
+![RF Schematic]()
+
+NCS can be implemented as either passive or active setup, with the Tx antenna on the chest, with optimal placement to get vital sign of interest (heart or breath or both). For the former setup, passive radiofrequency identification (RFID) tags can be put on the person's clothes to maximize the wearer comfort and minimize the tag cost, while receiver (Rx) can get the vital sign in the far-field. Mechanical movements that result in dynamic dielectric boundary changes are modulated onto the radio signals with unique digital identification (ID), which can be readily extended to monitor multiple tags and persons by a single RFID reader with good channel isolation. In the active tag approach, both Tx and Rx antennas are placed on the chest as a self-contained mobile unit without need of an external reference reader, which is then feasible for both indoor and outdoor applications. NCS is less sensitive to wearer movement and ambient motion which can be filtered out as the common-mode signal and is thus more feasible for continuous monitoring. 
 
 As this setup provides comfortable non-invasive vital sign monitoring, it can be used for long-term monitoring. Among others, it can help improve diagnostics of respiratory diseases and sleep apnea, which can often be undetected and untreated due to lack of continous monitoring. With the ease of placing two independent sensors, we can easily differentiate thorax and abdomen breathing patterns to identify obstructive sleep apnea (OSA) by its thoracoabdominal asynchrony. 
 
@@ -16,8 +19,6 @@ We have estimated two key respiratory parameters breath rate (BR) and lung volum
 
 ## Measurement devices and data recording software
 ----------------------------------------------------------------------------------------------------------------------------------------
-
-![Setup](./Figure/MassStudySetup.jpg)
 
 ### [Hexoskin Smart Shirt](https://www.hexoskin.com/) reference 
 - Provides following sensors:
@@ -76,12 +77,15 @@ Lung volume is an important parameter to be measured for respiratory health moni
 	* 2D LF/HF graph
 * We have tried both fundamental and harmonic NCS to estimate RR interval, as peak from Harmonic is much more accurate, but with *low* SNR.
 
-## File organization
+## Projects
 ----------------------------------------------------------------------------------------------------------------------------------------
-This folder orgainization is not in terms of code, but in terms of progress of the project. Initially individual components were focused (following are listed in the order oldest to current projects):
+This folder orgainization is in terms of progress of the project. Initially individual components were focused (following are listed in the order oldest to current projects):
 * **Motion detection in sleep [1]**
-  * NCS with synchronized external ECG heartbeat waveform (reference instrument only added towards the end of this work, so the paper does not have refernce HR during motion corrected phase)
-  * So far only Matlab codes are added, earlier Labview codes are in **EcgNcsCorrelation**.
+![Sleep Setup](./Figure/sleepSetup1.jpg)
+  * NCS with synchronized external ECG heartbeat waveform (reference instrument only added towards the end of this work, so the paper does not have refernce HR during motion corrected phase).
+  * Data was collected with different simulated conditions: at rest, slight jerk, high-energy jerk and slow turning.
+  * Data processing is based on training at the rest state, and detect any other motion as outlier, while not misclassifying if the signal is weaker when a person turns. The processing is shown below.
+![Motion Data Processing]()
 * **Respiratory (Normal Breathing)**
   * Hexoskin smart shirt is used for majority of this work as reference. 
   * Reference measurements from Hexoskin: ECG heart, thorax and abdomen chest belts respiration with calibrated lung volume estimate.
@@ -89,21 +93,26 @@ This folder orgainization is not in terms of code, but in terms of progress of t
   * Estimating lung volume by volume calibration, 
   * HR and BR estimation following the peak detection.
 * **Respiratory (Breath Pattern, Coughing, Speaking) [2]**
-  * Performing data collection and analysis with different breathing conditions (simulating various apnea and respiratory disorders), coughing and speaking.
+![Hexoskin Setup](./Figure/HexoskinSetup1.jpg)
+  * Performing data collection and analysis with different simulated breathing conditions, coughing and speaking.
+  * One NCS sensor, near xiphoid process is used for detecting central sleep apnea (CSA) and observing respiratory-disordered breathing like Cheyne-Stokes, Biot's, Ataxic and Kussmaul breathing. 
+  * We can further observe separte thoracic and abdominal breathing patterns, present in obstructive sleep apnea (OSA) by placing two NCS sensors near thorax and abdomen as shown in the figure.
+ ![OSA Two Sensor]()
   * Data analysis is similar coding as previous, but these abnormal breathing conditions require some more changes in the HR, BR estimation post-processing, as the peak-detection is prone to error.
   * Added Labview codes (improved versions are in recent folders).
-* **Attention Test**
-  * It includes a psychological test (Mackworth clock test)to detect attention and vigilance.
-  * Aim is to compare HRV feature variation during relaxed and attention phases between NCS and reference instrument.
-  * The test is written on [PsyToolkit](https://psytoolkit.org) free-available online software.
-  * The acknowledgement for the script is [here](https://www.psytoolkit.org/acknowledgements.html).
 * **Mass Study 2019**
+![Mass Study Setup](./Figure/MassStudySetup.jpg)
   * This project covers codes from all the previous projects with improved algorithm for peak detection etc.
   * The aim is to test the system for multiple people in multiple postures, hence many updates were needed:
     * Reference instrument is updated to Biopac system.
     * Codes are automated as much as possible, with no tuning needed (once parameters are set) from person-to-person.
     * refer to the Readme of this for further details regarding hardware and code structure. 
- 
+* **Attention Test**
+  * It includes a psychological test (Mackworth clock test)to detect attention and vigilance.
+  * Aim is to compare HRV feature variation during relaxed and attention phases between NCS and reference instrument.
+  * The test is written on [PsyToolkit](https://psytoolkit.org) free-available online software.
+  * The acknowledgement for the script is [here](https://www.psytoolkit.org/acknowledgements.html).
+  
 ## References
 ----------------------------------------------------------------------------------------------------------------------------------------
 1. P. Sharma and E. C. Kan, “Sleep scoring with a UHF RFID tag by near field coherent sensing,” in IEEE MTT-S Int. Microw. Symp. Dig., 2018, pp. 1419–1422. [Link](https://doi.org/10.1109/MWSYM.2018.8439216)
