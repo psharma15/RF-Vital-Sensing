@@ -9,6 +9,7 @@ Vital Sign Monitoring by Radio Frequency (RF) Near-Field Coherent Sensing (NCS)
 
 RF NCS can record dielectric boundary movement of internal organs and body surfaces in the near-field region of the transmitter (Tx)
 antenna by modulating the carrier. For a harmonic tag, RF schematic is shown below. NCS is extracted as the modulated I-Q amplitude and phase.
+
 ![RF Schematic](./Figure/RF_Schematic2.png)
 
 NCS can be implemented as either passive or active setup, with the Tx antenna on the chest, with optimal placement to get vital sign of interest (heart or breath or both). For the former setup, passive radiofrequency identification (RFID) tags can be put on the person's clothes to maximize the wearer comfort and minimize the tag cost, while receiver (Rx) can get the vital sign in the far-field. Mechanical movements that result in dynamic dielectric boundary changes are modulated onto the radio signals with unique digital identification (ID), which can be readily extended to monitor multiple tags and persons by a single RFID reader with good channel isolation. In the active tag approach, both Tx and Rx antennas are placed on the chest as a self-contained mobile unit without need of an external reference reader, which is then feasible for both indoor and outdoor applications. NCS is less sensitive to wearer movement and ambient motion which can be filtered out as the common-mode signal and is thus more feasible for continuous monitoring. 
@@ -85,19 +86,24 @@ This folder orgainization is in terms of progress of the project. Initially indi
   * NCS with synchronized external ECG heartbeat waveform (reference instrument only added towards the end of this work, so the paper does not have refernce HR during motion corrected phase).
   * Data was collected with different simulated conditions: at rest, slight jerk, high-energy jerk and slow turning.
   * Data processing is based on training at the rest state, and detect any other motion as outlier, while not misclassifying if the signal is weaker when a person turns. The processing is shown below.
+  
 ![Motion Data Processing](./Figure/motionDataProcess.png)
+
 * **Respiratory (Normal Breathing)**
   * Hexoskin smart shirt is used for majority of this work as reference. 
   * Reference measurements from Hexoskin: ECG heart, thorax and abdomen chest belts respiration with calibrated lung volume estimate.
   * Focusing on normal breathing peak detection using modified Automated Multiscale Peak Detection (AMPD) algorithm, that is mostly automated, with no manually tuned threshold parameters.
   * Estimating lung volume by volume calibration, 
   * HR and BR estimation following the peak detection.
-* **Respiratory (Breath Pattern, Coughing, Speaking) [2]**
+
 ![Hexoskin Setup](./Figure/HexoskinSetup1.jpg)
+
+* **Respiratory (Breath Pattern, Coughing, Speaking) [2]**
   * Performing data collection and analysis with different simulated breathing conditions, coughing and speaking.
   * One NCS sensor, near xiphoid process is used for detecting central sleep apnea (CSA) and observing respiratory-disordered breathing like Cheyne-Stokes, Biot's, Ataxic and Kussmaul breathing. 
   * We can further observe separte thoracic and abdominal breathing patterns, present in obstructive sleep apnea (OSA) by placing two NCS sensors near thorax and abdomen as shown in the figure.
- ![OSA Two Sensor](./Figure/isoVol_twoSensor.png)
+
+![OSA Two Sensor](./Figure/isoVol_twoSensor.png)
   * Data analysis is similar coding as previous, but these abnormal breathing conditions require some more changes in the HR, BR estimation post-processing, as the peak-detection is prone to error.
   * Added Labview codes (improved versions are in recent folders).
 * **Mass Study 2019**
