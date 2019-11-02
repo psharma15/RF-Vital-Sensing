@@ -5,7 +5,7 @@ Vital Sign Monitoring by Radio Frequency (RF) Near-Field Coherent Sensing (NCS)
 ## NCS Overview
 ----------------------------------------------------------------------------------------------------------------------------------------
 
-![RespirationHeartbeatImage](https://github.com/psharma15/Vital-Sign-Monitoring-by-Radio-Frequency-based-Near-Field-Coherent-Sensing/blob/master/Figure/NcsHeartResp.jpg)
+![Respiration Heartbeat Signal](https://github.com/psharma15/Vital-Sign-Monitoring-by-Radio-Frequency-based-Near-Field-Coherent-Sensing/blob/master/Figure/NcsHeartResp.jpg)
 
 RF NCS can record dielectric boundary movement of internal organs and body surfaces in the near-field region of the transmitter (Tx)
 antenna. NCS can be implemented as either passive or active setup, with the Tx antenna on the chest, with optimal placement to get vital sign of interest (heart or breath or both). For the former setup, passive radiofrequency identification (RFID) tags can be put on the person's clothes to maximize the wearer comfort and minimize the tag cost, while receiver (Rx) can get the vital sign in the far-field. Mechanical movements that result in dynamic dielectric boundary changes are modulated onto the radio signals with unique digital identification (ID), which can be readily extended to monitor multiple tags and persons by a single RFID reader with good channel isolation. In the active tag approach, both Tx and Rx antennas are placed on the chest as a self-contained mobile unit without need of an external reference reader, which is then feasible for both indoor and outdoor applications. NCS is less sensitive to wearer movement and ambient motion which can be filtered out as the common-mode signal and is thus more feasible for continuous monitoring. 
@@ -17,7 +17,7 @@ We have estimated two key respiratory parameters breath rate (BR) and lung volum
 ## Measurement devices and data recording software
 ----------------------------------------------------------------------------------------------------------------------------------------
 
-![SetupFigure](https://github.com/psharma15/Vital-Sign-Monitoring-by-Radio-Frequency-based-Near-Field-Coherent-Sensing/blob/master/Figure/MassStudySetup.jpg)
+![Setup](https://github.com/psharma15/Vital-Sign-Monitoring-by-Radio-Frequency-based-Near-Field-Coherent-Sensing/blob/master/Figure/MassStudySetup.jpg)
 
 ### [Hexoskin Smart Shirt](https://www.hexoskin.com/) reference 
 * Provides following sensors:
