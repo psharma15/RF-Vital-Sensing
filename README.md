@@ -20,20 +20,20 @@ We have estimated two key respiratory parameters breath rate (BR) and lung volum
 ![Setup](./Figure/MassStudySetup.jpg)
 
 ### [Hexoskin Smart Shirt](https://www.hexoskin.com/) reference 
-* Provides following sensors:
- 	* Fabric-electode Electrocardiogram (ECG)
- 	* Respiratory Inductance Plethysmography (RIP) chest belts
- 	* Accelerometer
-* Also provides pre-calibrated Tidal Volume (TV) with limited accuracy.
+- Provides following sensors:
+	- Fabric-electode Electrocardiogram (ECG)
+	- Respiratory Inductance Plethysmography (RIP) chest belts
+	- Accelerometer
+- Also provides pre-calibrated Tidal Volume (TV) with limited accuracy.
 
 ### [BIOPAC](https://www.biopac.com/) reference   
-* MP36R 4-channel system.
-* Transducers include:
-	* 3-lead Electrocardiogram (ECG)
-	* Stress-based chest belts to be placed on thorax and abdomen.
-	* Pre-calibrated pneumotach provides airflow information, that is converted to lung air volume by integration.
-	* Finger Photoplethysmograph (PPG).
-* Using Biopac Acqknowledge software to read the data and the start timestamp, accurate to seconds.
+- MP36R 4-channel system.
+- Transducers include:
+	-3-lead Electrocardiogram (ECG)
+	- Stress-based chest belts to be placed on thorax and abdomen.
+	- Pre-calibrated pneumotach provides airflow information, that is converted to lung air volume by integration.
+	- Finger Photoplethysmograph (PPG).
+- Using Biopac Acqknowledge software to read the data and the start timestamp, accurate to seconds.
 
 ### Ettus USRP for NCS thorax (near heart) and NCS abdomen measurements (Labview)
 * This has updated over the months - initially a Ettus B210 MIMO was implemented with same carrier frequency and different IF for thorax and abdomen NCS measurements. This MIMO was baseband synchronized.
