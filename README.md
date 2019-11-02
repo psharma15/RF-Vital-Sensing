@@ -82,13 +82,19 @@ Lung volume is an important parameter to be measured for respiratory health moni
 ----------------------------------------------------------------------------------------------------------------------------------------
 This folder orgainization is in terms of progress of the project. Initially individual components were focused (following are listed in the order oldest to current projects):
 * **Motion detection in sleep [1]**
-![Sleep Setup](./Figure/sleepSetup1.jpg)
+
+<p align="center">
+  <src="./Figure/sleepSetup1.jpg">
+</p>
+
   * NCS with synchronized external ECG heartbeat waveform (reference instrument only added towards the end of this work, so the paper does not have refernce HR during motion corrected phase).
   * Data was collected with different simulated conditions: at rest, slight jerk, high-energy jerk and slow turning.
   * Data processing is based on training at the rest state, and detect any other motion as outlier, while not misclassifying if the signal is weaker when a person turns. The processing is shown below.
   
-![Motion Data Processing](./Figure/motionDataProcess.png)
-
+<p align="center">
+  <src="./Figure/motionDataProcess.png">
+</p>
+	
 * **Respiratory (Normal Breathing)**
 	* Hexoskin smart shirt is used for majority of this work as reference. 
   	* Reference measurements from Hexoskin: ECG heart, thorax and abdomen chest belts respiration with calibrated lung volume estimate.
@@ -104,21 +110,24 @@ This folder orgainization is in terms of progress of the project. Initially indi
   	* Performing data collection and analysis with different simulated breathing conditions, coughing and speaking.
   	* One NCS sensor, near xiphoid process is used for detecting central sleep apnea (CSA) and observing respiratory-disordered breathing like Cheyne-Stokes, Biot's, Ataxic and Kussmaul breathing. 
   	* We can further observe separte thoracic and abdominal breathing patterns, present in obstructive sleep apnea (OSA) by placing two NCS sensors near thorax and abdomen as shown in the figure.
-
-<p align="center">
-  < src="./Figure/isoVol_twoSensor.png">
-</p>
-
   	* Data analysis is similar coding as previous, but these abnormal breathing conditions require some more changes in the HR, BR estimation post-processing, as the peak-detection is prone to error.
   	* Added Labview codes (improved versions are in recent folders).
+	
+<p align="center">
+  <src="./Figure/isoVol_twoSensor.png">
+</p>	
+	
 * **Mass Study 2019**
-
-![Mass Study Setup](./Figure/MassStudySetup.jpg)
   * This project covers codes from all the previous projects with improved algorithm for peak detection etc.
   * The aim is to test the system for multiple people in multiple postures, hence many updates were needed:
     * Reference instrument is updated to Biopac system.
     * Codes are automated as much as possible, with no tuning needed (once parameters are set) from person-to-person.
     * refer to the Readme of this for further details regarding hardware and code structure. 
+    
+<p align="center">
+  <src="./Figure/MassStudySetup.jpg">
+</p>    
+    
 * **Attention Test**
   * It includes a psychological test (Mackworth clock test)to detect attention and vigilance.
   * Aim is to compare HRV feature variation during relaxed and attention phases between NCS and reference instrument.
