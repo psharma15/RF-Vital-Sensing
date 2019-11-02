@@ -19,14 +19,15 @@ We have estimated two key respiratory parameters breath rate (BR) and lung volum
 
 ![SetupFigure](https://github.com/psharma15/Vital-Sign-Monitoring-by-Radio-Frequency-based-Near-Field-Coherent-Sensing/blob/master/Figure/MassStudySetup.jpg)
 
-### Hexoskin Smart Shirt reference
+### Hexoskin Smart Shirt reference [Hexoskin](https://www.hexoskin.com/)
 * Provides following sensors:
  	* Fabric-electode Electrocardiogram (ECG)
  	* Respiratory Inductance Plethysmography (RIP) chest belts
  	* Accelerometer
 * Also provides pre-calibrated Tidal Volume (TV) with limited accuracy.
 
-### BIOPAC reference measurement (Biopac MP36R)
+### BIOPAC reference measurement  [Biopac](https://www.biopac.com/)
+* MP36R 4-channel system.
 * Transducers include:
 	* 3-lead Electrocardiogram (ECG)
 	* Stress-based chest belts to be placed on thorax and abdomen.
@@ -82,7 +83,7 @@ This folder orgainization is not in terms of code, but in terms of progress of t
   * NCS with synchronized external ECG heartbeat waveform (reference instrument only added towards the end of this work, so the paper does not have refernce HR during motion corrected phase)
   * So far only Matlab codes are added, earlier Labview codes are in **EcgNcsCorrelation**.
 * **Respiratory (Normal Breathing)**
-  * A new reference: Hexoskin smart shirt is used for majority of this work. [Hexoskin](https://www.hexoskin.com/)
+  * A new reference: Hexoskin smart shirt is used for majority of this work. 
   * Reference measurements from Hexoskin: ECG heart, thorax and abdomen chest belts respiration with calibrated lung volume estimate.
   * Focusing on normal breathing peak detection using modified Automated Multiscale Peak Detection (AMPD) algorithm, that is mostly automated, with no manually tuned threshold parameters.
   * Estimating lung volume by volume calibration, 
@@ -99,7 +100,7 @@ This folder orgainization is not in terms of code, but in terms of progress of t
 * **Mass Study 2019**
   * This project covers codes from all the previous projects with improved algorithm for peak detection etc.
   * The aim is to test the system for multiple people in multiple postures, hence many updates were needed:
-    * Reference instrument is updated to Biopac system [Biopac](https://www.biopac.com/).
+    * Reference instrument is updated to Biopac system.
     * Codes are automated as much as possible, with no tuning needed (once parameters are set) from person-to-person.
     * refer to the Readme of this for further details regarding hardware and code structure. 
  
