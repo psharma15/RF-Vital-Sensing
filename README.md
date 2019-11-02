@@ -2,7 +2,7 @@ Vital Sign Monitoring by Radio Frequency (RF) Near-Field Coherent Sensing (NCS)
 ========================================================================================================================================
 *Code for applications of radio frequency (RF) based near-field coherent sensing (NCS) in vital sign detection.*
 
-## NCS Overview
+## Near-Field Coherent Sensing [(NCS)](https://www.nature.com/articles/s41928-017-0001-0) Overview
 ----------------------------------------------------------------------------------------------------------------------------------------
 
 ![Respiration Heartbeat Signal](./Figure/NcsHeartResp.jpg)
@@ -39,7 +39,7 @@ We have estimated two key respiratory parameters breath rate (BR) and lung volum
 	- Finger Photoplethysmograph (PPG).
 - Using Biopac Acqknowledge software to read the data and the start timestamp, accurate to seconds.
 
-### Ettus USRP for NCS thorax (near heart) and NCS abdomen measurements (Labview)
+### [Ettus](https://www.ettus.com/) USRP for NCS thorax (near heart) and NCS abdomen measurements (Labview)
 * This has updated over the months - initially a Ettus B210 MIMO was implemented with same carrier frequency and different IF for thorax and abdomen NCS measurements. This MIMO was baseband synchronized.
 * This setup also used a mic to record audio data (required by the study protocol, removed in following setup due to time constraint).
 * The abdomen sensor was much affected by motion of the wire. So setup updated to work with more portable B200mini.
@@ -83,7 +83,7 @@ Lung volume is an important parameter to be measured for respiratory health moni
 ## Projects
 ----------------------------------------------------------------------------------------------------------------------------------------
 This folder orgainization is in terms of progress of the project. Initially individual components were focused (following are listed in the order oldest to current projects):
-* **Motion detection in sleep [1]**
+* **Motion detection in sleep [1](https://doi.org/10.1109/MWSYM.2018.8439216)**
 
 <p align="center">
   <img width="450" src="./Figure/sleepSetup1.jpg">
@@ -108,7 +108,7 @@ This folder orgainization is in terms of progress of the project. Initially indi
   <img width="500" src="./Figure/HexoskinSetup1.png">
 </p>
 
-- **Respiratory: Lung Volume, Breath Rate Estimation and Apnea Detection in Respiratory Disorders [2]**
+- **Respiratory: Lung Volume, Breath Rate Estimation and Apnea Detection in Respiratory Disorders [2](https://doi.org/10.1109/EMBC.2019.8857870)**
 	- Performing data collection and analysis with different simulated breathing conditions, coughing and speaking.
   	- One NCS sensor, near xiphoid process is used for detecting central sleep apnea (CSA) and observing respiratory-disordered breathing like Cheyne-Stokes, Biot's, Ataxic and Kussmaul breathing. 
   	- We can further observe separte thoracic and abdominal breathing patterns, present in obstructive sleep apnea (OSA) by placing two NCS sensors near thorax and abdomen as shown in the figure.
