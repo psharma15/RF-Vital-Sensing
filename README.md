@@ -82,7 +82,7 @@ This folder orgainization is not in terms of code, but in terms of progress of t
   * NCS with synchronized external ECG heartbeat waveform (reference instrument only added towards the end of this work, so the paper does not have refernce HR during motion corrected phase)
   * So far only Matlab codes are added, earlier Labview codes are in **EcgNcsCorrelation**.
 * **Respiratory (Normal Breathing)**
-  * A new reference: Hexoskin smart shirt is used for majority of this work. (./https://www.hexoskin.com/)
+  * A new reference: Hexoskin smart shirt is used for majority of this work. [Hexoskin](https://www.hexoskin.com/)
   * Reference measurements from Hexoskin: ECG heart, thorax and abdomen chest belts respiration with calibrated lung volume estimate.
   * Focusing on normal breathing peak detection using modified Automated Multiscale Peak Detection (AMPD) algorithm, that is mostly automated, with no manually tuned threshold parameters.
   * Estimating lung volume by volume calibration, 
@@ -94,17 +94,17 @@ This folder orgainization is not in terms of code, but in terms of progress of t
 * **Attention Test**
   * It includes a psychological test (Mackworth clock test)to detect attention and vigilance.
   * Aim is to compare HRV feature variation during relaxed and attention phases between NCS and reference instrument.
-  * The test is written on PsyToolkit free-available online software (https://psytoolkit.org).
-  * The script is based on https://www.psytoolkit.org/acknowledgements.html.
+  * The test is written on PsyToolkit free-available online software. [Psytoolkit](https://psytoolkit.org)
+  * The script is based on. [Psytoolkit ack](https://www.psytoolkit.org/acknowledgements.html)
 * **Mass Study 2019**
   * This project covers codes from all the previous projects with improved algorithm for peak detection etc.
   * The aim is to test the system for multiple people in multiple postures, hence many updates were needed:
-    * Reference instrument is updated to Biopac system (https://www.biopac.com/).
+    * Reference instrument is updated to Biopac system [Biopac](https://www.biopac.com/).
     * Codes are automated as much as possible, with no tuning needed (once parameters are set) from person-to-person.
     * refer to the Readme of this for further details regarding hardware and code structure. 
  
 ## References
 ----------------------------------------------------------------------------------------------------------------------------------------
-1. P. Sharma and E. C. Kan, “Sleep scoring with a UHF RFID tag by near field coherent sensing,” in IEEE MTT-S Int. Microw. Symp. Dig., 2018, pp. 1419–1422. (https://doi.org/10.1109/MWSYM.2018.8439216)
-2. P. Sharma, X. Hui and E. C. Kan, "A wearable RF sensor for monitoring respiratory patterns," in IEEE Engineering in Medicine and Biology Society (EMBC), 2019 (https://doi.org/10.1109/EMBC.2019.8857870).
-3. X. Hui and E. C. Kan, “Monitoring vital signs over multiplexed radio by near-field coherent sensing,” Nat. Electron., vol. 1, pp. 74–78, 2018. (https://www.nature.com/articles/s41928-017-0001-0)
+1. P. Sharma and E. C. Kan, “Sleep scoring with a UHF RFID tag by near field coherent sensing,” in IEEE MTT-S Int. Microw. Symp. Dig., 2018, pp. 1419–1422. [Link](https://doi.org/10.1109/MWSYM.2018.8439216)
+2. P. Sharma, X. Hui and E. C. Kan, "A wearable RF sensor for monitoring respiratory patterns," in IEEE Engineering in Medicine and Biology Society (EMBC), 2019. [Link](https://doi.org/10.1109/EMBC.2019.8857870)
+3. X. Hui and E. C. Kan, “Monitoring vital signs over multiplexed radio by near-field coherent sensing,” Nat. Electron., vol. 1, pp. 74–78, 2018. [Link](https://www.nature.com/articles/s41928-017-0001-0)
