@@ -97,7 +97,7 @@ This folder orgainization is in terms of progress of the project. Initially indi
   <img width="300" src="./Figure/motionDataProcess.png">
 </p>
 	
-* **Respiratory (Normal Breathing)**
+* **Respiratory: Lung Volume and Breath Rate Estimation in Normal Breathing**
 	* Hexoskin smart shirt is used for majority of this work as reference. 
   	* Reference measurements from Hexoskin: ECG heart, thorax and abdomen chest belts respiration with calibrated lung volume estimate.
  	* Focusing on normal breathing peak detection using modified Automated Multiscale Peak Detection (AMPD) algorithm, that is mostly automated, with no manually tuned threshold parameters.
@@ -108,7 +108,7 @@ This folder orgainization is in terms of progress of the project. Initially indi
   <img width="500" src="./Figure/HexoskinSetup1.png">
 </p>
 
-- **Respiratory (Breath Pattern, Coughing, Speaking) [2]**
+- **Respiratory: Lung Volume, Breath Rate Estimation and Apnea Detection in Respiratory Disorders [2]**
 	- Performing data collection and analysis with different simulated breathing conditions, coughing and speaking.
   	- One NCS sensor, near xiphoid process is used for detecting central sleep apnea (CSA) and observing respiratory-disordered breathing like Cheyne-Stokes, Biot's, Ataxic and Kussmaul breathing. 
   	- We can further observe separte thoracic and abdominal breathing patterns, present in obstructive sleep apnea (OSA) by placing two NCS sensors near thorax and abdomen as shown in the figure.
@@ -119,18 +119,18 @@ This folder orgainization is in terms of progress of the project. Initially indi
   <img width="600" src="./Figure/isoVol_twoSensor.png">
 </p>	
 	
-* **Mass Study 2019**
+* **Mass Study 2019: Testing on Large Dataset (20 subjects) for LV, BR and HR accuracy in various positions** (Ongoing)
   * This project covers codes from all the previous projects with improved algorithm for peak detection etc.
   * The aim is to test the system for multiple people in multiple postures, hence many updates were needed:
     * Reference instrument is updated to Biopac system.
     * Codes are automated as much as possible, with no tuning needed (once parameters are set) from person-to-person.
-    * refer to the Readme of this for further details regarding hardware and code structure. 
+    * Refer to the Readme of this for further details regarding hardware and code structure.
     
 <p align="center">
   <img width="300" src="./Figure/MassStudySetup.jpg">
 </p>    
     
-* **Attention Test**
+* **Attention Test: Attention Level Detection with NCS Signal based Heart Rate Variation** (Ongoing)
   * It includes a psychological test (Mackworth clock test)to detect attention and vigilance.
   * Aim is to compare HRV feature variation during relaxed and attention phases between NCS and reference instrument.
   * The test is written on [PsyToolkit](https://psytoolkit.org) free-available online software.
