@@ -90,25 +90,27 @@ This folder orgainization is in terms of progress of the project. Initially indi
 ![Motion Data Processing](./Figure/motionDataProcess.png)
 
 * **Respiratory (Normal Breathing)**
-  * Hexoskin smart shirt is used for majority of this work as reference. 
-  * Reference measurements from Hexoskin: ECG heart, thorax and abdomen chest belts respiration with calibrated lung volume estimate.
-  * Focusing on normal breathing peak detection using modified Automated Multiscale Peak Detection (AMPD) algorithm, that is mostly automated, with no manually tuned threshold parameters.
-  * Estimating lung volume by volume calibration, 
-  * HR and BR estimation following the peak detection.
-
-![Hexoskin Setup](./Figure/HexoskinSetup1.jpg)
-
-* **Respiratory (Breath Pattern, Coughing, Speaking) [2]**
-  * Performing data collection and analysis with different simulated breathing conditions, coughing and speaking.
-  * One NCS sensor, near xiphoid process is used for detecting central sleep apnea (CSA) and observing respiratory-disordered breathing like Cheyne-Stokes, Biot's, Ataxic and Kussmaul breathing. 
-  * We can further observe separte thoracic and abdominal breathing patterns, present in obstructive sleep apnea (OSA) by placing two NCS sensors near thorax and abdomen as shown in the figure.
+	* Hexoskin smart shirt is used for majority of this work as reference. 
+  	* Reference measurements from Hexoskin: ECG heart, thorax and abdomen chest belts respiration with calibrated lung volume estimate.
+ 	* Focusing on normal breathing peak detection using modified Automated Multiscale Peak Detection (AMPD) algorithm, that is mostly automated, with no manually tuned threshold parameters.
+	* Estimating lung volume by volume calibration, 
+  	* HR and BR estimation following the peak detection.
 
 <p align="center">
-  <img width="460" height="300" src="./Figure/isoVol_twoSensor.png">
+  <src="./Figure/HexoskinSetup1.jpg">
 </p>
 
-  * Data analysis is similar coding as previous, but these abnormal breathing conditions require some more changes in the HR, BR estimation post-processing, as the peak-detection is prone to error.
-  * Added Labview codes (improved versions are in recent folders).
+* **Respiratory (Breath Pattern, Coughing, Speaking) [2]**
+  	* Performing data collection and analysis with different simulated breathing conditions, coughing and speaking.
+  	* One NCS sensor, near xiphoid process is used for detecting central sleep apnea (CSA) and observing respiratory-disordered breathing like Cheyne-Stokes, Biot's, Ataxic and Kussmaul breathing. 
+  	* We can further observe separte thoracic and abdominal breathing patterns, present in obstructive sleep apnea (OSA) by placing two NCS sensors near thorax and abdomen as shown in the figure.
+
+<p align="center">
+  < src="./Figure/isoVol_twoSensor.png">
+</p>
+
+  	* Data analysis is similar coding as previous, but these abnormal breathing conditions require some more changes in the HR, BR estimation post-processing, as the peak-detection is prone to error.
+  	* Added Labview codes (improved versions are in recent folders).
 * **Mass Study 2019**
 
 ![Mass Study Setup](./Figure/MassStudySetup.jpg)
