@@ -82,7 +82,7 @@ Lung volume is an important parameter to be measured for respiratory health moni
 
 ## Projects
 ----------------------------------------------------------------------------------------------------------------------------------------
-This folder orgainization is in terms of progress of the project. Initially individual components were focused (following are listed in the order oldest to current projects):
+Projects are listed in chronological order:
 * **Motion detection in sleep [1](https://doi.org/10.1109/MWSYM.2018.8439216)**
 
 <p align="center">
