@@ -119,7 +119,7 @@ Projects are listed in chronological order:
   <img width="600" src="./Figure/isoVol_twoSensor.png">
 </p>	
 	
-* **Mass Study 2019: Testing on Large Dataset (20 subjects) for LV, BR and HR accuracy in various positions** (Ongoing)
+* **Mass Study 2019: Testing on Large Dataset (20 subjects) for LV, BR and HR accuracy in various positions** (Ongoing) [4]
   * This project covers codes from all the previous projects with improved algorithm for peak detection etc.
   * The aim is to test the system for multiple people in multiple postures, hence many updates were needed:
     * Reference instrument is updated to Biopac system.
@@ -141,3 +141,4 @@ Projects are listed in chronological order:
 1. P. Sharma and E. C. Kan, “Sleep scoring with a UHF RFID tag by near field coherent sensing,” in IEEE MTT-S Int. Microw. Symp. Dig., 2018, pp. 1419–1422. [Link](https://doi.org/10.1109/MWSYM.2018.8439216)
 2. P. Sharma, X. Hui and E. C. Kan, "A wearable RF sensor for monitoring respiratory patterns," in IEEE Engineering in Medicine and Biology Society (EMBC), 2019. [Link](https://doi.org/10.1109/EMBC.2019.8857870)
 3. X. Hui and E. C. Kan, “Monitoring vital signs over multiplexed radio by near-field coherent sensing,” Nat. Electron., vol. 1, pp. 74–78, 2018. [Link](https://www.nature.com/articles/s41928-017-0001-0)
+4. P. Sharma, X. Hui, J. Xhou, T. B. Conroy and E. C. Kan, "Robust cardiopulmoary monitoring using wearable radio frequency sensors." (Manuscript under review)
