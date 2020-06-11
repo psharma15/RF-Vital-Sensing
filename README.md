@@ -4,10 +4,11 @@ Vital Sign Monitoring by Radio Frequency (RF) Near-Field Coherent Sensing (NCS)
 
 ## Publications
 ----------------------------------------------------------------------------------------------------------------------------------------
-1. P. Sharma and E. C. Kan, “Sleep scoring with a UHF RFID tag by near field coherent sensing,” in _IEEE MTT-S Int. Microw. Symp. Dig._, 2018, pp. 1419–1422. [Link](https://doi.org/10.1109/MWSYM.2018.8439216)
-2. P. Sharma, X. Hui and E. C. Kan, "A wearable RF sensor for monitoring respiratory patterns," in _IEEE Engineering in Medicine and Biology Society (EMBC)_, 2019. [Link](https://doi.org/10.1109/EMBC.2019.8857870)
+1. **P. Sharma** and E. C. Kan, “Sleep scoring with a UHF RFID tag by near field coherent sensing,” in _IEEE MTT-S Int. Microw. Symp. Dig._, 2018, pp. 1419–1422. [Link](https://doi.org/10.1109/MWSYM.2018.8439216)
+2. **P. Sharma**, X. Hui and E. C. Kan, "A wearable RF sensor for monitoring respiratory patterns," in _IEEE Engineering in Medicine and Biology Society (EMBC)_, 2019. [Link](https://doi.org/10.1109/EMBC.2019.8857870)
 3. X. Hui and E. C. Kan, “Monitoring vital signs over multiplexed radio by near-field coherent sensing,” _Nat. Electron._, vol. 1, pp. 74–78, 2018. [Link](https://www.nature.com/articles/s41928-017-0001-0)
-4. P. Sharma, X. Hui, J. Xhou, T. B. Conroy and E. C. Kan, "A wearable radio frequency sensor for respiratory rate, respiratory volume and heart rate monitoring," _npj Digital Medicine_, 2020. (Accepted)
+4. **P. Sharma**, X. Hui, J. Xhou, T. B. Conroy and E. C. Kan, "A wearable radio frequency sensor for respiratory rate, respiratory volume and heart rate monitoring," _npj Digital Medicine_, 2020. (Accepted)
+5. X. Hui, **P. Sharma** and E. C. Kan, "Microwave Stethoscope for Heart Sound by Near-Field Coherent Sensing," in _IEEE MTT-S International Microwave Symposium (IMS)_, Boston, MA, June 2 - 7, 2019. [Link](https://doi.org/10.1109/MWSYM.2019.8700904)
 
 ## Near-Field Coherent Sensing [(NCS)](https://www.nature.com/articles/s41928-017-0001-0) Overview
 ----------------------------------------------------------------------------------------------------------------------------------------
