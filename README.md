@@ -2,6 +2,13 @@ Vital Sign Monitoring by Radio Frequency (RF) Near-Field Coherent Sensing (NCS)
 ========================================================================================================================================
 *Code for applications of radio frequency (RF) based near-field coherent sensing (NCS) in vital sign detection.*
 
+## Publications
+----------------------------------------------------------------------------------------------------------------------------------------
+1. P. Sharma and E. C. Kan, “Sleep scoring with a UHF RFID tag by near field coherent sensing,” in _IEEE MTT-S Int. Microw. Symp. Dig._, 2018, pp. 1419–1422. [Link](https://doi.org/10.1109/MWSYM.2018.8439216)
+2. P. Sharma, X. Hui and E. C. Kan, "A wearable RF sensor for monitoring respiratory patterns," in _IEEE Engineering in Medicine and Biology Society (EMBC)_, 2019. [Link](https://doi.org/10.1109/EMBC.2019.8857870)
+3. X. Hui and E. C. Kan, “Monitoring vital signs over multiplexed radio by near-field coherent sensing,” _Nat. Electron._, vol. 1, pp. 74–78, 2018. [Link](https://www.nature.com/articles/s41928-017-0001-0)
+4. P. Sharma, X. Hui, J. Xhou, T. B. Conroy and E. C. Kan, "A wearable radio frequency sensor for respiratory rate, respiratory volume and heart rate monitoring," _npj Digital Medicine_, 2020. (Accepted)
+
 ## Near-Field Coherent Sensing [(NCS)](https://www.nature.com/articles/s41928-017-0001-0) Overview
 ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -136,9 +143,3 @@ Projects are listed in chronological order:
   * The test is written on [PsyToolkit](https://psytoolkit.org) free-available online software.
   * The acknowledgement for the script is [here](https://www.psytoolkit.org/acknowledgements.html).
   
-## References
-----------------------------------------------------------------------------------------------------------------------------------------
-1. P. Sharma and E. C. Kan, “Sleep scoring with a UHF RFID tag by near field coherent sensing,” in IEEE MTT-S Int. Microw. Symp. Dig., 2018, pp. 1419–1422. [Link](https://doi.org/10.1109/MWSYM.2018.8439216)
-2. P. Sharma, X. Hui and E. C. Kan, "A wearable RF sensor for monitoring respiratory patterns," in IEEE Engineering in Medicine and Biology Society (EMBC), 2019. [Link](https://doi.org/10.1109/EMBC.2019.8857870)
-3. X. Hui and E. C. Kan, “Monitoring vital signs over multiplexed radio by near-field coherent sensing,” Nat. Electron., vol. 1, pp. 74–78, 2018. [Link](https://www.nature.com/articles/s41928-017-0001-0)
-4. P. Sharma, X. Hui, J. Xhou, T. B. Conroy and E. C. Kan, "Robust cardiopulmoary monitoring using wearable radio frequency sensors." (Manuscript under review)
