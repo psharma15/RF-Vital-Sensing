@@ -1,4 +1,4 @@
-Vital Sign Monitoring by Radio Frequency (RF) Near-Field Coherent Sensing (NCS)
+Wearable Near-Field Radio-Frequency Sensor for Respiratory Rate, Respiratory Volume and Heart Rate Monitoring
 ========================================================================================================================================
 *Code for applications of radio frequency (RF) based near-field coherent sensing (NCS) in vital sign detection.*
 
