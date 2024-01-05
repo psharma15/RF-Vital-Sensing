@@ -26,7 +26,7 @@ As this setup provides comfortable non-invasive vital sign monitoring, it can be
 * **Respiratory Volume (RV), Respiratory Rate (RR) Estimation and Apnea Detection [[1](https://doi.org/10.1109/EMBC.2019.8857870), [2](https://www.nature.com/articles/s41746-020-0307-6)]**
 	- Performed 30-subject data collection and analysis with various postures and different simulated breathing conditions, coughing, and speaking.
   	- Used LabView interface to provide prompts to users for each task.
-	- One NCS sensor near xiphoid process is used for detecting central sleep apnea (CSA) and observing respiratory-disordered breathing like Cheyne-Stokes, Biot's, Ataxic and Kussmaul breathing. 
+  	- One NCS sensor near xiphoid process is used for detecting central sleep apnea (CSA) and observing respiratory-disordered breathing like Cheyne-Stokes, Biot's, Ataxic and Kussmaul breathing.
   	- We further observed separate thoracic and abdominal breathing patterns, present in obstructive sleep apnea (OSA) by placing two NCS sensors near the thorax and abdomen. An isovolumetric maneuver was used to observe opposite thorax and abdomen motions, clearly observed in the below figure.
   	- Implemented the first bed-integrated sensor prototype at *Cornell Weill Sleep Center, NY* for observing sleep apnea in real-world conditions.
   	- Developed robust signal processing tools for extracting HR, RR, and RV from abnormal breathing patterns with a large RR range of 2-40 BrPM.
