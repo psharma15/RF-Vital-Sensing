@@ -127,7 +127,7 @@ Projects are listed in chronological order:
   <img width="600" src="./Figure/isoVol_twoSensor.png">
 </p>	
 	
-* **Mass Study 2019: Testing on Large Dataset (20 subjects) for LV, BR and HR accuracy in various positions** (Ongoing) [4]
+* **Mass Study 2019: Testing on Large Dataset (20 subjects) for LV, BR and HR accuracy in various positions** [4]
   * This project covers codes from all the previous projects with improved algorithm for peak detection etc.
   * The aim is to test the system for multiple people in multiple postures, hence many updates were needed:
     * Reference instrument is updated to Biopac system.
@@ -138,7 +138,7 @@ Projects are listed in chronological order:
   <img width="300" src="./Figure/MassStudySetup.jpg">
 </p>    
     
-* **Attention Test: Attention Level Detection with NCS Signal based Heart Rate Variation** (Ongoing)
+* **Attention Test: Attention Level Detection with NCS Signal based Heart Rate Variation**
   * It includes a psychological test (Mackworth clock test)to detect attention and vigilance.
   * Aim is to compare HRV feature variation during relaxed and attention phases between NCS and reference instrument.
   * The test is written on [PsyToolkit](https://psytoolkit.org) free-available online software.
