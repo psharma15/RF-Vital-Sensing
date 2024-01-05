@@ -51,14 +51,13 @@ As this setup provides comfortable non-invasive vital sign monitoring, it can be
   * Observed performances with Leave-one-subject-out vs same-subject training.
 
 * **Motion detection in sleep [[4](https://doi.org/10.1109/MWSYM.2018.8439216)]**
-<p align="center">
-  <img width="450" src="./Figure/sleepSetup1.jpg">
-</p>
-
   * NCS with synchronized external ECG heartbeat waveform reference.
   * Data was collected with different simulated conditions: at rest, slight jerk, high-energy jerk and slow turning.
   * Data processing is based on training at the rest state, and detects any other motion as an outlier, while not misclassifying if the RF signal is weaker when a person turns. The processing is shown below.
-  
+
+<p align="center">
+  <img width="450" src="./Figure/sleepSetup1.jpg">
+</p>
 <p align="center">
   <img width="300" src="./Figure/motionDataProcess.png">
 </p>
