@@ -42,11 +42,7 @@ We have estimated two key respiratory parameters breath rate (BR) and lung volum
 * **Respiratory Volume (RV), Respiratory Rate (RR) Estimation and Apnea Detection [2](https://doi.org/10.1109/EMBC.2019.8857870) [5](https://www.nature.com/articles/s41746-020-0307-6)**
 	- Performed 30-subject data collection and analysis with various postures and different simulated breathing conditions, coughing, and speaking.
   	- Used LabView interface to provide prompts to users for each task.
-  	- One NCS sensor near xiphoid process is used for detecting central sleep apnea (CSA) and observing respiratory-disordered breathing like Cheyne-Stokes, Biot's, Ataxic and Kussmaul breathing. 
-  	- We further observed separate thoracic and abdominal breathing patterns, present in obstructive sleep apnea (OSA) by placing two NCS sensors near the thorax and abdomen as shown in the figure.
-  	- Implemented the first bed-integrated sensor prototype at *Cornell Weill Sleep Center, NY* for observing sleep apnea in real-world conditions.
-  	- Developed robust signal processing tools for extracting HR, RR, and RV from abnormal breathing patterns with a large RR range of 2-40 BrPM.
-
+  	
 <p align="center">
   <img width="300" src="./Figure/MassStudySetup.jpg">
 </p>    
@@ -55,10 +51,16 @@ We have estimated two key respiratory parameters breath rate (BR) and lung volum
   <img width="500" src="./Figure/HexoskinSetup1.png">
 </p>
 
+	- One NCS sensor near xiphoid process is used for detecting central sleep apnea (CSA) and observing respiratory-disordered breathing like Cheyne-Stokes, Biot's, Ataxic and Kussmaul breathing. 
+  	- We further observed separate thoracic and abdominal breathing patterns, present in obstructive sleep apnea (OSA) by placing two NCS sensors near the thorax and abdomen. An isovolumetric maneuver was used to observe opposite thorax and abdomen motions, clearly observed in the below figure.
+
 <p align="center">
   <img width="600" src="./Figure/isoVol_twoSensor.png">
 </p>	
-    
+
+      	- Implemented the first bed-integrated sensor prototype at *Cornell Weill Sleep Center, NY* for observing sleep apnea in real-world conditions.
+  	- Developed robust signal processing tools for extracting HR, RR, and RV from abnormal breathing patterns with a large RR range of 2-40 BrPM.
+   
 * **Attention Detection: User attention Detection with NCS Signal-based Heart Rate and Respiratory Rate Variation [11](https://doi.org/10.3390/s22208047)**
   * 30 Human subjects performed a Mackworth clock test while wearing RF-NCS sensor to detect attention and vigilance.
   * Used Heart Rate variability and Respiratory Rate Variability features to detect relaxed vs attention states.
