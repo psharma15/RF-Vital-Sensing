@@ -18,7 +18,7 @@ NCS can be implemented as either a passive or active setup, with the Tx antenna 
 
 As this setup provides comfortable non-invasive vital sign monitoring, it can be used for long-term monitoring. Among others, it can help improve diagnostics of respiratory diseases and sleep apnea, which can often be undetected and untreated due to a lack of continuous monitoring. With the ease of placing two independent sensors, we can easily differentiate thorax and abdomen breathing patterns to identify obstructive sleep apnea (OSA) by its thoracoabdominal asynchrony. 
 
-*I have estimated two key respiratory parameters respiratory rate (RR) and respiratory volume (RV) that can identify various respiratory dynamics and also compared with reference signals derived from airflow pneumotach and calibrated chest belts. Additionally, my work demonstrated accurate heart rate variation (HRV) features from NCS, and novel respiration variation features, used for attention vs relaxed user state detection.*
+*I have estimated two key respiratory parameters: respiratory rate (RR) and respiratory volume (RV) that can identify various respiratory dynamics and also compared with reference signals derived from airflow pneumotach and calibrated chest belts. Additionally, my work demonstrated accurate heart rate variability (HRV) features from NCS, and novel respiration variation features, used for attention vs relaxed user state detection.*
 
 ## Projects
 ----------------------------------------------------------------------------------------------------------------------------------------
