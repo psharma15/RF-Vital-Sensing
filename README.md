@@ -23,7 +23,7 @@ As this setup provides comfortable non-invasive vital sign monitoring, it can be
 ## Projects
 ----------------------------------------------------------------------------------------------------------------------------------------
 
-* **Respiratory Volume (RV), Respiratory Rate (RR) Estimation and Apnea Detection [[2](https://doi.org/10.1109/EMBC.2019.8857870), [5](https://www.nature.com/articles/s41746-020-0307-6)]**
+* **Respiratory Volume (RV), Respiratory Rate (RR) Estimation and Apnea Detection [[1](https://doi.org/10.1109/EMBC.2019.8857870), [2](https://www.nature.com/articles/s41746-020-0307-6)]**
 	- Performed 30-subject data collection and analysis with various postures and different simulated breathing conditions, coughing, and speaking.
   	- Used LabView interface to provide prompts to users for each task.
 	- One NCS sensor near xiphoid process is used for detecting central sleep apnea (CSA) and observing respiratory-disordered breathing like Cheyne-Stokes, Biot's, Ataxic and Kussmaul breathing. 
@@ -45,12 +45,12 @@ As this setup provides comfortable non-invasive vital sign monitoring, it can be
 </p>	
 
    
-* **Attention Detection: User attention Detection with NCS Signal-based Heart Rate and Respiratory Rate Variation [[11](https://doi.org/10.3390/s22208047)]**
+* **Attention Detection: User attention Detection with NCS Signal-based Heart Rate and Respiratory Rate Variation [[3](https://doi.org/10.3390/s22208047)]**
   * 30 Human subjects performed a Mackworth clock test while wearing RF-NCS sensor to detect attention and vigilance.
   * Used Heart Rate variability and Respiratory Rate Variability features to detect relaxed vs attention states.
   * Observed performances with Leave-one-subject-out vs same-subject training.
 
-* **Motion detection in sleep [[1](https://doi.org/10.1109/MWSYM.2018.8439216)]**
+* **Motion detection in sleep [[4](https://doi.org/10.1109/MWSYM.2018.8439216)]**
 <p align="center">
   <img width="450" src="./Figure/sleepSetup1.jpg">
 </p>
@@ -66,17 +66,17 @@ As this setup provides comfortable non-invasive vital sign monitoring, it can be
 
 ## Publications
 ----------------------------------------------------------------------------------------------------------------------------------------
-1. **P. Sharma** and E. C. Kan, “Sleep scoring with a UHF RFID tag by near field coherent sensing,” in _IEEE MTT-S Int. Microw. Symp. Dig._, 2018, pp. 1419–1422. [Link](https://doi.org/10.1109/MWSYM.2018.8439216)
-2. **P. Sharma**, X. Hui and E. C. Kan, "A wearable RF sensor for monitoring respiratory patterns," in _IEEE Engineering in Medicine and Biology Society (EMBC)_, 2019. [Link](https://doi.org/10.1109/EMBC.2019.8857870)
-3. X. Hui and E. C. Kan, “Monitoring vital signs over multiplexed radio by near-field coherent sensing,” _Nat. Electron._, vol. 1, pp. 74–78, 2018. [Link](https://www.nature.com/articles/s41928-017-0001-0)
-4. X. Hui, **P. Sharma** and E. C. Kan, "Microwave Stethoscope for Heart Sound by Near-Field Coherent Sensing," in _IEEE MTT-S International Microwave Symposium (IMS)_, Boston, MA, June 2 - 7, 2019. [Link](https://doi.org/10.1109/MWSYM.2019.8700904)
-5. **P. Sharma**, X. Hui, J. Zhou, T. B. Conroy, E. C. Kan, “Wearable Radio Frequency Sensor for Respiratory Rate, Respiratory Volume and Heart Rate Monitoring,” in _Nature Partner Journal (npj) Digital Medicine_, 2020. [Link](https://www.nature.com/articles/s41746-020-0307-6)
-6. J. Zhou, **P. Sharma**, X. Hui, E. C. Kan, "A Wireless Wearable RF Sensor for Brumation Study of Chelonians," in _IEEE Journal of Electromagnetics, RF and Microwaves in Medicine and Biology_, 2020. [Link](https://doi.org/10.1109/JERM.2020.2998761)
-7. Z. Zhang, **P. Sharma**, J. Zhou, X. Hui, E. C. Kan, "Furniture-Integrated Respiration Sensors by Notched Transmission Lines," in _IEEE Sensors Journal_, 2020. [Link](https://doi.org/10.1109/JSEN.2020.3028970)
-8. Z. Zhang, **P. Sharma**, T. B. Conroy, V. Phongtankuel, E. C. Kan, "Objective Scoring of Physiologically Induced Dyspnea by Non-invasive RF Sensors," in _IEEE Transactions on Biomedical Engineering_, 2021. [Link](https://doi.org/10.1109/TBME.2021.3096462)
-9. X. Hui, J. Zhou, **P. Sharma**, T. B. Conroy, Z. Zhang, E. C. Kan, "Wearable RF Near-Field Cough Monitoring by Frequency-Time Deep Learning," in _IEEE Transactions on Biomedical Circuits and Systems_, 2021. [Link](https://doi.org/10.1109/TBCAS.2021.3099865)
-10. T. B. Conroy, X. Hui, **P. Sharma**, E. C. Kan, "Heart ID: Biometric Identification Using Wearable MIMO RF Heart Sensors," in _IEEE Journal of Electromagnetics, RF and Microwaves in Medicine and Biology_, 2022. [Link](https://doi.org/10.1109/JERM.2022.3223034)
-11. **P. Sharma**, Z. Zhang, T. B. Conroy, X. Hui, E. C. Kan, "Attention Detection by Heartbeat and Respiratory Features from Radio-Frequency Sensor," in _Sensors_, 2022. [Link](https://doi.org/10.3390/s22208047)
+* **P. Sharma**, X. Hui, J. Zhou, T. B. Conroy, E. C. Kan, “Wearable Radio Frequency Sensor for Respiratory Rate, Respiratory Volume and Heart Rate Monitoring,” in _Nature Partner Journal (npj) Digital Medicine_, 2020. [Link](https://www.nature.com/articles/s41746-020-0307-6)
+* **P. Sharma**, X. Hui and E. C. Kan, "A wearable RF sensor for monitoring respiratory patterns," in _IEEE Engineering in Medicine and Biology Society (EMBC)_, 2019. [Link](https://doi.org/10.1109/EMBC.2019.8857870)
+* **P. Sharma**, Z. Zhang, T. B. Conroy, X. Hui, E. C. Kan, "Attention Detection by Heartbeat and Respiratory Features from Radio-Frequency Sensor," in _Sensors_, 2022. [Link](https://doi.org/10.3390/s22208047)
+* **P. Sharma** and E. C. Kan, “Sleep scoring with a UHF RFID tag by near field coherent sensing,” in _IEEE MTT-S Int. Microw. Symp. Dig._, 2018, pp. 1419–1422. [Link](https://doi.org/10.1109/MWSYM.2018.8439216)
+* X. Hui and E. C. Kan, “Monitoring vital signs over multiplexed radio by near-field coherent sensing,” _Nat. Electron._, vol. 1, pp. 74–78, 2018. [Link](https://www.nature.com/articles/s41928-017-0001-0)
+* X. Hui, **P. Sharma** and E. C. Kan, "Microwave Stethoscope for Heart Sound by Near-Field Coherent Sensing," in _IEEE MTT-S International Microwave Symposium (IMS)_, Boston, MA, June 2 - 7, 2019. [Link](https://doi.org/10.1109/MWSYM.2019.8700904)
+* J. Zhou, **P. Sharma**, X. Hui, E. C. Kan, "A Wireless Wearable RF Sensor for Brumation Study of Chelonians," in _IEEE Journal of Electromagnetics, RF and Microwaves in Medicine and Biology_, 2020. [Link](https://doi.org/10.1109/JERM.2020.2998761)
+* Z. Zhang, **P. Sharma**, J. Zhou, X. Hui, E. C. Kan, "Furniture-Integrated Respiration Sensors by Notched Transmission Lines," in _IEEE Sensors Journal_, 2020. [Link](https://doi.org/10.1109/JSEN.2020.3028970)
+* Z. Zhang, **P. Sharma**, T. B. Conroy, V. Phongtankuel, E. C. Kan, "Objective Scoring of Physiologically Induced Dyspnea by Non-invasive RF Sensors," in _IEEE Transactions on Biomedical Engineering_, 2021. [Link](https://doi.org/10.1109/TBME.2021.3096462)
+* X. Hui, J. Zhou, **P. Sharma**, T. B. Conroy, Z. Zhang, E. C. Kan, "Wearable RF Near-Field Cough Monitoring by Frequency-Time Deep Learning," in _IEEE Transactions on Biomedical Circuits and Systems_, 2021. [Link](https://doi.org/10.1109/TBCAS.2021.3099865)
+* T. B. Conroy, X. Hui, **P. Sharma**, E. C. Kan, "Heart ID: Biometric Identification Using Wearable MIMO RF Heart Sensors," in _IEEE Journal of Electromagnetics, RF and Microwaves in Medicine and Biology_, 2022. [Link](https://doi.org/10.1109/JERM.2022.3223034)
 
  
 
