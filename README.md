@@ -23,7 +23,7 @@ As this setup provides comfortable non-invasive vital sign monitoring, it can be
 ## Projects
 ----------------------------------------------------------------------------------------------------------------------------------------
 
-* **Respiratory Volume (RV), Respiratory Rate (RR) Estimation and Apnea Detection [2](https://doi.org/10.1109/EMBC.2019.8857870) [5](https://www.nature.com/articles/s41746-020-0307-6)**
+* **Respiratory Volume (RV), Respiratory Rate (RR) Estimation and Apnea Detection [[2](https://doi.org/10.1109/EMBC.2019.8857870), [5](https://www.nature.com/articles/s41746-020-0307-6)]**
 	- Performed 30-subject data collection and analysis with various postures and different simulated breathing conditions, coughing, and speaking.
   	- Used LabView interface to provide prompts to users for each task.
   	
@@ -45,12 +45,12 @@ As this setup provides comfortable non-invasive vital sign monitoring, it can be
       	- Implemented the first bed-integrated sensor prototype at *Cornell Weill Sleep Center, NY* for observing sleep apnea in real-world conditions.
   	- Developed robust signal processing tools for extracting HR, RR, and RV from abnormal breathing patterns with a large RR range of 2-40 BrPM.
    
-* **Attention Detection: User attention Detection with NCS Signal-based Heart Rate and Respiratory Rate Variation [11](https://doi.org/10.3390/s22208047)**
+* **Attention Detection: User attention Detection with NCS Signal-based Heart Rate and Respiratory Rate Variation [[11](https://doi.org/10.3390/s22208047)]**
   * 30 Human subjects performed a Mackworth clock test while wearing RF-NCS sensor to detect attention and vigilance.
   * Used Heart Rate variability and Respiratory Rate Variability features to detect relaxed vs attention states.
   * Observed performances with Leave-one-subject-out vs same-subject training.
 
-* **Motion detection in sleep [1](https://doi.org/10.1109/MWSYM.2018.8439216)**
+* **Motion detection in sleep [[1](https://doi.org/10.1109/MWSYM.2018.8439216)]**
 <p align="center">
   <img width="450" src="./Figure/sleepSetup1.jpg">
 </p>
